@@ -1,27 +1,20 @@
+## This is the final task on JavaScript/Front-end 2023Q1
+
+# Artstore - the store of fineart
+
+## Using technologies: 
 # React + TypeScript + Vite
+# ESlint + Prettier + Husky
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ To install this App clone the repo and run the 'npm install' in your terminal.
 
-Currently, two official plugins are available:
+ Scripts:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+start - start development mode
+build - build the app
+lint:fix - lint and fix some issues by ESlint
+lint - lint project by ESlint
+preview - prewiev builded project
+prepare -husky install
+pre-commit - scrypt for husky hook pre-commit
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
