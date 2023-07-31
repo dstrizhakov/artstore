@@ -1,20 +1,34 @@
-## This is the final task on JavaScript/Front-end 2023Q1
-
 # Artstore - the store of fineart
 
-## Using technologies: 
-# React + TypeScript + Vite
-# ESlint + Prettier + Husky
+This is the final task on JavaScript/Front-end 2023Q1
 
- To install this App clone the repo and run the 'npm install' in your terminal.
+### Using technologies:
 
- Scripts:
+- React
+- TypeScript
+- Vite
+- ESlint
+- Prettier
+- Husky
 
-start - start development mode
-build - build the app
-lint:fix - lint and fix some issues by ESlint
-lint - lint project by ESlint
-preview - prewiev builded project
-prepare -husky install
-pre-commit - scrypt for husky hook pre-commit
+### How to install:
 
+```sh
+cd artstore
+npm i
+npm start
+```
+
+### Scripts:
+
+- start - start development mode
+- build - build the app
+- lint:fix - lint and fix some issues by ESlint
+- lint - lint project by ESlint
+- preview - prewiev builded project
+- prepare -husky install
+- pre-commit - scrypt for husky hook pre-commit
+
+## License
+
+**Free Software, Hell Yeah!**
