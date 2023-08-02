@@ -24,7 +24,8 @@ npm start
 - start - start development mode
 - build - build the app
 - lint:fix - lint and fix some issues by ESlint
-- lint - lint project by ESlint
+- lint - lint project by ESlint\
+- prettier - run prettier with --write flag
 - preview - prewiev builded project
 - prepare -husky install
 - pre-commit - scrypt for husky hook pre-commit

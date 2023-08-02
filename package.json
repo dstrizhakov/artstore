@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "lint:fix": "eslint ./src --fix --color",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "prettier": "prettier --write",
     "preview": "vite preview",
     "prepare": "husky install",
     "pre-commit": "lint-staged"

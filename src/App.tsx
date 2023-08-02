@@ -1,7 +1,8 @@
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import { FC } from 'react';
 
-function App() {
+const App: FC = (): JSX.Element => {
   return (
     <>
       <Header />
@@ -9,6 +10,6 @@ function App() {
       <Footer />
     </>
   );
-}
+};
 
 export default App;
