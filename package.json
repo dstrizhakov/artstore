@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "lint:fix": "eslint ./src --fix --color",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier": "prettier --write",
+    "prettier": "prettier . --check",
+    "prettier:write": "prettier --write ./src",
     "preview": "vite preview",
     "prepare": "husky install",
     "pre-commit": "lint-staged"
@@ -20,7 +21,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write"
+      "prettier:write"
     ]
   },
   "dependencies": {
