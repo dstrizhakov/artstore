@@ -26,6 +26,7 @@ npm start
 - lint:fix - lint and fix some issues by ESlint
 - lint - lint project by ESlint\
 - prettier - run prettier with --write flag
+- test - run jest tests
 - preview - prewiev builded project
 - prepare -husky install
 - pre-commit - scrypt for husky hook pre-commit
