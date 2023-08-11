@@ -9,9 +9,9 @@ const Register: FC = () => {
     <div>
       <h1>Register Page</h1>
       <div className={styles.wrapper}>
-        <TextField id="outlined-basic" label="email" variant="outlined" />
-        <TextField id="outlined-basic" label="password" variant="outlined" type="password" />
-        <TextField id="outlined-basic" label="password" variant="outlined" type="password" />
+        <TextField id="email" label="email" variant="outlined" />
+        <TextField id="password" label="password" variant="outlined" type="password" />
+        <TextField id="password-repeat" label="password" variant="outlined" type="password" />
         <p>
           Have an account <Link to="/login">Login</Link>
         </p>

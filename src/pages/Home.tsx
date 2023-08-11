@@ -1,11 +1,55 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
+import { getProducts } from '../api/getProducts';
+import { Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from '@mui/material';
 
 const Home: FC = () => {
+  const [products, setProducts] = useState([]);
+
+  const get = async () => {
+    try {
+      const products = await getProducts();
+      setProducts(products.results || []);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    get();
+  }, []);
+
+  console.log(products.results);
   return (
     <div>
       <h1>Home Page</h1>
-      <Button variant="contained">Contained</Button>
+      <div className="flex">
+        {products &&
+          products.map((product) => (
+            <Card key={product.id} variant="outlined">
+              <CardHeader
+                title={product.masterData.current.name['en-US']}
+                subheader={product.createdAt}
+              ></CardHeader>
+              <CardMedia
+                component="img"
+                height="200"
+                image={product.masterData.staged.masterVariant.images[0].url}
+                alt={product.masterData.current.name['en-US']}
+              />
+              {product.masterData.current.name['en-US']}
+              <CardContent>
+                <Typography variant="body2" color="text.secondary">
+                  {product.masterData.current.description['en-US']}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Add to cart</Button>
+                <Button size="small">Learn More</Button>
+              </CardActions>
+            </Card>
+          ))}
+      </div>
     </div>
   );
 };
