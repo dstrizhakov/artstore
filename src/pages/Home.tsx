@@ -1,55 +1,77 @@
-import { FC, useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
+import { FC, useEffect, useCallback } from 'react';
 import { getProducts } from '../api/getProducts';
-import { Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from '@mui/material';
+import MainSlider from '../components/MainSlider/MainSlider';
+import MainInfo from '../components/MainInfo/MainInfo';
+import CircularProgress from '@mui/material/CircularProgress';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import styles from './Home.module.scss';
+import { Image, Product } from '@commercetools/platform-sdk';
+import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+
+interface ISlide {
+  id: string;
+  img: string;
+  images: Image[];
+  title: string;
+}
 
 const Home: FC = () => {
-  const [products, setProducts] = useState([]);
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((store) => store.products.items);
+  const loading = useAppSelector((store) => store.products.loading);
+  const error = useAppSelector((store) => store.products.error);
 
-  const get = async () => {
-    try {
-      const products = await getProducts();
-      setProducts(products.results || []);
-    } catch (e) {
-      console.log(e);
-    }
+  const getSlides = (products: Product[]): ISlide[] => {
+    return products.map((item) => {
+      const firstImage = item.masterData.staged.masterVariant.images?.[0];
+      return {
+        id: item.id,
+        img: firstImage?.url || '',
+        images: item.masterData.staged.masterVariant.images || [],
+        title: item.masterData.current.name['en-US'],
+      };
+    });
   };
 
-  useEffect(() => {
-    get();
-  }, []);
+  const fetchData = useCallback(async (): Promise<void> => {
+    dispatch(setLoading(true));
+    try {
+      const items = await getProducts();
+      dispatch(setProducts(items.results));
+    } catch (e) {
+      dispatch(setError('Произошла ошибка при получении данных'));
+    }
+  }, [dispatch]);
 
-  console.log(products.results);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleCloseSnackbar = () => {
+    dispatch(setError(null));
+  };
+
   return (
-    <div>
+    <div className={styles.wrapper}>
       <h1>Home Page</h1>
-      <div className="flex">
-        {products &&
-          products.map((product) => (
-            <Card key={product.id} variant="outlined">
-              <CardHeader
-                title={product.masterData.current.name['en-US']}
-                subheader={product.createdAt}
-              ></CardHeader>
-              <CardMedia
-                component="img"
-                height="200"
-                image={product.masterData.staged.masterVariant.images[0].url}
-                alt={product.masterData.current.name['en-US']}
-              />
-              {product.masterData.current.name['en-US']}
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {product.masterData.current.description['en-US']}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Add to cart</Button>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-          ))}
-      </div>
+      {loading ? (
+        <div className={styles.loadingOverlay}>
+          <CircularProgress size={100} />
+        </div>
+      ) : error ? (
+        <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+          <MuiAlert elevation={6} variant="filled" severity="error" onClose={handleCloseSnackbar}>
+            {error}
+          </MuiAlert>
+        </Snackbar>
+      ) : (
+        <>
+          <MainSlider slides={getSlides(products)} />
+          <MainInfo />
+        </>
+      )}
     </div>
   );
 };

@@ -1,10 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import {
-  ClientBuilder,
-  Client,
-  AuthMiddlewareOptions,
-  HttpMiddlewareOptions,
-} from '@commercetools/sdk-client-v2';
+import { ClientBuilder, Client, AuthMiddlewareOptions, HttpMiddlewareOptions } from '@commercetools/sdk-client-v2';
 import { createApiBuilderFromCtpClient, ApiRoot } from '@commercetools/platform-sdk';
 
 const scope = import.meta.env.VITE_CTP_SCOPES;
