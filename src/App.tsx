@@ -11,6 +11,7 @@ import Shop from './pages/Shop';
 import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import NotFound from './pages/NotFound';
 import ProductDetails from './pages/ProductDetails';
 import RootLayout from './layouts/RootLayout';
 import ShopLayout from './layouts/ShopLayout';
@@ -29,6 +30,9 @@ const router = createBrowserRouter(
       <Route path="about" element={<About />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+      
+      
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );

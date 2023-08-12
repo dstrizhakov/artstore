@@ -12,7 +12,6 @@ const RootLayout: FC = (): ReactNode => {
           <Outlet />
         </div>
       </main>
-
     </div>
   );
 };
