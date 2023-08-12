@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useCallback } from 'react';
 import { getProducts } from '../api/getProducts';
 import MainSlider from '../components/MainSlider/MainSlider';
 import MainInfo from '../components/MainInfo/MainInfo';
@@ -35,7 +35,7 @@ const Home: FC = () => {
     });
   };
 
-  const fetchData = async (): Promise<void> => {
+  const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
       const items = await getProducts();
@@ -43,11 +43,11 @@ const Home: FC = () => {
     } catch (e) {
       dispatch(setError('Произошла ошибка при получении данных'));
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const handleCloseSnackbar = () => {
     dispatch(setError(null));
