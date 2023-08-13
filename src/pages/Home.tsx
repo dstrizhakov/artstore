@@ -1,5 +1,5 @@
 import { FC, useEffect, useCallback } from 'react';
-import { getProducts } from '../api/getProducts';
+import { getProducts } from '../api/requests';
 import MainSlider from '../components/MainSlider/MainSlider';
 import MainInfo from '../components/MainInfo/MainInfo';
 import CircularProgress from '@mui/material/CircularProgress';

@@ -9,7 +9,8 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Stack from '@mui/material/Stack';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
-import { getProducts } from '../api/getProducts';
+import { getProducts } from '../api/requests';
+import styles from './Shop.module.scss';
 
 export interface IArtwork {}
 export interface IResponce {}
@@ -44,8 +45,8 @@ const Shop: FC = () => {
     <div>
       <h1>Shop Page</h1>
       {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-          <CircularProgress />
+        <div className={styles.loadingOverlay}>
+          <CircularProgress size={100} />
         </div>
       ) : (
         <Grid container spacing={2}>
