@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 import {
   ClientBuilder,
   Client,
@@ -6,7 +6,7 @@ import {
   type HttpMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 
-const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
+export const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
 const authUrl = import.meta.env.VITE_CTP_AUTH_URL;
 const clientId = import.meta.env.VITE_CTP_CLIENT_ID;
 const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;

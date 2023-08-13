@@ -2,6 +2,7 @@ import { Product } from '@commercetools/platform-sdk';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IUser {
+  id: string;
   name: string;
   email: string;
   accessToken: string;
@@ -24,6 +25,7 @@ export interface ProductsState {
 
 const initialState: ProductsState = {
   user: {
+    id: '',
     name: '',
     email: '',
     accessToken: '',
@@ -42,6 +44,7 @@ const userSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
+      console.log(state.user);
     },
     logout: (state) => {
       state.user = initialState.user;
