@@ -55,7 +55,7 @@ const Home: FC = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h1>Home Page</h1>
+      <h2>Home Page</h2>
       {loading ? (
         <div className={styles.loadingOverlay}>
           <CircularProgress size={100} />

@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import style from './Navigation.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Button from '@mui/material/Button';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Badge from '@mui/material/Badge';
 import { logout } from '../../store/reducers/user.slice';
 
 interface IActive {
@@ -12,7 +14,9 @@ const setActive = ({ isActive }: IActive) => (isActive ? style.active : style.li
 
 export const Navigation: FC = (): ReactNode => {
   const user = useAppSelector((state) => state.user.user.name);
+  const cartTotal = useAppSelector((state) => state.user.cart.total);
   const dispatch = useAppDispatch();
+  console.log(cartTotal);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -27,7 +31,9 @@ export const Navigation: FC = (): ReactNode => {
         Shop
       </NavLink>
       <NavLink to="cart" className={setActive}>
-        Cart
+        <Badge badgeContent={cartTotal} color="primary">
+          <ShoppingCartIcon color="action" />
+        </Badge>
       </NavLink>
       <NavLink to="about" className={setActive}>
         About

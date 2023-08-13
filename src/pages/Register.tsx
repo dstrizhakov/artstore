@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const Register: FC = () => {
   return (
     <div>
-      <h1>Register Page</h1>
+      <h2>Register Page</h2>
       <div className={styles.wrapper}>
         <TextField id="email" label="email" variant="outlined" />
         <TextField id="password" label="password" variant="outlined" type="password" />
