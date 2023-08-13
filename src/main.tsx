@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom/client';
+import { StrictMode } from 'react';
 import App from './App.tsx';
 import './index.scss';
 import { setupStore } from './store/store.ts';
@@ -8,7 +9,9 @@ import './index.scss';
 const store = setupStore();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <Provider store={store}>
-    <App />
-  </Provider>
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>
 );

@@ -6,7 +6,6 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
-    "allowImportingTsExtensions": true,
     "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
@@ -17,6 +16,16 @@
     "baseUrl": "./src",
     "resolveJsonModule": true
   },
-  "include": ["./src/**/*", "styled.d.ts"],
+  "include": [
+    "./src/**/*",
+    "styled.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "index.d.ts"
+  ],
+
   "references": [{ "path": "./tsconfig.node.json" }]
 }
