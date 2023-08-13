@@ -1,6 +1,22 @@
-import { getApiRoot } from './ClientBuilder';
+import { getApiRoot } from './createClient';
 import { projectKey } from './ClientBuilder';
 import { ProductPagedQueryResponse } from '@commercetools/platform-sdk';
+
+export async function signIn(email: string, password: string) {
+  const response = await getApiRoot()
+    .withProjectKey({
+      projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+    })
+    .login()
+    .post({
+      body: {
+        email: email,
+        password: password,
+      },
+    })
+    .execute();
+  return response;
+}
 
 export const getProducts = async (): Promise<ProductPagedQueryResponse> => {
   try {
@@ -46,6 +62,7 @@ export const getCustomers = async () => {
     throw error;
   }
 };
+
 export const getOrders = async () => {
   try {
     const customers = await getApiRoot()
@@ -107,6 +124,7 @@ export const getCustomerById = async (ID: string) => {
     throw error;
   }
 };
+
 export const getCustomerByKey = async (key: string) => {
   try {
     const customer = await getApiRoot().withProjectKey({ projectKey }).customers().withKey({ key }).get().execute();

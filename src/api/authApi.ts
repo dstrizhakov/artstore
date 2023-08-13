@@ -10,7 +10,6 @@ export const authClient = new SdkAuth({
   host: authHost,
   projectKey,
   disableRefreshToken: false,
-  // authType: 'Password',
   credentials: {
     clientId,
     clientSecret,
@@ -43,9 +42,9 @@ export const customerSession = async (username: string, password: string) => {
   }
 };
 
-export const anonimusSession = async (id: number) => {
+export const anonimusSession = async () => {
   try {
-    const token = await authClient.anonymousFlow(id);
+    const token = await authClient.anonymousFlow();
     return token;
   } catch (error) {
     throw error;
