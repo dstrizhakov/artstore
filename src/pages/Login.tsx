@@ -28,6 +28,30 @@ const Login: FC = () => {
   }
   const handleLogin = async (email: string, password: string) => {
     await signIn(email, password);
+
+// import { Link } from 'react-router-dom';
+// import { anonimusSession } from '../api/authApi';
+// import { useAppDispatch } from '../hooks/redux';
+// import { login } from '../store/reducers/user.slice';
+
+// const Login: FC = () => {
+//   const [username, setUsername] = useState('user@mail.ru');
+//   const [password, setPassword] = useState('1235678');
+//   const dispatch = useAppDispatch();
+
+//   const handleAuth = async () => {
+//     const token = await anonimusSession(Date.now());
+//     if (token.access_token) {
+//       dispatch(
+//         login({
+//           name: 'Anonimus',
+//           email: 'Anonimus',
+//           accessToken: token.access_token,
+//           refreshToken: token.refresh_token,
+//         })
+//       );
+//     }
+//     console.log(token);
   };
 
   return (
@@ -50,11 +74,31 @@ const Login: FC = () => {
           variant="outlined"
           type="password"
           autoComplete="current-password"
+
+<!--       <div className={styles.wrapper}>
+        <TextField
+          id="email"
+          label="email"
+          variant="outlined"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+        />
+        <TextField
+          id="password"
+          label="password"
+          variant="outlined"
+          // type="password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)} -->
+
         />
         <p>
           Dont have account <Link to="/register">Register</Link>
         </p>
+
         <Button onClick={() => handleLogin(email, password)} variant="contained">
+<!--         <Button onClick={handleAuth} variant="contained"> -->
+
           Login
         </Button>
       </form>

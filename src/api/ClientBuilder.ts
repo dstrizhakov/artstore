@@ -1,9 +1,9 @@
 import fetch from 'node-fetch';
 import {
   ClientBuilder,
+  Client,
   type AuthMiddlewareOptions,
   type HttpMiddlewareOptions,
-  // type PasswordAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 
 const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
@@ -32,10 +32,9 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
 };
 
 // Export the ClientBuilder
-export const ctpClient = new ClientBuilder()
-  .withProjectKey(projectKey) // .withProjectKey() is not required if the projectKey is included in authMiddlewareOptions
-  // .withPasswordFlow(options)
+export const ctpClient: Client = new ClientBuilder()
+  .withProjectKey(projectKey)
   .withClientCredentialsFlow(authMiddlewareOptions)
   .withHttpMiddleware(httpMiddlewareOptions)
-  .withLoggerMiddleware() // Include middleware for logging
+  .withLoggerMiddleware()
   .build();

@@ -75,6 +75,12 @@ const Register: FC = () => {
           type="password"
           autoComplete="new-password"
         />
+
+<!--       <div className={styles.wrapper}>
+        <TextField id="email" label="email" variant="outlined" />
+        <TextField id="password" label="password" variant="outlined" type="password" />
+        <TextField id="password-repeat" label="password" variant="outlined" type="password" /> -->
+
         <p>
           Have an account <Link to="/login">Login</Link>
         </p>
