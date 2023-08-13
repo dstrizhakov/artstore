@@ -11,6 +11,8 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
 import { getProducts } from '../api/requests';
 import styles from './Shop.module.scss';
+import { Product } from '@commercetools/platform-sdk';
+import { addProductToCart } from '../store/reducers/user.slice';
 
 export interface IArtwork {}
 export interface IResponce {}
@@ -41,9 +43,13 @@ const Shop: FC = () => {
     }
   }, [products, fetchData]);
 
+  const addToCart = (product: Product) => {
+    dispatch(addProductToCart(product));
+  };
+
   return (
     <div>
-      <h1>Shop Page</h1>
+      <h2>Shop Page</h2>
       {loading ? (
         <div className={styles.loadingOverlay}>
           <CircularProgress size={100} />
@@ -61,8 +67,13 @@ const Shop: FC = () => {
                 />
                 <CardHeader title={product.masterData.current.name['en-US']} subheader={product.createdAt}></CardHeader>
                 <CardActions>
-                  <Stack direction="row" spacing={2}>
-                    <Button size="small" variant="outlined" endIcon={<AddShoppingCartIcon />}>
+                  <Stack direction="row" spacing={3}>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      endIcon={<AddShoppingCartIcon />}
+                      onClick={() => addToCart(product)}
+                    >
                       Add to cart
                     </Button>
                     <Button size="small" variant="text">

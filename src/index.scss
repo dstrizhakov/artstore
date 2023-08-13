@@ -1,26 +1,33 @@
-@import './normalize';
+@import './styles/constants';
+@import './styles/normalize';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 
+* {
+  box-sizing: border-box;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $color-main-heading;
+}
 body {
-  background-color: aliceblue;
+  background-color: $color-main-background;
+  color: $color-main-text;
   margin: 0 auto;
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
 }
 
-#root {
-}
-
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-.flex {
+.wrapper {
+  min-height: 100vh;
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  flex-direction: column;
+}
+.main {
+  flex: 1 1 auto;
 }
 
 .swiper {
@@ -35,8 +42,6 @@ body {
   text-align: center;
   font-size: 18px;
   background: #fff;
-
-  /* Center slide text vertically */
   display: flex;
   justify-content: center;
   align-items: center;

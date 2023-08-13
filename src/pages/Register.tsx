@@ -36,7 +36,8 @@ const Register: FC = () => {
 
   return (
     <div>
-      <h1>Register Page</h1>
+
+      <h2>Register Page</h2>
       <form className={styles.wrapper}>
         <TextField
           onChange={(e) => setEmail(e.target.value)}

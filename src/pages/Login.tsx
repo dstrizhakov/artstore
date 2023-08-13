@@ -35,7 +35,8 @@ const Login: FC = () => {
 
   return (
     <div>
-      <h1>Login Page</h1>
+
+      <h2>Login Page</h2>
       <form className={styles.wrapper}>
         <TextField
           onChange={(e) => setEmail(e.target.value)}

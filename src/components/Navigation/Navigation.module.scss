@@ -1,19 +1,14 @@
-.active {
-  border: 3px solid teal;
-  border-radius: 8px;
-}
-.link {
-  border: 3px solid transparent;
-  border-radius: 8px;
+.nav .link {
+  font-size: 18px;
+  padding: 4px;
+  margin-left: 10px;
+  text-decoration: none;
 }
 
-.nav a {
-  text-decoration: none;
-  margin-left: 10px;
+.active {
   font-size: 18px;
-  color: black;
-  padding: 5px;
-}
-.nav a:last-child {
-  padding-right: 0;
+  padding: 4px;
+  margin-left: 10px;
+  color: blue;
+  text-decoration: none;
 }
