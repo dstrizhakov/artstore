@@ -1,10 +1,5 @@
 import { ReactNode, FC } from 'react';
-import {
-  Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from 'react-router-dom';
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Shop from './pages/Shop';
@@ -30,7 +25,7 @@ const router = createBrowserRouter(
       <Route path="about" element={<About />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
-      
+
       <Route path="*" element={<NotFound />} />
     </Route>
   )
