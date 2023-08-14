@@ -8,12 +8,10 @@ import Button from '@mui/material/Button';
 
 const CartList: FC = () => {
   const [modal, setModal] = useState(false);
-
+  const dispatch = useAppDispatch();
   const cartTotal = useAppSelector((state) => state.user.cart.price);
   const cartList = useAppSelector((state) => state.user.cart.items);
   const totalCount = useAppSelector((state) => state.user.cart.total);
-
-  const dispatch = useAppDispatch();
 
   const completeOrder = async () => {
     setModal(true);
@@ -26,7 +24,7 @@ const CartList: FC = () => {
   return (
     <div className={styles.wrapper}>
       <Modal isOpen={modal} setIsOpen={setModal}>
-        <h3>Thank you for order!</h3>
+        <h3>Thank you for your order!</h3>
       </Modal>
       <div className={styles.body}>
         {cartList.map((item) => (
@@ -38,9 +36,7 @@ const CartList: FC = () => {
           <Button size="large" variant="contained" onClick={completeOrder}>
             Оформить заказ
           </Button>
-          <span className={styles.total} data-testid="cart-total">
-            {cartTotal}
-          </span>
+          <span className={styles.total}>{cartTotal}</span>
         </div>
       ) : (
         <h3>Cart is empty...</h3>

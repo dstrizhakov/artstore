@@ -1,5 +1,6 @@
-import { FC } from 'react';
-import './Modal.scss';
+import React, { FC } from 'react';
+import { Modal as MuiModal, Paper } from '@mui/material';
+import styles from './Modal.module.scss';
 
 type ModalPropsType = {
   isOpen: boolean;
@@ -8,12 +9,16 @@ type ModalPropsType = {
 };
 
 const Modal: FC<ModalPropsType> = ({ isOpen, setIsOpen, children }) => {
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <div className={isOpen ? 'modal active' : 'modal'} onClick={() => setIsOpen(false)}>
-      <div className="modal__content" onClick={(e) => e.stopPropagation()}>
+    <MuiModal open={isOpen} onClose={handleClose} className={styles.modal}>
+      <Paper className={styles.modal__content} onClick={(e) => e.stopPropagation()}>
         {children}
-      </div>
-    </div>
+      </Paper>
+    </MuiModal>
   );
 };
 
