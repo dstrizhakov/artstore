@@ -10,7 +10,7 @@ interface ProductsState {
 
 const initialState: ProductsState = {
   items: [],
-  item: {},
+  item: {} as Product,
   loading: true,
   error: null,
 };

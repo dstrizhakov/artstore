@@ -6,7 +6,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { getProductByKey } from '../api/getProductByKey';
 import { setProduct, setLoading, setError } from '../store/reducers/products.slice';
-import { Button, Divider, Grid, IconButton, Paper, Typography } from '@mui/material';
+import { Breadcrumbs, Button, Divider, Grid, IconButton, Link, Paper, Typography } from '@mui/material';
 import { AddShoppingCart, Favorite, Share } from '@mui/icons-material';
 import styles from './ProductDetails.module.scss';
 
@@ -45,13 +45,32 @@ const ProductDetails: FC = () => {
   console.dir(product);
   return (
     <div>
+      <Grid container padding={2}> 
+          <Breadcrumbs aria-label="breadcrumb">
+          <Link underline="hover" color="inherit" href="/">
+            Home
+          </Link>
+          <Link
+            underline="hover"
+            color="inherit"
+            href="/shop"
+          >
+            Shop
+          </Link>
+          <Typography color="text.primary">{product.key}</Typography>
+        </Breadcrumbs>
+          </Grid>
+
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <CircularProgress />
         </div>
       ) : (
         <Paper className={styles.root}>
+          
+          
           <Grid container>
+            
             <Grid item xs={12} sm={12} md={6} padding={2}>
               <img
                 src={product.masterData.staged.masterVariant?.images?.[0]?.url || ''}
@@ -67,10 +86,10 @@ const ProductDetails: FC = () => {
                 {product.createdAt}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                {product.masterData.current.description['en-US']}
+                {product.masterData.current.description && product.masterData.current.description['en-US']}
               </Typography>
               <Typography variant="h5" gutterBottom>
-                ${product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0}
+              ${(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
               </Typography>
               <div className={styles.buttons}>
                 <Button size="small" variant="outlined" endIcon={<AddShoppingCart />}>
