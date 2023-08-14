@@ -64,7 +64,7 @@ const Shop: FC = () => {
                     <Button size="small" variant="outlined" endIcon={<AddShoppingCartIcon />}>
                       Add to cart
                     </Button>
-                    <Button size="small" variant="text">
+                    <Button size="small" variant="text" href={'shop/' + product.key}>
                       Learn More
                     </Button>
                   </Stack>
