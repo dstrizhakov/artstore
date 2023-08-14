@@ -76,7 +76,7 @@ const Shop: FC = () => {
                     >
                       Add to cart
                     </Button>
-                    <Button size="small" variant="text">
+                    <Button size="small" variant="text" href={'shop/' + product.key}>
                       Learn More
                     </Button>
                   </Stack>
