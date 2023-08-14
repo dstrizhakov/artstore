@@ -3,12 +3,14 @@ import { Product } from '@commercetools/platform-sdk';
 
 interface ProductsState {
   items: Product[];
+  item: Product;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ProductsState = {
   items: [],
+  item: {},
   loading: true,
   error: null,
 };
@@ -22,6 +24,11 @@ const productsSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+    setProduct: (state, action: PayloadAction<Product>) => {
+      state.item = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
@@ -32,6 +39,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { setProducts, setLoading, setError } = productsSlice.actions;
+export const { setProducts, setProduct, setLoading, setError } = productsSlice.actions;
 
 export default productsSlice.reducer;
