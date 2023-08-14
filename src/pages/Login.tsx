@@ -35,7 +35,6 @@ const Login: FC = () => {
 
   return (
     <div>
-
       <h2>Login Page</h2>
       <form className={styles.wrapper}>
         <TextField

@@ -36,7 +36,6 @@ const Register: FC = () => {
 
   return (
     <div>
-
       <h2>Register Page</h2>
       <form className={styles.wrapper}>
         <TextField
