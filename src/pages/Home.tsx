@@ -1,5 +1,5 @@
 import { FC, useEffect, useCallback } from 'react';
-import { getProducts } from '../api/getProducts';
+import { getProducts } from '../api/requests';
 import MainSlider from '../components/MainSlider/MainSlider';
 import MainInfo from '../components/MainInfo/MainInfo';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -55,7 +55,7 @@ const Home: FC = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h1>Home Page</h1>
+      <h2>Home Page</h2>
       {loading ? (
         <div className={styles.loadingOverlay}>
           <CircularProgress size={100} />

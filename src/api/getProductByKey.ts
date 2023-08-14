@@ -1,6 +1,7 @@
-import { getApiRoot } from './ClientBuilder';
+
 import { projectKey } from './ClientBuilder';
 import { Product } from '@commercetools/platform-sdk';
+import { getApiRoot } from './createClient';
 
 export const getProductByKey = async (productKey: string): Promise<Product> => {
   try {

@@ -26,6 +26,7 @@
     ]
   },
   "dependencies": {
+    "@commercetools/api-request-builder": "^6.0.0",
     "@commercetools/history-sdk": "^3.5.0",
     "@commercetools/importapi-sdk": "^4.6.2",
     "@commercetools/ml-sdk": "^3.4.1",
@@ -39,6 +40,7 @@
     "@mui/material": "^5.14.4",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/react-redux": "^7.1.25",
+    "ajax": "^0.0.4",
     "axios": "^1.4.0",
     "isomorphic-fetch": "^3.0.0",
     "react": "^18.2.0",
@@ -54,6 +56,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/node-fetch": "^2.6.4",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
