@@ -65,7 +65,7 @@ import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { useAppDispatch } from '../../hooks/redux';
-import { ICartItem, changeProductCount, deleteProductFromCart } from '../../store/reducers/user.slice';
+import { ICartItem, changeProductCount, deleteProductFromCart } from '../../store/reducers/cart.slice';
 
 interface CartItemProps {
   item: ICartItem;

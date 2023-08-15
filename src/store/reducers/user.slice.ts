@@ -69,13 +69,6 @@ const userSlice = createSlice({
       }
       userSlice.caseReducers.countTotalAndPrice(state);
     },
-    // addProductToCart: (state, action: PayloadAction<Product>) => {
-    //   const itemIndex = state.cart.items.findIndex((item) => item.id === action.payload.id);
-    //   itemIndex >= 0
-    //     ? (state.cart.items[itemIndex].count += action.payload.count)
-    //     : state.cart.items.push({ id: action.payload.id, product: action.payload, count: 1 });
-    //   userSlice.caseReducers.countTotalAndPrice(state);
-    // },
     deleteProductFromCart: (state, action: PayloadAction<string>) => {
       state.cart.items = state.cart.items.filter((item) => item.id !== action.payload);
       userSlice.caseReducers.countTotalAndPrice(state);
@@ -94,20 +87,6 @@ const userSlice = createSlice({
       state.cart.price = 0;
       state.cart.total = 0;
     },
-    // removeProductFromCart: (state, action: PayloadAction<string>) => {
-    //   const cart = state.cart as ICart;
-    //   const itemIndex = cart.items.findIndex((item) => item.id === action.payload);
-
-    //   if (itemIndex >= 0) {
-    //     const itemToRemove = cart.items[itemIndex];
-    //     if (itemToRemove.count > 1) {
-    //       itemToRemove.count -= 1;
-    //     } else {
-    //       cart.items.splice(itemIndex, 1);
-    //     }
-    //   }
-    //   userSlice.caseReducers.countTotalAndPrice(state);
-    // },
     countTotalAndPrice: (state) => {
       const cart = state.cart as ICart;
 
