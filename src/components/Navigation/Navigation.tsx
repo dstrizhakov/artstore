@@ -16,7 +16,6 @@ export const Navigation: FC = (): ReactNode => {
   const user = useAppSelector((state) => state.user.user.name);
   const cartTotal = useAppSelector((state) => state.user.cart.total);
   const dispatch = useAppDispatch();
-  console.log(cartTotal);
 
   const handleLogout = () => {
     dispatch(logout());

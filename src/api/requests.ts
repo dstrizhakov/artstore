@@ -17,6 +17,24 @@ export async function signIn(email: string, password: string) {
     .execute();
   return response;
 }
+export async function signUp(email: string, firstName: string, lastName: string, password: string) {
+  const response = await getApiRoot()
+    .withProjectKey({
+      projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+    })
+    .me()
+    .signup()
+    .post({
+      body: {
+        email: email,
+        firstName: firstName,
+        lastName: lastName || '',
+        password: password,
+      },
+    })
+    .execute();
+  return response;
+}
 
 export const getProducts = async (): Promise<ProductPagedQueryResponse> => {
   try {
@@ -118,7 +136,12 @@ export const createCustomer = async (draft: ICustomer) => {
 
 export const getCustomerById = async (ID: string) => {
   try {
-    const customer = await getApiRoot().withProjectKey({ projectKey }).customers().withId({ ID }).get().execute();
+    const customer = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .customers()
+      .withId({ ID })
+      .get()
+      .execute();
     return customer;
   } catch (error) {
     throw error;
@@ -127,7 +150,12 @@ export const getCustomerById = async (ID: string) => {
 
 export const getCustomerByKey = async (key: string) => {
   try {
-    const customer = await getApiRoot().withProjectKey({ projectKey }).customers().withKey({ key }).get().execute();
+    const customer = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .customers()
+      .withKey({ key })
+      .get()
+      .execute();
     return customer;
   } catch (error) {
     throw error;
