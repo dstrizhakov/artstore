@@ -8,6 +8,8 @@ import { getProductByKey } from '../api/getProductByKey';
 import { setProduct, setLoading, setError } from '../store/reducers/products.slice';
 import { Breadcrumbs, Button, Divider, Grid, IconButton, Link, Paper, Typography } from '@mui/material';
 import { AddShoppingCart, CalendarToday, Favorite, Share } from '@mui/icons-material';
+import { addProductToCart } from '../store/reducers/user.slice'
+import { Product } from '@commercetools/platform-sdk';
 import styles from './ProductDetails.module.scss';
 import { dateConverter } from '../utils';
 
@@ -42,6 +44,10 @@ const ProductDetails: FC = () => {
       fetchData();
     }
   }, [product, fetchData]);
+
+  const addToCart = (product: Product) => {
+    dispatch(addProductToCart(product));
+  };
 
   console.dir(product);
   return (
@@ -86,7 +92,7 @@ const ProductDetails: FC = () => {
                 ${(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
               </Typography>
               <div className={styles.buttons}>
-                <Button size="small" variant="outlined" endIcon={<AddShoppingCart />}>
+                <Button size="small" variant="outlined" endIcon={<AddShoppingCart />} onClick={() => addToCart(product)}>
                   Add to cart
                 </Button>
                 <IconButton aria-label="Add to Favorites">
