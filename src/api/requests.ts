@@ -1,8 +1,8 @@
 import { getApiRoot } from './createClient';
 import { projectKey } from './ClientBuilder';
-import { ProductPagedQueryResponse } from '@commercetools/platform-sdk';
+import { CustomerSignInResult, ProductPagedQueryResponse } from '@commercetools/platform-sdk';
 
-export async function signIn(email: string, password: string) {
+export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
   const response = await getApiRoot()
     .withProjectKey({
       projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
@@ -15,25 +15,35 @@ export async function signIn(email: string, password: string) {
       },
     })
     .execute();
-  return response;
+  return response.body;
 }
-export async function signUp(email: string, firstName: string, lastName: string, password: string) {
-  const response = await getApiRoot()
-    .withProjectKey({
-      projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-    })
-    .me()
-    .signup()
-    .post({
-      body: {
-        email: email,
-        firstName: firstName,
-        lastName: lastName || '',
-        password: password,
-      },
-    })
-    .execute();
-  return response;
+
+export async function signUp(
+  email: string,
+  firstName: string,
+  lastName: string,
+  password: string
+): Promise<CustomerSignInResult> {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({
+        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+      })
+      .me()
+      .signup()
+      .post({
+        body: {
+          email: email,
+          firstName: firstName,
+          lastName: lastName || '',
+          password: password,
+        },
+      })
+      .execute();
+    return response.body;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export const getProducts = async (): Promise<ProductPagedQueryResponse> => {
@@ -136,12 +146,7 @@ export const createCustomer = async (draft: ICustomer) => {
 
 export const getCustomerById = async (ID: string) => {
   try {
-    const customer = await getApiRoot()
-      .withProjectKey({ projectKey })
-      .customers()
-      .withId({ ID })
-      .get()
-      .execute();
+    const customer = await getApiRoot().withProjectKey({ projectKey }).customers().withId({ ID }).get().execute();
     return customer;
   } catch (error) {
     throw error;
@@ -150,12 +155,7 @@ export const getCustomerById = async (ID: string) => {
 
 export const getCustomerByKey = async (key: string) => {
   try {
-    const customer = await getApiRoot()
-      .withProjectKey({ projectKey })
-      .customers()
-      .withKey({ key })
-      .get()
-      .execute();
+    const customer = await getApiRoot().withProjectKey({ projectKey }).customers().withKey({ key }).get().execute();
     return customer;
   } catch (error) {
     throw error;

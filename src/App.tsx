@@ -1,10 +1,5 @@
 import { ReactNode, FC } from 'react';
-import {
-  Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from 'react-router-dom';
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Shop from './pages/Shop';
@@ -15,6 +10,7 @@ import NotFound from './pages/NotFound';
 import ProductDetails from './pages/ProductDetails';
 import RootLayout from './layouts/RootLayout';
 import ShopLayout from './layouts/ShopLayout';
+import Profile from './pages/Profile';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +23,7 @@ const router = createBrowserRouter(
       </Route>
 
       <Route path="cart" element={<Cart />} />
+      <Route path="profile" element={<Profile />} />
       <Route path="about" element={<About />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />

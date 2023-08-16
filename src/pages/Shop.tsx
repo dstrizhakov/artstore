@@ -15,7 +15,6 @@ import { Product } from '@commercetools/platform-sdk';
 import { addProductToCart } from '../store/reducers/cart.slice';
 import { dateConverter } from '../utils';
 
-
 export interface IArtwork {}
 export interface IResponce {}
 

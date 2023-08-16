@@ -13,9 +13,9 @@ interface IActive {
 const setActive = ({ isActive }: IActive) => (isActive ? style.active : style.link);
 
 export const Navigation: FC = (): ReactNode => {
-  const user = useAppSelector((state) => state.user.user.name);
+  const user = useAppSelector((state) => state.userOwn.customer.firstName);
+  const isAuth = useAppSelector((state) => state.userOwn.isAuth);
   const cartTotal = useAppSelector((state) => state.cart.total);
-  // const cartTotal = useAppSelector((state) => state.user.cart.total);
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
@@ -38,8 +38,9 @@ export const Navigation: FC = (): ReactNode => {
       <NavLink to="about" className={setActive}>
         About
       </NavLink>
-      {user ? (
+      {isAuth ? (
         <>
+          <NavLink to="profile">Profile</NavLink>
           <span>Welcome, {user}!</span>
           <Button variant="text" onClick={handleLogout}>
             Logout

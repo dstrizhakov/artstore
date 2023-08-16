@@ -5,7 +5,7 @@ import styles from './Login.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../api/requests';
 import { useAppDispatch } from '../hooks/redux';
-import { login } from '../store/reducers/user.slice';
+import { login } from '../store/reducers/userOwn.slice';
 import { Erroring } from './Register';
 import { validator } from '../components/Validate/validator';
 import validatorConfig from '../components/Validate/validatorConfig';
@@ -17,7 +17,7 @@ export interface DataLogin {
 }
 const Login: FC = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState({ email: '', password: '' });
+  const [data, setData] = useState({ email: 'admin@mail.ru', password: 'Fox347767!' });
   const [errors, setErrors] = useState({} as Erroring);
   useEffect(() => {
     validate();
@@ -33,22 +33,11 @@ const Login: FC = () => {
   };
 
   const handleLogin = async (email: string, password: string) => {
-    const response = await signIn(email, password);
-
-    if (response.statusCode === 200) {
-      const customer = response.body.customer;
-      console.log(response.body);
-      dispatch(
-        login({
-          id: customer.id,
-          name: customer.firstName || '',
-          email: customer.email,
-          accessToken: '',
-          refreshToken: '',
-        })
-      );
-      navigate('/');
-    }
+    const responce = await signIn(email, password);
+    const customer = responce.customer;
+    // const cart = responce.cart;
+    dispatch(login(customer));
+    navigate('/');
   };
   const validate = () => {
     const error: Erroring = validator(data, validatorConfig);

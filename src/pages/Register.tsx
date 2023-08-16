@@ -7,6 +7,8 @@ import { signUp } from '../api/requests';
 import { TextField } from '@mui/material';
 import { validator } from '../components/Validate/validator';
 import validatorConfig from '../components/Validate/validatorConfig';
+import { login } from '../store/reducers/userOwn.slice';
+import { useAppDispatch } from '../hooks/redux';
 export interface Erroring {
   [key: string]: string;
 }
@@ -49,6 +51,7 @@ export interface ConfigValidator {
 }
 const Register: FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -67,14 +70,11 @@ const Register: FC = () => {
       [target!.name]: target!.value,
     }));
   };
-  const handleRegister = async (
-    email: string,
-    password: string,
-    firsName: string,
-    lastName: string
-  ) => {
+  const handleRegister = async (email: string, password: string, firsName: string, lastName: string) => {
     const response = await signUp(email, password, firsName, lastName);
-    if (response.statusCode === 201) {
+    const customer = response.customer;
+    dispatch(login(customer));
+    if (customer) {
       navigate('/');
     }
   };
