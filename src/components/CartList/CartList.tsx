@@ -9,9 +9,9 @@ import Button from '@mui/material/Button';
 const CartList: FC = () => {
   const [modal, setModal] = useState(false);
   const dispatch = useAppDispatch();
-  const cartTotal = useAppSelector((state) => state.user.cart.price);
-  const cartList = useAppSelector((state) => state.user.cart.items);
-  const totalCount = useAppSelector((state) => state.user.cart.total);
+  const cartTotal = useAppSelector((state) => state.cart.price);
+  const cartList = useAppSelector((state) => state.cart.items);
+  const totalCount = useAppSelector((state) => state.cart.total);
 
   const completeOrder = async () => {
     setModal(true);

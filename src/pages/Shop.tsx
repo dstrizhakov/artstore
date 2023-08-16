@@ -12,8 +12,9 @@ import { setProducts, setLoading, setError } from '../store/reducers/products.sl
 import { getProducts } from '../api/requests';
 import styles from './Shop.module.scss';
 import { Product } from '@commercetools/platform-sdk';
-import { addProductToCart } from '../store/reducers/user.slice';
+import { addProductToCart } from '../store/reducers/cart.slice';
 import { dateConverter } from '../utils';
+
 
 export interface IArtwork {}
 export interface IResponce {}
