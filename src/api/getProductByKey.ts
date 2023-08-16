@@ -1,4 +1,3 @@
-
 import { projectKey } from './ClientBuilder';
 import { Product } from '@commercetools/platform-sdk';
 import { getApiRoot } from './createClient';

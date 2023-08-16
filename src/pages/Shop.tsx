@@ -13,6 +13,7 @@ import { getProducts } from '../api/requests';
 import styles from './Shop.module.scss';
 import { Product } from '@commercetools/platform-sdk';
 import { addProductToCart } from '../store/reducers/user.slice';
+import { dateConverter } from '../utils';
 
 export interface IArtwork {}
 export interface IResponce {}
@@ -65,7 +66,11 @@ const Shop: FC = () => {
                   image={product.masterData.staged.masterVariant?.images?.[0]?.url || ''}
                   alt={product.masterData.current.name['en-US']}
                 />
-                <CardHeader title={product.masterData.current.name['en-US']} subheader={product.createdAt}></CardHeader>
+                <CardHeader
+                  title={product.masterData.current.name['en-US']}
+                  subheader={dateConverter(product.createdAt)}
+                ></CardHeader>
+
                 <CardActions>
                   <Stack direction="row" spacing={3}>
                     <Button
