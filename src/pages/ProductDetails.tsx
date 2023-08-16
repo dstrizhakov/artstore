@@ -8,7 +8,7 @@ import { getProductByKey } from '../api/getProductByKey';
 import { setProduct, setLoading, setError } from '../store/reducers/products.slice';
 import { Breadcrumbs, Button, Divider, Grid, IconButton, Link, Paper, Typography } from '@mui/material';
 import { AddShoppingCart, CalendarToday, Favorite, Share } from '@mui/icons-material';
-import { addProductToCart } from '../store/reducers/user.slice'
+import { addProductToCart } from '../store/reducers/user.slice';
 import { Product } from '@commercetools/platform-sdk';
 import styles from './ProductDetails.module.scss';
 import { dateConverter } from '../utils';
@@ -49,7 +49,8 @@ const ProductDetails: FC = () => {
     dispatch(addProductToCart(product));
   };
 
-  console.dir(product);
+  // const description = product.masterData.current.description && product.masterData.current.description['en-US']
+
   return (
     <div>
       <Grid container padding={2}>
@@ -85,14 +86,27 @@ const ProductDetails: FC = () => {
               <Typography variant="body2" color="textSecondary" className={styles.data}>
                 {<CalendarToday />} {dateConverter(product.createdAt)}
               </Typography>
-              <Typography variant="body1" gutterBottom>
-                {product.masterData.current.description && product.masterData.current.description['en-US']}
-              </Typography>
+
+              {product.masterData.current.description &&
+                product.masterData.current.description['en-US']
+                  .split('\n')
+                  .filter((elem) => elem !== '')
+                  .map((item, index) => (
+                    <Typography key={index} variant="body1" gutterBottom>
+                      {item}
+                    </Typography>
+                  ))}
+
               <Typography variant="h5" gutterBottom>
                 ${(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
               </Typography>
               <div className={styles.buttons}>
-                <Button size="small" variant="outlined" endIcon={<AddShoppingCart />} onClick={() => addToCart(product)}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  endIcon={<AddShoppingCart />}
+                  onClick={() => addToCart(product)}
+                >
                   Add to cart
                 </Button>
                 <IconButton aria-label="Add to Favorites">
