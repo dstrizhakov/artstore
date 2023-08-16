@@ -45,32 +45,32 @@ const ProductDetails: FC = () => {
   console.dir(product);
   return (
     <div>
-      <Grid container padding={2}> 
-          <Breadcrumbs aria-label="breadcrumb">
+      <Grid container padding={2}>
+        <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="inherit" href="/">
             Home
           </Link>
-          <Link
-            underline="hover"
-            color="inherit"
-            href="/shop"
-          >
+          <Link underline="hover" color="inherit" href="/shop">
             Shop
           </Link>
           <Typography color="text.primary">{product.key}</Typography>
         </Breadcrumbs>
-          </Grid>
+      </Grid>
 
       {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+          }}
+        >
           <CircularProgress />
         </div>
       ) : (
         <Paper className={styles.root}>
-          
-          
           <Grid container>
-            
             <Grid item xs={12} sm={12} md={6} padding={2}>
               <img
                 src={product.masterData.staged.masterVariant?.images?.[0]?.url || ''}
@@ -89,7 +89,7 @@ const ProductDetails: FC = () => {
                 {product.masterData.current.description && product.masterData.current.description['en-US']}
               </Typography>
               <Typography variant="h5" gutterBottom>
-              ${(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
+                ${(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
               </Typography>
               <div className={styles.buttons}>
                 <Button size="small" variant="outlined" endIcon={<AddShoppingCart />}>
