@@ -6,7 +6,16 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { getProductByKey } from '../api/getProductByKey';
 import { setProduct, setLoading, setError } from '../store/reducers/products.slice';
-import { Breadcrumbs, Button, Divider, Grid, IconButton, Link, Paper, Typography } from '@mui/material';
+import {
+  Breadcrumbs,
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  Link,
+  Paper,
+  Typography,
+} from '@mui/material';
 import { AddShoppingCart, CalendarToday, Favorite, Share } from '@mui/icons-material';
 import { addProductToCart } from '../store/reducers/user.slice';
 import { Product } from '@commercetools/platform-sdk';
@@ -66,7 +75,14 @@ const ProductDetails: FC = () => {
       </Grid>
 
       {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+          }}
+        >
           <CircularProgress />
         </div>
       ) : (
@@ -79,7 +95,15 @@ const ProductDetails: FC = () => {
                 className={styles.productImage}
               />
             </Grid>
-            <Grid item xs={12} sm={12} md={6} spacing={2} padding={2} className={styles.productInfo}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={6}
+              spacing={2}
+              padding={2}
+              className={styles.productInfo}
+            >
               <Typography variant="h4" gutterBottom>
                 {product.masterData.current.name['en-US']}
               </Typography>
@@ -98,7 +122,9 @@ const ProductDetails: FC = () => {
                   ))}
 
               <Typography variant="h5" gutterBottom>
-                ${(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
+                $
+                {(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) /
+                  100}
               </Typography>
               <div className={styles.buttons}>
                 <Button

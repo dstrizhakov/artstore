@@ -22,7 +22,6 @@ const NotFound: FC = () => {
           <span>4</span>
         </span>
       </section>
-
     </div>
   );
 };

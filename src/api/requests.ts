@@ -118,7 +118,12 @@ export const createCustomer = async (draft: ICustomer) => {
 
 export const getCustomerById = async (ID: string) => {
   try {
-    const customer = await getApiRoot().withProjectKey({ projectKey }).customers().withId({ ID }).get().execute();
+    const customer = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .customers()
+      .withId({ ID })
+      .get()
+      .execute();
     return customer;
   } catch (error) {
     throw error;
@@ -127,7 +132,12 @@ export const getCustomerById = async (ID: string) => {
 
 export const getCustomerByKey = async (key: string) => {
   try {
-    const customer = await getApiRoot().withProjectKey({ projectKey }).customers().withKey({ key }).get().execute();
+    const customer = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .customers()
+      .withKey({ key })
+      .get()
+      .execute();
     return customer;
   } catch (error) {
     throw error;
