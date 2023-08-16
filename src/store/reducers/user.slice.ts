@@ -92,7 +92,8 @@ const userSlice = createSlice({
 
       const totalQuantity = cart.items.reduce((total, item) => total + item.count, 0);
       const totalPrice = cart.items.reduce((total, item) => {
-        const price = item.product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0;
+        const price =
+          item.product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0;
         return total + (price / 100) * item.count;
       }, 0);
 
@@ -102,7 +103,13 @@ const userSlice = createSlice({
   },
 });
 
-export const { login, logout, addProductToCart, deleteProductFromCart, changeProductCount, clearCart } =
-  userSlice.actions;
+export const {
+  login,
+  logout,
+  addProductToCart,
+  deleteProductFromCart,
+  changeProductCount,
+  clearCart,
+} = userSlice.actions;
 
 export default userSlice.reducer;
