@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Button from '@mui/material/Button';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
-import { logout } from '../../store/reducers/userOwn.slice';
+import { logout } from '../../store/reducers/user.slice';
 
 interface IActive {
   isActive: boolean;
@@ -13,8 +13,8 @@ interface IActive {
 const setActive = ({ isActive }: IActive) => (isActive ? style.active : style.link);
 
 export const Navigation: FC = (): ReactNode => {
-  const user = useAppSelector((state) => state.userOwn.customer.firstName);
-  const isAuth = useAppSelector((state) => state.userOwn.isAuth);
+  const user = useAppSelector((state) => state.user.customer.firstName);
+  const isAuth = useAppSelector((state) => state.user.isAuth);
   const cartTotal = useAppSelector((state) => state.cart.total);
   const dispatch = useAppDispatch();
 

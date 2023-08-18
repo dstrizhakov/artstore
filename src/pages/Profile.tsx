@@ -8,7 +8,7 @@ import CustomerAddress from '../components/Profile/CustomerAddress/CustomerAddre
 
 const Profile = () => {
   const [isBillingSame, setIsBillingSame] = useState(false);
-  const customer = useAppSelector((state) => state.userOwn.customer);
+  const customer = useAppSelector((state) => state.user.customer);
   return (
     <div className={styles.wrapper}>
       <h2>Profile Page</h2>

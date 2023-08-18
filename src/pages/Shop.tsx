@@ -13,7 +13,7 @@ import { getProducts } from '../api/requests';
 import styles from './Shop.module.scss';
 import { Product } from '@commercetools/platform-sdk';
 import { addProductToCart } from '../store/reducers/cart.slice';
-import { dateConverter } from '../utils';
+import { dateConverter } from '../utils/dateConverter';
 import { Link } from 'react-router-dom';
 
 export interface IArtwork {}

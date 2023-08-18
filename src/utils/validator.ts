@@ -1,5 +1,5 @@
-import { DataLogin } from './../../pages/Login';
-import { DataRegister, Erroring, ConfigValidator, Required } from './../../pages/Register';
+import { DataLogin } from '../pages/Login';
+import { DataRegister, Erroring, ConfigValidator, Required } from '../pages/Register';
 
 export const validator = (data: DataRegister | DataLogin, config: ConfigValidator) => {
   const errors: Erroring = {};

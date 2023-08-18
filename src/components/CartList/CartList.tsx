@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import styles from './CartList.module.scss';
-import { clearCart } from '../../store/reducers/user.slice';
+import { clearCart } from '../../store/reducers/cart.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import CartItem from '../CartItem/CartItem';
 import Modal from '../Modal/Modal';
