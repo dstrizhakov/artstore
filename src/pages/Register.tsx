@@ -1,14 +1,15 @@
 import Button from '@mui/material/Button';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useCallback } from 'react';
 import styles from './Login.module.scss';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { signUp } from '../api/requests';
 import { TextField } from '@mui/material';
-import { validator } from '../components/Validate/validator';
-import validatorConfig from '../components/Validate/validatorConfig';
-import { login } from '../store/reducers/userOwn.slice';
+import { validator } from '../utils/validator';
+import validatorConfig from '../utils/validatorConfig';
+import { login } from '../store/reducers/user.slice';
 import { useAppDispatch } from '../hooks/redux';
+
 export interface Erroring {
   [key: string]: string;
 }
@@ -49,6 +50,7 @@ export interface ConfigValidator {
     isRequired: Required;
   };
 }
+
 const Register: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -58,10 +60,8 @@ const Register: FC = () => {
     firstName: '',
     lastName: '',
   });
+
   const [errors, setErrors] = useState({} as Erroring);
-  useEffect(() => {
-    validate();
-  }, [data]);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = event.currentTarget;
@@ -70,6 +70,7 @@ const Register: FC = () => {
       [target!.name]: target!.value,
     }));
   };
+
   const handleRegister = async (email: string, password: string, firsName: string, lastName: string) => {
     const response = await signUp(email, password, firsName, lastName);
     const customer = response.customer;
@@ -78,11 +79,18 @@ const Register: FC = () => {
       navigate('/');
     }
   };
-  const validate = () => {
-    const error: Erroring = validator(data, validatorConfig);
-    setErrors(error);
-    return Object.keys(errors).length === 0;
-  };
+
+  const validate = useCallback(async () => {
+    try {
+      const error: Erroring = await validator(data, validatorConfig);
+      setErrors(error);
+      return Object.keys(error).length === 0;
+    } catch (validationError) {
+      console.error('Validation Error:', validationError);
+      return false;
+    }
+  }, [data]);
+
   const isValid = Object.keys(errors).length === 0;
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -90,6 +98,10 @@ const Register: FC = () => {
     if (!isValid) return;
     handleRegister(data.email, data.password, data.firstName, data.lastName);
   };
+
+  useEffect(() => {
+    validate();
+  }, [data, validate]);
 
   return (
     <div>

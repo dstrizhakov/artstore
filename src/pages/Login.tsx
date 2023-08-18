@@ -1,14 +1,14 @@
 import Button from '@mui/material/Button';
 import { TextField } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import styles from './Login.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../api/requests';
 import { useAppDispatch } from '../hooks/redux';
-import { login } from '../store/reducers/userOwn.slice';
+import { login } from '../store/reducers/user.slice';
 import { Erroring } from './Register';
-import { validator } from '../components/Validate/validator';
-import validatorConfig from '../components/Validate/validatorConfig';
+import { validator } from '../utils/validator';
+import validatorConfig from '../utils/validatorConfig';
 // import VisibilityIcon from '@mui/icons-material/Visibility';
 // import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 export interface DataLogin {
@@ -19,9 +19,6 @@ const Login: FC = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({ email: 'admin@mail.ru', password: 'Fox347767!' });
   const [errors, setErrors] = useState({} as Erroring);
-  useEffect(() => {
-    validate();
-  }, [data]);
 
   const dispatch = useAppDispatch();
   const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -33,18 +30,24 @@ const Login: FC = () => {
   };
 
   const handleLogin = async (email: string, password: string) => {
-    // loginCustomer(email, password);
     const responce = await signIn(email, password);
     const customer = responce.customer;
     // const cart = responce.cart;
     dispatch(login(customer));
     navigate('/');
   };
-  const validate = () => {
-    const error: Erroring = validator(data, validatorConfig);
-    setErrors(error);
-    return Object.keys(errors).length === 0;
-  };
+
+  const validate = useCallback(async () => {
+    try {
+      const error: Erroring = await validator(data, validatorConfig);
+      setErrors(error);
+      return Object.keys(error).length === 0;
+    } catch (validationError) {
+      console.error('Validation Error:', validationError);
+      return false;
+    }
+  }, [data]);
+
   const isValid = Object.keys(errors).length === 0;
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,6 +55,10 @@ const Login: FC = () => {
     if (!isValid) return;
     handleLogin(data.email, data.password);
   };
+
+  useEffect(() => {
+    validate();
+  }, [data, validate]);
 
   return (
     <div>

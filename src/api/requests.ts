@@ -1,9 +1,9 @@
 import { getApiRoot, projectKey } from './ClientBuilder';
 import {
   CustomerSignInResult,
-  MyCustomerChangePassword,
   ProductPagedQueryResponse,
   Product,
+  CustomerChangePassword,
 } from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
@@ -50,18 +50,15 @@ export async function signUp(
   }
 }
 
-export async function changePassword({
-  version,
-  currentPassword,
-  newPassword,
-}: MyCustomerChangePassword): Promise<any> {
+export async function changePassword({ id, version, currentPassword, newPassword }: CustomerChangePassword) {
   try {
     const response = await getApiRoot()
       .withProjectKey({ projectKey: import.meta.env.VITE_CTP_PROJECT_KEY })
-      .me()
+      .customers()
       .password()
       .post({
         body: {
+          id,
           version,
           currentPassword,
           newPassword,

@@ -1,8 +1,9 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Box, Button, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, Paper } from '@mui/material';
 import { changePassword } from '../../../api/requests';
-import { useAppSelector } from '../../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { FC, useState } from 'react';
+import { login } from '../../../store/reducers/user.slice';
 
 interface CustomerPasswordProps {
   password?: string;
@@ -18,7 +19,9 @@ const CustomerPassword: FC<CustomerPasswordProps> = ({ password }) => {
   const [newPassword, setNewPassword] = useState<string>('');
   const [newPasswordConf, setNewPasswordConf] = useState<string>('');
 
-  const version = useAppSelector((store) => store.userOwn.customer.version);
+  const id = useAppSelector((store) => store.user.customer.id);
+  const version = useAppSelector((store) => store.user.customer.version);
+  const dispatch = useAppDispatch();
 
   const handleClickShowPassword = () => {
     if (isEdit) {
@@ -42,9 +45,10 @@ const CustomerPassword: FC<CustomerPasswordProps> = ({ password }) => {
     //тут проверяем валидность данных и отправляем на сервер
     setIsEdit(false);
     setShowPassword(false);
+    setShowNewPassword(false);
     setShowPasswordConfirm(false);
-    const customer = await changePassword({ version, currentPassword: passwordValue, newPassword });
-    console.log(customer);
+    const customer = await changePassword({ id, version, currentPassword: passwordValue, newPassword });
+    dispatch(login(customer));
   };
   return (
     <Grid item xs={12} md={4}>
