@@ -14,6 +14,7 @@ import styles from './Shop.module.scss';
 import { Product } from '@commercetools/platform-sdk';
 import { addProductToCart } from '../store/reducers/cart.slice';
 import { dateConverter } from '../utils';
+import { Link } from 'react-router-dom';
 
 export interface IArtwork {}
 export interface IResponce {}
@@ -81,9 +82,11 @@ const Shop: FC = () => {
                     >
                       Add to cart
                     </Button>
-                    <Button size="small" variant="text" href={'shop/' + product.key}>
-                      Learn More
-                    </Button>
+                    {product.key && (
+                      <Button>
+                        <Link to={product.key}>Learn More</Link>
+                      </Button>
+                    )}
                   </Stack>
                 </CardActions>
               </Card>

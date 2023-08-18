@@ -1,6 +1,10 @@
-import { getApiRoot } from './createClient';
-import { projectKey } from './ClientBuilder';
-import { CustomerSignInResult, ProductPagedQueryResponse } from '@commercetools/platform-sdk';
+import { getApiRoot, projectKey } from './ClientBuilder';
+import {
+  CustomerSignInResult,
+  MyCustomerChangePassword,
+  ProductPagedQueryResponse,
+  Product,
+} from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
   const response = await getApiRoot()
@@ -37,6 +41,30 @@ export async function signUp(
           firstName: firstName,
           lastName: lastName || '',
           password: password,
+        },
+      })
+      .execute();
+    return response.body;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function changePassword({
+  version,
+  currentPassword,
+  newPassword,
+}: MyCustomerChangePassword): Promise<any> {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey: import.meta.env.VITE_CTP_PROJECT_KEY })
+      .me()
+      .password()
+      .post({
+        body: {
+          version,
+          currentPassword,
+          newPassword,
         },
       })
       .execute();
@@ -194,5 +222,20 @@ export const authCustomer = async (email: string, password: string) => {
     return responce;
   } catch (error) {
     throw error;
+  }
+};
+
+export const getProductByKey = async (productKey: string): Promise<Product> => {
+  try {
+    const project = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .products()
+      .withKey({ key: productKey })
+      .get()
+      .execute();
+
+    return project.body;
+  } catch (e) {
+    throw e;
   }
 };

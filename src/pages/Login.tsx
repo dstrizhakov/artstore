@@ -33,6 +33,7 @@ const Login: FC = () => {
   };
 
   const handleLogin = async (email: string, password: string) => {
+    // loginCustomer(email, password);
     const responce = await signIn(email, password);
     const customer = responce.customer;
     // const cart = responce.cart;
@@ -75,7 +76,7 @@ const Login: FC = () => {
           name="password"
           id="outlined-basic-password"
           label="password"
-          type="password"
+          // type="password"
           variant="outlined"
           autoComplete="current-password"
           helperText={errors.password}

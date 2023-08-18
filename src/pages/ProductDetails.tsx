@@ -4,14 +4,15 @@ import { useParams } from 'react-router';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { getProductByKey } from '../api/getProductByKey';
+
 import { setProduct, setLoading, setError } from '../store/reducers/products.slice';
 import { Breadcrumbs, Button, Divider, Grid, IconButton, Link, Paper, Typography } from '@mui/material';
 import { AddShoppingCart, CalendarToday, Favorite, Share } from '@mui/icons-material';
-import { addProductToCart } from '../store/reducers/user.slice';
+import { addProductToCart } from '../store/reducers/cart.slice';
 import { Product } from '@commercetools/platform-sdk';
 import styles from './ProductDetails.module.scss';
 import { dateConverter } from '../utils';
+import { getProductByKey } from '../api/requests';
 
 const ProductDetails: FC = () => {
   const { id } = useParams();
