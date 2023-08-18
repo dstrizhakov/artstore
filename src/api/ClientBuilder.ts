@@ -1,4 +1,5 @@
 // import fetch from 'node-fetch';
+import { ApiRoot, createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import {
   ClientBuilder,
   Client,
@@ -31,10 +32,35 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch,
 };
 
-// Export the ClientBuilder
-export const ctpClient: Client = new ClientBuilder()
+const ctpClient: Client = new ClientBuilder()
   .withProjectKey(projectKey)
   .withClientCredentialsFlow(authMiddlewareOptions)
   .withHttpMiddleware(httpMiddlewareOptions)
   .withLoggerMiddleware()
   .build();
+
+export const getApiRoot: () => ApiRoot = () => {
+  return createApiBuilderFromCtpClient(ctpClient);
+};
+
+// export const withPasswordFlowClient = (username: string, password: string) => {
+//   const options: PasswordAuthMiddlewareOptions = {
+//     host: authUrl,
+//     projectKey,
+//     credentials: {
+//       clientId,
+//       clientSecret,
+//       user: {
+//         username,
+//         password,
+//       },
+//     },
+//     scopes,
+//     fetch,
+//   };
+//   return new ClientBuilder().withProjectKey().withPasswordFlow(options).build();
+// };
+
+// export const getCliApiRoot: () => ApiRoot = () => {
+//   return createApiBuilderFromCtpClient(withPasswordFlowClient);
+// };

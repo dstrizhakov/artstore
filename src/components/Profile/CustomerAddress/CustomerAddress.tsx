@@ -36,77 +36,77 @@ const CustomerAddress: FC<CustomerAddressProps> = ({ customer, type, billingSame
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_country"
+              id={`${type}_country`}
               label="Country"
               defaultValue={customer.addresses[0].state}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_state"
+              id={`${type}_state`}
               label="State"
               defaultValue={customer.addresses[0].country}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_city"
+              id={`${type}_city`}
               label="City"
               defaultValue={customer.addresses[0].city}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_street_name"
+              id={`${type}_street_name`}
               label="Street name"
               defaultValue={customer.addresses[0].streetName}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_street_number"
+              id={`${type}_street_number`}
               label="Street number"
               defaultValue={customer.addresses[0].streetNumber}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_building"
+              id={`${type}_building`}
               label="Building"
               defaultValue={customer.addresses[0].building}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_apart"
+              id={`${type}_apart`}
               label="Apartment"
               defaultValue={customer.addresses[0].apartment}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_zip"
+              id={`${type}_zip`}
               label="Zip"
               defaultValue={customer.addresses[0].postalCode}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_first_name"
+              id={`${type}_first_name`}
               label="First name"
               defaultValue={customer.addresses[0].firstName}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_last_name"
+              id={`${type}_last_name`}
               label="Last name"
               defaultValue={customer.addresses[0].lastName}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
-              id="shipping_phone"
+              id={`${type}_phone`}
               label="Phone number"
               defaultValue={customer.addresses[0].lastName}
             />
