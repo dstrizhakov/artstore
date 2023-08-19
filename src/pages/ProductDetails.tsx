@@ -32,7 +32,7 @@ const ProductDetails: FC = () => {
           <Link underline="hover" color="inherit" href="/shop">
             Shop
           </Link>
-          <Typography color="text.primary">{product.key}</Typography>
+          <Typography color="text.primary">{product.masterData.current.name['en-US'].slice(0,22).concat('...')}</Typography>
         </Breadcrumbs>
       </Grid>
       <Paper className={styles.root}>
