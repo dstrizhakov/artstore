@@ -1,7 +1,8 @@
+import { DataCustomerInfo } from '../components/Profile/CustomerInfo/CustomerInfo';
 import { DataLogin } from '../pages/Login';
 import { DataRegister, Erroring, ConfigValidator, Required } from '../pages/Register';
 
-export const validator = (data: DataRegister | DataLogin, config: ConfigValidator) => {
+export const validator = (data: DataRegister | DataLogin | DataCustomerInfo, config: ConfigValidator) => {
   const errors: Erroring = {};
   const validate = (validateMethod: string, data: string, config: Required) => {
     let statusVlidate;
@@ -40,7 +41,7 @@ export const validator = (data: DataRegister | DataLogin, config: ConfigValidato
     for (const validateMethod in config[fildName as keyof ConfigValidator]) {
       const error = validate(
         validateMethod,
-        data[fildName as keyof (DataRegister | DataLogin)],
+        data[fildName as keyof (DataRegister | DataLogin | DataCustomerInfo)],
         config[fildName as keyof ConfigValidator][validateMethod as keyof typeof validate]
       );
       if (error && !errors[fildName as keyof typeof errors]) {

@@ -49,6 +49,48 @@ export async function signUp(
     throw error;
   }
 }
+export const updateCustomer = async (
+  customerID: string,
+  version: number,
+  firstName: string,
+  lastName: string,
+  email: string,
+  middleName: string
+) => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey: import.meta.env.VITE_CTP_PROJECT_KEY })
+      .customers()
+      .withId({ ID: customerID })
+      .post({
+        body: {
+          version: version + 1,
+          actions: [
+            {
+              action: 'setFirstName',
+              firstName: firstName,
+            },
+            {
+              action: 'setLastName',
+              lastName: lastName,
+            },
+            {
+              action: 'changeEmail',
+              email: email,
+            },
+            {
+              action: 'setMiddleName',
+              middleName: middleName,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response.body;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export async function changePassword({ id, version, currentPassword, newPassword }: CustomerChangePassword) {
   try {
