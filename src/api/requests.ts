@@ -64,7 +64,7 @@ export const updateCustomer = async (
       .withId({ ID: customerID })
       .post({
         body: {
-          version: version + 1,
+          version,
           actions: [
             {
               action: 'setFirstName',

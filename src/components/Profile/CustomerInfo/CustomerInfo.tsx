@@ -18,7 +18,7 @@ export interface DataCustomerInfo {
   email: string;
 }
 const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
-  const [isEdit, setIsEdit] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
   const [data, setData] = useState({
     firstName: customer.firstName || '',
     lastName: customer.lastName || '',
@@ -28,20 +28,14 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
   const [emailDirty, setEmailDirty] = useState(false);
   const [firstNameDirty, setFirstNameDirty] = useState(false);
   const [lastNameDirty, setLastNameDirty] = useState(false);
-
-  // const [firstName, setFirtsName] = useState(customer.firstName);
-  // const [lastName, setLastName] = useState(customer.lastName);
-  // const [middleName, setMiddleName] = useState(customer.middleName);
-  // const [email, setEmail] = useState(customer.email);
   const [errors, setErrors] = useState({} as Erroring);
+
   const dispatch = useAppDispatch();
+
   const handleEdit = () => {
     setIsEdit(true);
   };
-  const handleSave = () => {
-    //тут проверяем валидность данных и отправляем на сервер
-    setIsEdit(false);
-  };
+
   const handleUpdate = async () => {
     const customerUpdate = await updateCustomer(
       customer.id,
@@ -53,6 +47,7 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
     );
     dispatch(login(customerUpdate));
   };
+
   const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const eventTarget = e.target as HTMLInputElement;
     switch (eventTarget.name) {
@@ -85,6 +80,7 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
         break;
     }
   };
+
   const validate = useCallback(async () => {
     try {
       const error: Erroring = validator(data, validatorConfig);
@@ -97,12 +93,14 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
   }, [data]);
 
   const isValid = Object.keys(errors).length === 0;
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+
+  const handleSave = () => {
     const isValid = validate();
     if (!isValid) return;
     handleUpdate();
+    setIsEdit(false);
   };
+
   const blurHandler = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const eventTarget = e.target as HTMLInputElement;
     switch (eventTarget.name) {
@@ -127,6 +125,7 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
   useEffect(() => {
     validate();
   }, [data, validate]);
+
   return (
     <Grid item xs={12} md={8}>
       <Paper>
@@ -140,73 +139,70 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
           }}
         >
           <h3>Customer info</h3>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              error={errors.firstName && firstNameDirty ? true : false}
-              variant="standard"
-              disabled={!isEdit}
-              onChange={(e) => {
-                handleChange(e);
-              }}
-              onBlur={(e) => blurHandler(e)}
-              id="first_name"
-              label="First name"
-              name="firstName"
-              defaultValue={customer.firstName}
-              helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
-            />
-            <TextField
-              variant="standard"
-              disabled={!isEdit}
-              onChange={(e) => {
-                handleChange(e);
-              }}
-              id="middle_name"
-              label="Middle name"
-              name="middleName"
-              defaultValue={customer.middleName}
-            />
-            <TextField
-              error={errors.lastName && lastNameDirty ? true : false}
-              variant="standard"
-              onChange={(e) => {
-                handleChange(e);
-              }}
-              onBlur={(e) => blurHandler(e)}
-              disabled={!isEdit}
-              id="last_name"
-              label="Last name"
-              name="lastName"
-              defaultValue={customer.lastName}
-              helperText={errors.lastName && lastNameDirty ? errors.lastName : ''}
-            />
-            <TextField
-              error={errors.email && emailDirty ? true : false}
-              variant="standard"
-              disabled={!isEdit}
-              onChange={(e) => {
-                handleChange(e);
-              }}
-              onBlur={(e) => blurHandler(e)}
-              id="customer_email"
-              label="Email"
-              name="email"
-              defaultValue={customer.email}
-              helperText={errors.email && emailDirty ? errors.email : ''}
-            />
+          <TextField
+            error={errors.firstName && firstNameDirty ? true : false}
+            variant="standard"
+            disabled={!isEdit}
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            onBlur={(e) => blurHandler(e)}
+            id="first_name"
+            label="First name"
+            name="firstName"
+            defaultValue={customer.firstName}
+            helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
+          />
+          <TextField
+            variant="standard"
+            disabled={!isEdit}
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            id="middle_name"
+            label="Middle name"
+            name="middleName"
+            defaultValue={customer.middleName}
+          />
+          <TextField
+            error={errors.lastName && lastNameDirty ? true : false}
+            variant="standard"
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            onBlur={(e) => blurHandler(e)}
+            disabled={!isEdit}
+            id="last_name"
+            label="Last name"
+            name="lastName"
+            defaultValue={customer.lastName}
+            helperText={errors.lastName && lastNameDirty ? errors.lastName : ''}
+          />
+          <TextField
+            error={errors.email && emailDirty ? true : false}
+            variant="standard"
+            disabled={!isEdit}
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            onBlur={(e) => blurHandler(e)}
+            id="customer_email"
+            label="Email"
+            name="email"
+            defaultValue={customer.email}
+            helperText={errors.email && emailDirty ? errors.email : ''}
+          />
 
-            <div>
-              <Button
-                type="submit"
-                disabled={!isValid}
-                onClick={() => {
-                  isEdit ? handleSave() : handleEdit();
-                }}
-              >
-                {isEdit ? 'Save' : 'Edit'}
-              </Button>
-            </div>
-          </form>
+          <div>
+            <Button
+              disabled={!isValid}
+              onClick={() => {
+                isEdit ? handleSave() : handleEdit();
+              }}
+            >
+              {isEdit ? 'Save' : 'Edit'}
+            </Button>
+          </div>
         </Box>
       </Paper>
     </Grid>

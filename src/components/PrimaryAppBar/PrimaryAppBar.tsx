@@ -204,7 +204,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" style={{ background: '#282828' }}>
         <Container maxWidth="xl">
           <Toolbar style={{ margin: 0, padding: 0 }}>
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
