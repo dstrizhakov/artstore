@@ -6,12 +6,14 @@ export interface IUser {
   email: string;
   accessToken: string;
   refreshToken: string;
+  isAuth: boolean;
 }
 
 const initialState: IUser = {
   id: '',
   name: '',
   email: '',
+  isAuth: false,
   accessToken: '',
   refreshToken: '',
 };
@@ -21,6 +23,7 @@ const userOwnReducer = createSlice({
   initialState,
   reducers: {
     login: (state, action: PayloadAction<IUser>) => {
+      state.isAuth = true;
       state.id = action.payload.id;
       state.name = action.payload.name;
       state.email = action.payload.email;
@@ -28,6 +31,7 @@ const userOwnReducer = createSlice({
       state.refreshToken = action.payload.refreshToken;
     },
     logout: (state) => {
+      state.isAuth = false;
       state.id = initialState.id;
       state.name = initialState.name;
       state.email = initialState.email;

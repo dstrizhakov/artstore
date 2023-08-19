@@ -73,7 +73,7 @@ const Register: FC = () => {
     firsName: string,
     lastName: string
   ) => {
-    const response = await signUp(email, password, firsName, lastName);
+    const response = await signUp(email, firsName, lastName, password);
     if (response.statusCode === 201) {
       navigate('/');
     }

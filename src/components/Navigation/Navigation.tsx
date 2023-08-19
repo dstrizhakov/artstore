@@ -13,7 +13,7 @@ interface IActive {
 const setActive = ({ isActive }: IActive) => (isActive ? style.active : style.link);
 
 export const Navigation: FC = (): ReactNode => {
-  const user = useAppSelector((state) => state.user.user.name);
+  const user = useAppSelector((state) => state.userOwn.name);
   const cartTotal = useAppSelector((state) => state.cart.total);
   // const cartTotal = useAppSelector((state) => state.user.cart.total);
   const dispatch = useAppDispatch();

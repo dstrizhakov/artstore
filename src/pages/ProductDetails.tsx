@@ -122,7 +122,9 @@ const ProductDetails: FC = () => {
                   ))}
 
               <Typography variant="h5" gutterBottom>
-                ${(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
+                $
+                {(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) /
+                  100}
               </Typography>
               <div className={styles.buttons}>
                 <Button

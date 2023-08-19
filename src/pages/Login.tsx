@@ -5,7 +5,7 @@ import styles from './Login.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../api/requests';
 import { useAppDispatch } from '../hooks/redux';
-import { login } from '../store/reducers/user.slice';
+import { login } from '../store/reducers/userOwn.slice';
 import { Erroring } from './Register';
 import { validator } from '../components/Validate/validator';
 import validatorConfig from '../components/Validate/validatorConfig';
@@ -43,6 +43,7 @@ const Login: FC = () => {
           id: customer.id,
           name: customer.firstName || '',
           email: customer.email,
+          isAuth: true,
           accessToken: '',
           refreshToken: '',
         })
