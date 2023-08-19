@@ -1,14 +1,24 @@
 import { Box, Grid } from '@mui/material';
 import styles from './Profile.module.scss';
 import { useAppSelector } from '../hooks/redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomerInfo from '../components/Profile/CustomerInfo/CustomerInfo';
 import CustomerPassword from '../components/Profile/CustomerPassword/CustomerPassword';
 import CustomerAddress from '../components/Profile/CustomerAddress/CustomerAddress';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [isBillingSame, setIsBillingSame] = useState(false);
   const customer = useAppSelector((state) => state.user.customer);
+  const isAuth = useAppSelector((state) => state.user.isAuth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuth) {
+      navigate('/');
+    }
+  }, [isAuth, navigate]);
+
   return (
     <div className={styles.wrapper}>
       <h2>Profile Page</h2>

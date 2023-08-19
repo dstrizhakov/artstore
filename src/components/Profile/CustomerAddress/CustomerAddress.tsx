@@ -1,5 +1,6 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { Box, Button, FormControlLabel, Grid, Paper, Switch, TextField } from '@mui/material';
+// import { changeAddress } from '../../../api/requests';
 import { FC, useState } from 'react';
 
 interface CustomerAddressProps {
@@ -11,12 +12,49 @@ interface CustomerAddressProps {
 
 const CustomerAddress: FC<CustomerAddressProps> = ({ customer, type, billingSame, setBillingSame }) => {
   const [isEdit, setIsEdit] = useState(false);
+  const [country, setCountry] = useState(customer.addresses[0].country);
+  const [state, setState] = useState(customer.addresses[0].state);
+  const [city, setCity] = useState(customer.addresses[0].city);
+  const [streetName, setStreetName] = useState(customer.addresses[0].streetName);
+  const [streetNumber, setStreetNumber] = useState(customer.addresses[0].streetNumber);
+  const [building, setBuilding] = useState(customer.addresses[0].building);
+  const [apartment, setApartment] = useState(customer.addresses[0].apartment);
+  const [postalCode, setPostalCode] = useState(customer.addresses[0].postalCode);
+  const [firstName, setFirstName] = useState(customer.addresses[0].firstName);
+  const [lastName, setLastName] = useState(customer.addresses[0].lastName);
+  const [phoneNumber, setPhoneNumber] = useState(customer.addresses[0].mobile);
 
+  const validateAddress = () => {
+    return true;
+  };
   const handleEdit = () => {
     setIsEdit(true);
   };
-  const handleSave = () => {
-    //тут проверяем валидность данных и отправляем на сервер
+  const handleSave = async () => {
+    const validateState = validateAddress();
+    if (!validateState) {
+      return;
+    }
+    // const response = changeAddress({
+    //   action: 'changeAddress',
+    //   addressId: customer.addresses[0].id,
+    //   address: {
+    //     key: 'Shipping Address',
+    //     title: 'Mr.',
+    //     country,
+    //     state,
+    //     city,
+    //     streetName,
+    //     streetNumber,
+    //     building,
+    //     apartment,
+    //     postalCode,
+    //     firstName,
+    //     lastName,
+    //     mobile: phoneNumber,
+    //   },
+    // });
+    // console.log('CHANGE ADDRESS RESPONSE', response);
     setIsEdit(false);
   };
   return (
@@ -38,77 +76,88 @@ const CustomerAddress: FC<CustomerAddressProps> = ({ customer, type, billingSame
               disabled={!isEdit}
               id={`${type}_country`}
               label="Country"
-              defaultValue={customer.addresses[0].state}
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_state`}
               label="State"
-              defaultValue={customer.addresses[0].country}
+              value={state}
+              onChange={(e) => setState(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_city`}
               label="City"
-              defaultValue={customer.addresses[0].city}
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_street_name`}
               label="Street name"
-              defaultValue={customer.addresses[0].streetName}
+              value={streetName}
+              onChange={(e) => setStreetName(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_street_number`}
               label="Street number"
-              defaultValue={customer.addresses[0].streetNumber}
+              value={streetNumber}
+              onChange={(e) => setStreetNumber(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_building`}
               label="Building"
-              defaultValue={customer.addresses[0].building}
+              value={building}
+              onChange={(e) => setBuilding(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_apart`}
               label="Apartment"
-              defaultValue={customer.addresses[0].apartment}
+              value={apartment}
+              onChange={(e) => setApartment(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_zip`}
               label="Zip"
-              defaultValue={customer.addresses[0].postalCode}
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_first_name`}
               label="First name"
-              defaultValue={customer.addresses[0].firstName}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_last_name`}
               label="Last name"
-              defaultValue={customer.addresses[0].lastName}
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_phone`}
               label="Phone number"
-              defaultValue={customer.addresses[0].lastName}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </div>
           <Box

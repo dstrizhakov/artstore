@@ -9,7 +9,7 @@ import {
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
   const response = await getApiRoot()
     .withProjectKey({
-      projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+      projectKey,
     })
     .login()
     .post({
@@ -31,7 +31,7 @@ export async function signUp(
   try {
     const response = await getApiRoot()
       .withProjectKey({
-        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+        projectKey,
       })
       .me()
       .signup()
@@ -64,7 +64,7 @@ export const updateCustomer = async (
       .withId({ ID: customerID })
       .post({
         body: {
-          version: version + 1,
+          version,
           actions: [
             {
               action: 'setFirstName',
@@ -95,7 +95,7 @@ export const updateCustomer = async (
 export async function changePassword({ id, version, currentPassword, newPassword }: CustomerChangePassword) {
   try {
     const response = await getApiRoot()
-      .withProjectKey({ projectKey: import.meta.env.VITE_CTP_PROJECT_KEY })
+      .withProjectKey({ projectKey })
       .customers()
       .password()
       .post({
@@ -112,6 +112,26 @@ export async function changePassword({ id, version, currentPassword, newPassword
     throw error;
   }
 }
+
+// export async function changeAddress({ action = 'changeAddress', addressId, address }: CustomerChangeAddressAction) {
+//   try {
+//     const response = await getCliApiRoot()
+//       .withProjectKey({ projectKey })
+//       .me()
+//       .post({
+//         body: {
+//           // action,
+//           addressId,
+//           address,
+//         },
+//       })
+//       .execute()
+//       .then(console.log);
+//     return response;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 
 export const getProducts = async (): Promise<ProductPagedQueryResponse> => {
   try {

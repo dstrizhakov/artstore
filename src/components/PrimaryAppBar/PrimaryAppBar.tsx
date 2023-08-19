@@ -19,6 +19,12 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../../store/reducers/user.slice';
 import { Button, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import style from './PrimaryAppBar.module.scss';
+
+interface IActive {
+  isActive: boolean;
+}
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -79,6 +85,8 @@ export default function PrimarySearchAppBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const setActive = ({ isActive }: IActive) => (isActive ? style.active : style.link);
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -114,6 +122,11 @@ export default function PrimarySearchAppBar() {
     navigate('/login');
   };
 
+  const handleRegister = () => {
+    handleMenuClose();
+    navigate('/register');
+  };
+
   const handleOpenCart = () => {
     handleMenuClose();
     navigate('/cart');
@@ -146,7 +159,10 @@ export default function PrimarySearchAppBar() {
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </div>
       ) : (
-        <MenuItem onClick={handleLogin}>Login</MenuItem>
+        <div>
+          <MenuItem onClick={handleLogin}>Login</MenuItem>
+          <MenuItem onClick={handleRegister}>Register</MenuItem>
+        </div>
       )}
     </Menu>
   );
@@ -168,13 +184,14 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem onClick={handleOpenCart}>
         <IconButton size="medium" color="inherit">
           <Badge badgeContent={cartTotal} color="error">
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
-        <p>Cart</p>
+        {/* <p>Cart</p> */}
+        <Typography textAlign="center">Cart</Typography>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton size="medium" color="inherit">
@@ -187,9 +204,9 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" style={{ background: '#282828' }}>
         <Container maxWidth="xl">
-          <Toolbar>
+          <Toolbar style={{ margin: 0, padding: 0 }}>
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <IconButton size="large" onClick={handleOpenNavMenu} color="inherit">
                 <MenuIcon />
@@ -221,9 +238,12 @@ export default function PrimarySearchAppBar() {
                 ))}
               </Menu>
             </Box>
-            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
-              FINEART
-            </Typography>
+            <Link to="/">
+              <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
+                FINEART
+              </Typography>
+            </Link>
+
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -233,7 +253,9 @@ export default function PrimarySearchAppBar() {
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
                 <Button key={page.title} onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-                  <Link to={page.path}>{page.title}</Link>
+                  <NavLink to={page.path} className={setActive}>
+                    {page.title}
+                  </NavLink>
                 </Button>
               ))}
             </Box>
