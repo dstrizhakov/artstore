@@ -5,6 +5,7 @@ import {
   Client,
   type AuthMiddlewareOptions,
   type HttpMiddlewareOptions,
+  PasswordAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 
 export const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
@@ -43,24 +44,24 @@ export const getApiRoot: () => ApiRoot = () => {
   return createApiBuilderFromCtpClient(ctpClient);
 };
 
-// export const withPasswordFlowClient = (username: string, password: string) => {
-//   const options: PasswordAuthMiddlewareOptions = {
-//     host: authUrl,
-//     projectKey,
-//     credentials: {
-//       clientId,
-//       clientSecret,
-//       user: {
-//         username,
-//         password,
-//       },
-//     },
-//     scopes,
-//     fetch,
-//   };
-//   return new ClientBuilder().withProjectKey().withPasswordFlow(options).build();
-// };
+export const withPasswordFlowClient = (username: string, password: string) => {
+  const options: PasswordAuthMiddlewareOptions = {
+    host: authUrl,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret,
+      user: {
+        username,
+        password,
+      },
+    },
+    scopes,
+    fetch,
+  };
+  return new ClientBuilder().withPasswordFlow(options).build();
+};
 
-// export const getCliApiRoot: () => ApiRoot = () => {
-//   return createApiBuilderFromCtpClient(withPasswordFlowClient);
-// };
+export const getCliApiRoot: () => ApiRoot = () => {
+  return createApiBuilderFromCtpClient(withPasswordFlowClient('admiral@gmail.com', 'Fox347767!'));
+};

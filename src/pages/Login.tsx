@@ -24,7 +24,7 @@ export interface DataLogin {
 }
 const Login: FC = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState({ email: 'admin@mail.ru', password: 'Fox347767!' });
+  const [data, setData] = useState({ email: 'admiral@gmail.com', password: 'Fox347767!' });
   const [errors, setErrors] = useState({} as Erroring);
   const [emailDirty, setEmailDirty] = useState(false);
   const [passwordDirty, setPasswordDirty] = useState(false);

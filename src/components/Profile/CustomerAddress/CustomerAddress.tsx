@@ -38,8 +38,9 @@ const CustomerAddress: FC<CustomerAddressProps> = ({ customer, type, billingSame
     // const response = changeAddress({
     //   action: 'changeAddress',
     //   addressId: customer.addresses[0].id,
-    //   addressKey: customer.addresses[0].key,
     //   address: {
+    //     key: 'Shipping Address',
+    //     title: 'Mr.',
     //     country,
     //     state,
     //     city,
