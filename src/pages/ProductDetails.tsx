@@ -44,7 +44,7 @@ const ProductDetails: FC = () => {
               className={styles.productImage}
             />
           </Grid>
-          <Grid item xs={12} sm={12} md={6} spacing={2} padding={2} className={styles.productInfo}>
+          <Grid item xs={12} sm={12} md={6} padding={2} className={styles.productInfo}>
             <Typography variant="h4" gutterBottom>
               {product.masterData.current.name['en-US']}
             </Typography>
