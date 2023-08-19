@@ -1,10 +1,20 @@
 import Button from '@mui/material/Button';
 import { FC, useState, useEffect, useCallback } from 'react';
 import styles from './Login.module.scss';
+import {
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from '@mui/material';
+
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { signUp } from '../api/requests';
-import { TextField } from '@mui/material';
 import { validator } from '../utils/validator';
 import validatorConfig from '../utils/validatorConfig';
 import { login } from '../store/reducers/user.slice';
@@ -62,7 +72,41 @@ const Register: FC = () => {
   });
 
   const [errors, setErrors] = useState({} as Erroring);
+  const [emailDirty, setEmailDirty] = useState(false);
+  const [passwordDirty, setPasswordDirty] = useState(false);
+  const [firstNameDirty, setFirstNameDirty] = useState(false);
+  const [lastNameDirty, setLastNameDirty] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
 
+  const blurHandler = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const eventTarget = e.target as HTMLInputElement;
+    switch (eventTarget.name) {
+      case 'email': {
+        setEmailDirty(true);
+        break;
+      }
+
+      case 'password': {
+        setPasswordDirty(true);
+        break;
+      }
+      case 'firstName': {
+        setFirstNameDirty(true);
+        break;
+      }
+      case 'lastName': {
+        setLastNameDirty(true);
+        break;
+      }
+
+      default:
+        break;
+    }
+  };
   const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = event.currentTarget;
     setData((prevState) => ({
@@ -108,50 +152,72 @@ const Register: FC = () => {
       <h2>Register Page</h2>
       <form className={styles.wrapper} onSubmit={handleSubmit}>
         <TextField
-          error={errors.email ? true : false}
+          error={errors.email && emailDirty ? true : false}
           onChange={handleChange}
           id="outlined-basic-email"
           label="email"
+          onBlur={(e) => blurHandler(e)}
           variant="outlined"
           name="email"
           value={data.email}
           autoComplete="username"
-          helperText={errors.email}
+          helperText={errors.email && emailDirty ? errors.email : ''}
         />
         <TextField
-          error={errors.firstName ? true : false}
+          error={errors.firstName && firstNameDirty ? true : false}
           onChange={handleChange}
+          onBlur={(e) => blurHandler(e)}
           id="outlined-basic-firsName"
           label="first name"
           variant="outlined"
           name="firstName"
           value={data.firstName}
           autoComplete="username"
-          helperText={errors.firstName}
+          helperText={errors.firstName && firstNameDirty ? errors.email : ''}
         />
         <TextField
-          error={errors.lastName ? true : false}
+          error={errors.password && lastNameDirty ? true : false}
           onChange={handleChange}
+          onBlur={(e) => blurHandler(e)}
           id="outlined-basic-lastName"
           label="last name"
           variant="outlined"
           name="lastName"
           value={data.lastName}
           autoComplete="username"
-          helperText={errors.lastName}
+          helperText={errors.lastName && lastNameDirty ? errors.lastName : ''}
         />
-        <TextField
-          error={errors.password ? true : false}
-          onChange={handleChange}
-          id="outlined-basic-password"
-          label="password"
-          variant="outlined"
-          name="password"
-          value={data.password}
-          type="password"
-          autoComplete="new-password"
-          helperText={errors.password}
-        />
+        <FormControl>
+          <InputLabel error={errors.password && passwordDirty ? true : false} htmlFor="outlined-adornment-password">
+            password
+          </InputLabel>
+          <OutlinedInput
+            error={errors.password && passwordDirty ? true : false}
+            id="outlined-adornment-password"
+            onChange={handleChange}
+            value={data.password}
+            onBlur={(e) => blurHandler(e)}
+            label="password"
+            name="password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          <FormHelperText error={errors.password && passwordDirty ? true : false}>
+            {errors.password && passwordDirty ? errors.password : ''}
+          </FormHelperText>
+        </FormControl>
 
         <p>
           Have an account <Link to="/login">Login</Link>
