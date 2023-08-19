@@ -113,6 +113,31 @@ export async function changePassword({ id, version, currentPassword, newPassword
   }
 }
 
+// export async function changeAddress({
+//   action = 'changeAddress',
+//   addressId,
+//   addressKey,
+//   address,
+// }: MyCustomerChangeAddressAction) {
+//   try {
+//     const response = await getApiRoot()
+//       .withProjectKey({ projectKey: import.meta.env.VITE_CTP_PROJECT_KEY })
+//       .me()
+//       .post({
+//         body: {
+//           action,
+//           addressId,
+//           addressKey,
+//           address,
+//         },
+//       })
+//       .execute();
+//     return response.body;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
 export const getProducts = async (): Promise<ProductPagedQueryResponse> => {
   try {
     const project = await getApiRoot().withProjectKey({ projectKey }).products().get().execute();
