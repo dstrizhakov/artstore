@@ -173,7 +173,7 @@ const Register: FC = () => {
           name="firstName"
           value={data.firstName}
           autoComplete="username"
-          helperText={errors.firstName && firstNameDirty ? errors.email : ''}
+          helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
         />
         <TextField
           error={errors.password && lastNameDirty ? true : false}

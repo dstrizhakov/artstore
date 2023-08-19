@@ -1,14 +1,40 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { Box, Button, Grid, Paper, TextField } from '@mui/material';
-import { FC, useState } from 'react';
+import { updateCustomer } from '../../../api/requests';
+import { useAppDispatch } from '../../../hooks/redux';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { login } from '../../../store/reducers/user.slice';
+import { validator } from '../../../utils/validator';
+import validatorConfig from '../../../utils/validatorConfig';
+import { Erroring } from '../../../pages/Register';
 
 interface CustomerInfoProps {
   customer: Customer;
 }
-
+export interface DataCustomerInfo {
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  email: string;
+}
 const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
   const [isEdit, setIsEdit] = useState(true);
+  const [data, setData] = useState({
+    firstName: customer.firstName || '',
+    lastName: customer.lastName || '',
+    middleName: customer.middleName || '',
+    email: customer.email || '',
+  });
+  const [emailDirty, setEmailDirty] = useState(false);
+  const [firstNameDirty, setFirstNameDirty] = useState(false);
+  const [lastNameDirty, setLastNameDirty] = useState(false);
 
+  // const [firstName, setFirtsName] = useState(customer.firstName);
+  // const [lastName, setLastName] = useState(customer.lastName);
+  // const [middleName, setMiddleName] = useState(customer.middleName);
+  // const [email, setEmail] = useState(customer.email);
+  const [errors, setErrors] = useState({} as Erroring);
+  const dispatch = useAppDispatch();
   const handleEdit = () => {
     setIsEdit(true);
   };
@@ -16,6 +42,91 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
     //тут проверяем валидность данных и отправляем на сервер
     setIsEdit(false);
   };
+  const handleUpdate = async () => {
+    const customerUpdate = await updateCustomer(
+      customer.id,
+      customer.version,
+      data.firstName!,
+      data.lastName!,
+      data.email!,
+      data.middleName!
+    );
+    dispatch(login(customerUpdate));
+  };
+  const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const eventTarget = e.target as HTMLInputElement;
+    switch (eventTarget.name) {
+      case 'firstName':
+        setData((prevState) => ({
+          ...prevState,
+          [eventTarget!.name]: eventTarget!.value,
+        }));
+        break;
+      case 'lastName':
+        setData((prevState) => ({
+          ...prevState,
+          [eventTarget!.name]: eventTarget!.value,
+        }));
+        break;
+      case 'email':
+        setData((prevState) => ({
+          ...prevState,
+          [eventTarget!.name]: eventTarget!.value,
+        }));
+        break;
+      case 'middleName':
+        setData((prevState) => ({
+          ...prevState,
+          [eventTarget!.name]: eventTarget!.value,
+        }));
+        break;
+
+      default:
+        break;
+    }
+  };
+  const validate = useCallback(async () => {
+    try {
+      const error: Erroring = validator(data, validatorConfig);
+      setErrors(error);
+      return Object.keys(error).length === 0;
+    } catch (validationError) {
+      console.error('Validation Error:', validationError);
+      return false;
+    }
+  }, [data]);
+
+  const isValid = Object.keys(errors).length === 0;
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const isValid = validate();
+    if (!isValid) return;
+    handleUpdate();
+  };
+  const blurHandler = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const eventTarget = e.target as HTMLInputElement;
+    switch (eventTarget.name) {
+      case 'email': {
+        setEmailDirty(true);
+        break;
+      }
+      case 'firstName': {
+        setFirstNameDirty(true);
+        break;
+      }
+      case 'lastName': {
+        setLastNameDirty(true);
+        break;
+      }
+
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    validate();
+  }, [data, validate]);
   return (
     <Grid item xs={12} md={8}>
       <Paper>
@@ -29,39 +140,73 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
           }}
         >
           <h3>Customer info</h3>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              error={errors.firstName && firstNameDirty ? true : false}
+              variant="standard"
+              disabled={!isEdit}
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              onBlur={(e) => blurHandler(e)}
+              id="first_name"
+              label="First name"
+              name="firstName"
+              defaultValue={customer.firstName}
+              helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
+            />
+            <TextField
+              variant="standard"
+              disabled={!isEdit}
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              id="middle_name"
+              label="Middle name"
+              name="middleName"
+              defaultValue={customer.middleName}
+            />
+            <TextField
+              error={errors.lastName && lastNameDirty ? true : false}
+              variant="standard"
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              onBlur={(e) => blurHandler(e)}
+              disabled={!isEdit}
+              id="last_name"
+              label="Last name"
+              name="lastName"
+              defaultValue={customer.lastName}
+              helperText={errors.lastName && lastNameDirty ? errors.lastName : ''}
+            />
+            <TextField
+              error={errors.email && emailDirty ? true : false}
+              variant="standard"
+              disabled={!isEdit}
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              onBlur={(e) => blurHandler(e)}
+              id="customer_email"
+              label="Email"
+              name="email"
+              defaultValue={customer.email}
+              helperText={errors.email && emailDirty ? errors.email : ''}
+            />
 
-          <TextField
-            variant="standard"
-            disabled={!isEdit}
-            id="first_name"
-            label="First name"
-            defaultValue={customer.firstName}
-          />
-          <TextField
-            variant="standard"
-            disabled={!isEdit}
-            id="middle_name"
-            label="Middle name"
-            defaultValue={customer.middleName}
-          />
-          <TextField
-            variant="standard"
-            disabled={!isEdit}
-            id="last_name"
-            label="Last name"
-            defaultValue={customer.lastName}
-          />
-          <TextField
-            variant="standard"
-            disabled={!isEdit}
-            id="customer_email"
-            label="Email"
-            defaultValue={customer.email}
-          />
-
-          <div>
-            <Button onClick={() => (isEdit ? handleSave() : handleEdit())}>{isEdit ? 'Save' : 'Edit'}</Button>
-          </div>
+            <div>
+              <Button
+                type="submit"
+                disabled={!isValid}
+                onClick={() => {
+                  isEdit ? handleSave() : handleEdit();
+                }}
+              >
+                {isEdit ? 'Save' : 'Edit'}
+              </Button>
+            </div>
+          </form>
         </Box>
       </Paper>
     </Grid>
