@@ -265,16 +265,22 @@ export default function PrimarySearchAppBar() {
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
-              <IconButton size="large" edge="end" onClick={handleProfileMenuOpen} color="inherit">
-                {isAuth ? (
+              {isAuth ? (
+                <IconButton size="large" edge="end" onClick={handleProfileMenuOpen} color="inherit">
                   <Avatar sx={{ bgcolor: '#298377' }}>{user.firstName && user.firstName.charAt(0)}</Avatar>
-                ) : (
-                  <>
-                    <AccountCircle />
-                  </>
-                )}
-              </IconButton>
+                </IconButton>
+              ) : (
+                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                  <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                    <Link to="login">Login</Link>
+                  </Button>
+                  <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                    <Link to="register">Register</Link>
+                  </Button>
+                </Box>
+              )}
             </Box>
+
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
               <IconButton size="large" onClick={handleMobileMenuOpen} color="inherit">
                 <MoreIcon />

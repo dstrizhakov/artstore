@@ -127,7 +127,7 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
   }, [data, validate]);
 
   return (
-    <Grid item xs={12} md={8}>
+    <Grid item xs={12} md={10}>
       <Paper>
         <Box
           sx={{
