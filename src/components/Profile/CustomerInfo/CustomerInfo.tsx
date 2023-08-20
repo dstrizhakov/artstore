@@ -18,6 +18,8 @@ export interface DataCustomerInfo {
   email: string;
 }
 const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
+  const storedCustomer = structuredClone(customer);
+
   const [isEdit, setIsEdit] = useState(false);
   const [data, setData] = useState({
     firstName: customer.firstName || '',
@@ -122,6 +124,17 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
     }
   };
 
+  const handleCancel = () => {
+    setData({
+      firstName: storedCustomer.firstName || '',
+      lastName: storedCustomer.lastName || '',
+      middleName: storedCustomer.middleName || '',
+      email: storedCustomer.email || '',
+    });
+    console.log(data);
+    setIsEdit(false);
+  };
+
   useEffect(() => {
     validate();
   }, [data, validate]);
@@ -202,6 +215,7 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
             >
               {isEdit ? 'Save' : 'Edit'}
             </Button>
+            {isEdit && <Button onClick={handleCancel}>Cancel</Button>}
           </div>
         </Box>
       </Paper>
