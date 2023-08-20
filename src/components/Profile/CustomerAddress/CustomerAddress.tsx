@@ -1,7 +1,9 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { Box, Button, FormControlLabel, Grid, Paper, Switch, TextField } from '@mui/material';
-// import { changeAddress } from '../../../api/requests';
+import { changeCustomerAddress } from '../../../api/requests';
 import { FC, useState } from 'react';
+import { login } from '../../../store/reducers/user.slice';
+import { useAppDispatch } from '../../../hooks/redux';
 
 interface CustomerAddressProps {
   type: 'shipping' | 'billing';
@@ -11,18 +13,20 @@ interface CustomerAddressProps {
 }
 
 const CustomerAddress: FC<CustomerAddressProps> = ({ customer, type, billingSame, setBillingSame }) => {
+  const index = type === 'shipping' ? 0 : 1;
+
   const [isEdit, setIsEdit] = useState(false);
-  const [country, setCountry] = useState(customer.addresses[0].country);
-  const [state, setState] = useState(customer.addresses[0].state);
-  const [city, setCity] = useState(customer.addresses[0].city);
-  const [streetName, setStreetName] = useState(customer.addresses[0].streetName);
-  const [streetNumber, setStreetNumber] = useState(customer.addresses[0].streetNumber);
-  const [building, setBuilding] = useState(customer.addresses[0].building);
-  const [apartment, setApartment] = useState(customer.addresses[0].apartment);
-  const [postalCode, setPostalCode] = useState(customer.addresses[0].postalCode);
-  const [firstName, setFirstName] = useState(customer.addresses[0].firstName);
-  const [lastName, setLastName] = useState(customer.addresses[0].lastName);
-  const [phoneNumber, setPhoneNumber] = useState(customer.addresses[0].mobile);
+
+  const [address, setAddress] = useState(customer.addresses[index]);
+
+  const handleAddressChange = (field: string, value: string) => {
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      [field]: value,
+    }));
+  };
+
+  const dispatch = useAppDispatch();
 
   const validateAddress = () => {
     return true;
@@ -35,26 +39,16 @@ const CustomerAddress: FC<CustomerAddressProps> = ({ customer, type, billingSame
     if (!validateState) {
       return;
     }
-    // const response = changeAddress({
-    //   action: 'changeAddress',
-    //   addressId: customer.addresses[0].id,
-    //   address: {
-    //     key: 'Shipping Address',
-    //     title: 'Mr.',
-    //     country,
-    //     state,
-    //     city,
-    //     streetName,
-    //     streetNumber,
-    //     building,
-    //     apartment,
-    //     postalCode,
-    //     firstName,
-    //     lastName,
-    //     mobile: phoneNumber,
-    //   },
-    // });
-    // console.log('CHANGE ADDRESS RESPONSE', response);
+    const addressId = customer.addresses[index].id;
+    const addressKey = customer.addresses[index].key;
+    const version = customer.version;
+    const response = await changeCustomerAddress(customer.id, version, {
+      action: 'changeAddress',
+      addressId,
+      addressKey,
+      address,
+    });
+    dispatch(login(response.body));
     setIsEdit(false);
   };
   return (
@@ -76,88 +70,88 @@ const CustomerAddress: FC<CustomerAddressProps> = ({ customer, type, billingSame
               disabled={!isEdit}
               id={`${type}_country`}
               label="Country"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
+              value={address.country}
+              onChange={(e) => handleAddressChange('country', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_state`}
               label="State"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
+              value={address.state}
+              onChange={(e) => handleAddressChange('state', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_city`}
               label="City"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
+              value={address.city}
+              onChange={(e) => handleAddressChange('city', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_street_name`}
               label="Street name"
-              value={streetName}
-              onChange={(e) => setStreetName(e.target.value)}
+              value={address.streetName}
+              onChange={(e) => handleAddressChange('streetName', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_street_number`}
               label="Street number"
-              value={streetNumber}
-              onChange={(e) => setStreetNumber(e.target.value)}
+              value={address.streetNumber}
+              onChange={(e) => handleAddressChange('streetNumber', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_building`}
               label="Building"
-              value={building}
-              onChange={(e) => setBuilding(e.target.value)}
+              value={address.building}
+              onChange={(e) => handleAddressChange('building', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_apart`}
               label="Apartment"
-              value={apartment}
-              onChange={(e) => setApartment(e.target.value)}
+              value={address.apartment}
+              onChange={(e) => handleAddressChange('apartment', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_zip`}
               label="Zip"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
+              value={address.postalCode}
+              onChange={(e) => handleAddressChange('postalCole', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_first_name`}
               label="First name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={address.firstName}
+              onChange={(e) => handleAddressChange('firstName', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_last_name`}
               label="Last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={address.lastName}
+              onChange={(e) => handleAddressChange('lastName', e.target.value)}
             />
             <TextField
               variant="standard"
               disabled={!isEdit}
               id={`${type}_phone`}
               label="Phone number"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={address.mobile}
+              onChange={(e) => handleAddressChange('mobile', e.target.value)}
             />
           </div>
           <Box

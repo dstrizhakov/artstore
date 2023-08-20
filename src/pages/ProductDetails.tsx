@@ -1,12 +1,13 @@
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { FC } from 'react';
 import { useParams } from 'react-router';
-import { Breadcrumbs, Button, Divider, Grid, IconButton, Link, Paper, Typography } from '@mui/material';
+import { Breadcrumbs, Button, Divider, Grid, IconButton, Paper, Typography } from '@mui/material';
 import { AddShoppingCart, CalendarToday, Favorite, Share } from '@mui/icons-material';
 import { addProductToCart } from '../store/reducers/cart.slice';
 import { Product } from '@commercetools/platform-sdk';
 import styles from './ProductDetails.module.scss';
 import { dateConverter } from '../utils/dateConverter';
+import { Link } from 'react-router-dom';
 
 const ProductDetails: FC = () => {
   const { id: key } = useParams();
@@ -26,13 +27,11 @@ const ProductDetails: FC = () => {
     <div>
       <Grid container padding={2}>
         <Breadcrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/">
-            Home
-          </Link>
-          <Link underline="hover" color="inherit" href="/shop">
-            Shop
-          </Link>
-          <Typography color="text.primary">{product.masterData.current.name['en-US'].slice(0,22).concat('...')}</Typography>
+          <Link to="/">Home</Link>
+          <Link to="/shop">Shop</Link>
+          <Typography color="text.primary">
+            {product.masterData.current.name['en-US'].slice(0, 22).concat('...')}
+          </Typography>
         </Breadcrumbs>
       </Grid>
       <Paper className={styles.root}>

@@ -4,22 +4,28 @@ import {
   ProductPagedQueryResponse,
   Product,
   CustomerChangePassword,
+  CustomerChangeAddressAction,
 } from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
-  const response = await getApiRoot()
-    .withProjectKey({
-      projectKey,
-    })
-    .login()
-    .post({
-      body: {
-        email: email,
-        password: password,
-      },
-    })
-    .execute();
-  return response.body;
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({
+        projectKey,
+      })
+      .login()
+      .post({
+        body: {
+          email: email,
+          password: password,
+        },
+      })
+      .execute();
+    return response.body;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export async function signUp(
@@ -59,7 +65,7 @@ export const updateCustomer = async (
 ) => {
   try {
     const response = await getApiRoot()
-      .withProjectKey({ projectKey: import.meta.env.VITE_CTP_PROJECT_KEY })
+      .withProjectKey({ projectKey })
       .customers()
       .withId({ ID: customerID })
       .post({
@@ -113,25 +119,28 @@ export async function changePassword({ id, version, currentPassword, newPassword
   }
 }
 
-// export async function changeAddress({ action = 'changeAddress', addressId, address }: CustomerChangeAddressAction) {
-//   try {
-//     const response = await getCliApiRoot()
-//       .withProjectKey({ projectKey })
-//       .me()
-//       .post({
-//         body: {
-//           // action,
-//           addressId,
-//           address,
-//         },
-//       })
-//       .execute()
-//       .then(console.log);
-//     return response;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+export const changeCustomerAddress = async (
+  customerID: string,
+  version: number,
+  action: CustomerChangeAddressAction
+) => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .customers()
+      .withId({ ID: customerID })
+      .post({
+        body: {
+          version,
+          actions: [action],
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getProducts = async (): Promise<ProductPagedQueryResponse> => {
   try {

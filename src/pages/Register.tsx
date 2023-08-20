@@ -18,7 +18,7 @@ import { signUp } from '../api/requests';
 import { validator } from '../utils/validator';
 import validatorConfig from '../utils/validatorConfig';
 import { login } from '../store/reducers/user.slice';
-import { useAppDispatch } from '../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 
 export interface Erroring {
   [key: string]: string;
@@ -81,6 +81,14 @@ const Register: FC = () => {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+
+  const isAuth = useAppSelector((state) => state.user.isAuth);
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate('/');
+    }
+  }, [isAuth, navigate]);
 
   const blurHandler = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const eventTarget = e.target as HTMLInputElement;

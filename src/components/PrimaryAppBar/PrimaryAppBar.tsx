@@ -17,7 +17,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../store/reducers/user.slice';
-import { Button, Container } from '@mui/material';
+import { Avatar, Button, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import style from './PrimaryAppBar.module.scss';
@@ -76,7 +76,7 @@ export default function PrimarySearchAppBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
-  // const user = useAppSelector((state) => state.user.customer.firstName);
+  const user = useAppSelector((state) => state.user.customer);
   const isAuth = useAppSelector((state) => state.user.isAuth);
   const cartTotal = useAppSelector((state) => state.cart.total);
   const navigate = useNavigate();
@@ -243,7 +243,6 @@ export default function PrimarySearchAppBar() {
                 FINEART
               </Typography>
             </Link>
-
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -267,7 +266,13 @@ export default function PrimarySearchAppBar() {
                 </Badge>
               </IconButton>
               <IconButton size="large" edge="end" onClick={handleProfileMenuOpen} color="inherit">
-                <AccountCircle />
+                {isAuth ? (
+                  <Avatar sx={{ bgcolor: '#298377' }}>{user.firstName && user.firstName.charAt(0)}</Avatar>
+                ) : (
+                  <>
+                    <AccountCircle />
+                  </>
+                )}
               </IconButton>
             </Box>
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

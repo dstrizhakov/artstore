@@ -1,18 +1,20 @@
 import Button from '@mui/material/Button';
 import {
+  Alert,
   FormControl,
   FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
+  Snackbar,
   TextField,
 } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 import styles from './Login.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../api/requests';
-import { useAppDispatch } from '../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { login } from '../store/reducers/user.slice';
 import { Erroring } from './Register';
 import { validator } from '../utils/validator';
@@ -23,12 +25,22 @@ export interface DataLogin {
   password: string;
 }
 const Login: FC = () => {
-  const navigate = useNavigate();
   const [data, setData] = useState({ email: 'admiral@gmail.com', password: 'Fox347767!' });
   const [errors, setErrors] = useState({} as Erroring);
   const [emailDirty, setEmailDirty] = useState(false);
   const [passwordDirty, setPasswordDirty] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState({ status: false, message: '' });
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isAuth = useAppSelector((state) => state.user.isAuth);
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate('/');
+    }
+  }, [isAuth, navigate]);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -52,7 +64,6 @@ const Login: FC = () => {
     }
   };
 
-  const dispatch = useAppDispatch();
   const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = event.currentTarget;
     setData((prevState) => ({
@@ -62,11 +73,20 @@ const Login: FC = () => {
   };
 
   const handleLogin = async (email: string, password: string) => {
-    const responce = await signIn(email, password);
-    const customer = responce.customer;
-    // const cart = responce.cart;
-    dispatch(login(customer));
-    navigate('/');
+    try {
+      const responce = await signIn(email, password);
+      if (responce.customer) {
+        const customer = responce.customer;
+        dispatch(login(customer));
+        navigate('/');
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message) {
+        setLoginError({ status: true, message: error.message });
+      } else {
+        throw error;
+      }
+    }
   };
 
   const validate = useCallback(async () => {
@@ -91,6 +111,16 @@ const Login: FC = () => {
   useEffect(() => {
     validate();
   }, [data, validate]);
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setLoginError((prevLoginError) => ({
+      ...prevLoginError,
+      status: false,
+    }));
+  };
 
   return (
     <div>
@@ -149,6 +179,19 @@ const Login: FC = () => {
           Login
         </Button>
       </form>
+      <Snackbar
+        open={loginError.status}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+          {loginError.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
