@@ -51,7 +51,7 @@ export async function signUp(
         },
       })
       .execute();
-    
+
     return response.body;
   } catch (error) {
     throw error;

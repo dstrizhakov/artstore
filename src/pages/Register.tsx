@@ -97,7 +97,6 @@ const Register: FC = () => {
 
   const isAuth = useAppSelector((state) => state.user.isAuth);
   const addreses = useAppSelector((state) => state.addresses);
-  console.log(addreses);
 
   useEffect(() => {
     if (isAuth) {
@@ -145,6 +144,12 @@ const Register: FC = () => {
 
   const handleRegister = async (email: string, password: string, firsName: string, lastName: string) => {
     try {
+      if (
+        (addreses.isBillingSame && addreses.shipping.country === '') ||
+        (addreses.shipping.country === '' && addreses.billing.country === '')
+      ) {
+        throw Error('Country is requered');
+      }
       const response = await signUp(email, password, firsName, lastName);
       const customer = response.customer;
       dispatch(login(customer));

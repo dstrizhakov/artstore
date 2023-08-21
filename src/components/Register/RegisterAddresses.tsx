@@ -16,6 +16,7 @@ import { FC, useState } from 'react';
 
 import { AddressType } from 'types/types';
 import { changeShipping, changeBilling, changeBillingSame } from '../../store/reducers/address.slice';
+import { countries } from '../../constants/countries';
 
 const RegisterAddress: FC = () => {
   const type = 'shipping';
@@ -111,9 +112,11 @@ const RegisterAddress: FC = () => {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={'US'}>United Sates</MenuItem>
-                <MenuItem value={'GB'}>Great Britains</MenuItem>
-                <MenuItem value={'CA'}>Canada</MenuItem>
+                {countries.map((country) => (
+                  <MenuItem key={country.value} value={country.value}>
+                    {country.name}
+                  </MenuItem>
+                ))}
               </Select>
               <FormHelperText>{'errors'}</FormHelperText>
             </FormControl>
@@ -218,9 +221,11 @@ const RegisterAddress: FC = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={'US'}>United Sates</MenuItem>
-                  <MenuItem value={'GB'}>Great Britains</MenuItem>
-                  <MenuItem value={'CA'}>Canada</MenuItem>
+                  {countries.map((country) => (
+                    <MenuItem key={country.value} value={country.value}>
+                      {country.name}
+                    </MenuItem>
+                  ))}
                 </Select>
                 <FormHelperText>{'errors'}</FormHelperText>
               </FormControl>
