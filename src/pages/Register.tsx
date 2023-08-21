@@ -1,14 +1,16 @@
 import Button from '@mui/material/Button';
-import { FC, useState, useEffect, useCallback } from 'react';
+import { FC, useState, useEffect, useCallback, ChangeEvent } from 'react';
 import styles from './Login.module.scss';
 import {
   Alert,
+  Box,
   FormControl,
   FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
+  Paper,
   Snackbar,
   TextField,
 } from '@mui/material';
@@ -21,6 +23,7 @@ import { validator } from '../utils/validator';
 import validatorConfig from '../utils/validatorConfig';
 import { login } from '../store/reducers/user.slice';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import RegisterAddress from '../components/Register/RegisterAddresses';
 
 export interface Erroring {
   [key: string]: string;
@@ -71,6 +74,13 @@ const Register: FC = () => {
     password: '',
     firstName: '',
     lastName: '',
+    country: '',
+    state: '',
+    zip: '',
+    city: '',
+    street: '',
+    building: '',
+    apartment: '',
   });
 
   const [errors, setErrors] = useState({} as Erroring);
@@ -86,6 +96,8 @@ const Register: FC = () => {
   const [registerError, setRegisterError] = useState({ status: false, message: '' });
 
   const isAuth = useAppSelector((state) => state.user.isAuth);
+  const addreses = useAppSelector((state) => state.addresses);
+  console.log(addreses);
 
   useEffect(() => {
     if (isAuth) {
@@ -118,12 +130,17 @@ const Register: FC = () => {
         break;
     }
   };
-  const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const target = event.currentTarget;
-    setData((prevState) => ({
-      ...prevState,
-      [target!.name]: target!.value,
-    }));
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const target = event.target;
+
+    if ('name' in target && 'value' in target) {
+      const { name, value } = target;
+      setData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
   const handleRegister = async (email: string, password: string, firsName: string, lastName: string) => {
@@ -178,83 +195,97 @@ const Register: FC = () => {
 
   return (
     <div>
-      <h2>Register Page</h2>
-      <form className={styles.wrapper} onSubmit={handleSubmit}>
-        <TextField
-          error={errors.email && emailDirty ? true : false}
-          onChange={handleChange}
-          id="outlined-basic-email"
-          label="email"
-          onBlur={(e) => blurHandler(e)}
-          variant="outlined"
-          name="email"
-          value={data.email}
-          autoComplete="username"
-          helperText={errors.email && emailDirty ? errors.email : ''}
-        />
-        <TextField
-          error={errors.firstName && firstNameDirty ? true : false}
-          onChange={handleChange}
-          onBlur={(e) => blurHandler(e)}
-          id="outlined-basic-firsName"
-          label="first name"
-          variant="outlined"
-          name="firstName"
-          value={data.firstName}
-          autoComplete="username"
-          helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
-        />
-        <TextField
-          error={errors.password && lastNameDirty ? true : false}
-          onChange={handleChange}
-          onBlur={(e) => blurHandler(e)}
-          id="outlined-basic-lastName"
-          label="last name"
-          variant="outlined"
-          name="lastName"
-          value={data.lastName}
-          autoComplete="username"
-          helperText={errors.lastName && lastNameDirty ? errors.lastName : ''}
-        />
-        <FormControl>
-          <InputLabel error={errors.password && passwordDirty ? true : false} htmlFor="outlined-adornment-password">
-            password
-          </InputLabel>
-          <OutlinedInput
-            error={errors.password && passwordDirty ? true : false}
-            id="outlined-adornment-password"
-            onChange={handleChange}
-            value={data.password}
-            onBlur={(e) => blurHandler(e)}
-            label="password"
-            name="password"
-            type={showPassword ? 'text' : 'password'}
-            autoComplete="current-password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-          <FormHelperText error={errors.password && passwordDirty ? true : false}>
-            {errors.password && passwordDirty ? errors.password : ''}
-          </FormHelperText>
-        </FormControl>
+      <Box>
+        <Paper
+          sx={{
+            display: 'block',
+            p: 4,
+            m: 1,
+            bgcolor: 'background.paper',
+            borderRadius: 1,
+          }}
+        >
+          <h2>Register Page</h2>
+          <form className={styles.wrapper} onSubmit={handleSubmit}>
+            <TextField
+              error={errors.email && emailDirty ? true : false}
+              onChange={handleChange}
+              id="outlined-basic-email"
+              label="email"
+              onBlur={(e) => blurHandler(e)}
+              variant="outlined"
+              name="email"
+              value={data.email}
+              autoComplete="username"
+              helperText={errors.email && emailDirty ? errors.email : ''}
+            />
+            <TextField
+              error={errors.firstName && firstNameDirty ? true : false}
+              onChange={handleChange}
+              onBlur={(e) => blurHandler(e)}
+              id="outlined-basic-firsName"
+              label="first name"
+              variant="outlined"
+              name="firstName"
+              value={data.firstName}
+              autoComplete="username"
+              helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
+            />
+            <TextField
+              error={errors.password && lastNameDirty ? true : false}
+              onChange={handleChange}
+              onBlur={(e) => blurHandler(e)}
+              id="outlined-basic-lastName"
+              label="last name"
+              variant="outlined"
+              name="lastName"
+              value={data.lastName}
+              autoComplete="username"
+              helperText={errors.lastName && lastNameDirty ? errors.lastName : ''}
+            />
+            <FormControl>
+              <InputLabel error={errors.password && passwordDirty ? true : false} htmlFor="outlined-adornment-password">
+                password
+              </InputLabel>
+              <OutlinedInput
+                error={errors.password && passwordDirty ? true : false}
+                id="outlined-adornment-password"
+                onChange={handleChange}
+                value={data.password}
+                onBlur={(e) => blurHandler(e)}
+                label="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <FormHelperText error={errors.password && passwordDirty ? true : false}>
+                {errors.password && passwordDirty ? errors.password : ''}
+              </FormHelperText>
+            </FormControl>
+            <p>
+              Have an account <Link to="/login">Login</Link>
+            </p>
+          </form>
 
-        <p>
-          Have an account <Link to="/login">Login</Link>
-        </p>
-        <Button type="submit" disabled={!isValid} variant="contained">
-          Register
-        </Button>
-      </form>
+          <RegisterAddress />
+          <Button type="submit" disabled={!isValid} variant="contained">
+            Register
+          </Button>
+        </Paper>
+      </Box>
+
       <Snackbar
         open={registerError.status}
         autoHideDuration={3000}
