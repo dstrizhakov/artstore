@@ -51,11 +51,13 @@ export async function signUp(
         },
       })
       .execute();
+    
     return response.body;
   } catch (error) {
     throw error;
   }
 }
+
 export const updateCustomer = async (
   customerID: string,
   version: number,
@@ -322,7 +324,7 @@ export const AddCustomerAddress = async (customerID: string, version: number, ac
         },
       })
       .execute();
-    return response;
+    return response.body;
   } catch (error) {
     throw error;
   }
