@@ -127,7 +127,7 @@ const CustomerAddress: FC<CustomerAddressProps> = ({ customer, type, billingSame
               id={`${type}_zip`}
               label="Zip"
               value={address.postalCode}
-              onChange={(e) => handleAddressChange('postalCole', e.target.value)}
+              onChange={(e) => handleAddressChange('postalCode', e.target.value)}
             />
             <TextField
               variant="standard"

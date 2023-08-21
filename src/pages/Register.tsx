@@ -2,12 +2,14 @@ import Button from '@mui/material/Button';
 import { FC, useState, useEffect, useCallback } from 'react';
 import styles from './Login.module.scss';
 import {
+  Alert,
   FormControl,
   FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
+  Snackbar,
   TextField,
 } from '@mui/material';
 
@@ -81,6 +83,7 @@ const Register: FC = () => {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+  const [registerError, setRegisterError] = useState({ status: false, message: '' });
 
   const isAuth = useAppSelector((state) => state.user.isAuth);
 
@@ -124,11 +127,19 @@ const Register: FC = () => {
   };
 
   const handleRegister = async (email: string, password: string, firsName: string, lastName: string) => {
-    const response = await signUp(email, password, firsName, lastName);
-    const customer = response.customer;
-    dispatch(login(customer));
-    if (customer) {
-      navigate('/');
+    try {
+      const response = await signUp(email, password, firsName, lastName);
+      const customer = response.customer;
+      dispatch(login(customer));
+      if (customer) {
+        navigate('/');
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message) {
+        setRegisterError({ status: true, message: error.message });
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -154,6 +165,16 @@ const Register: FC = () => {
   useEffect(() => {
     validate();
   }, [data, validate]);
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setRegisterError((prevRegisterError) => ({
+      ...prevRegisterError,
+      status: false,
+    }));
+  };
 
   return (
     <div>
@@ -234,6 +255,19 @@ const Register: FC = () => {
           Register
         </Button>
       </form>
+      <Snackbar
+        open={registerError.status}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+          {registerError.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
