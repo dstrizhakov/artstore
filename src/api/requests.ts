@@ -51,11 +51,13 @@ export async function signUp(
         },
       })
       .execute();
+    
     return response.body;
   } catch (error) {
     throw error;
   }
 }
+
 export const updateCustomer = async (
   customerID: string,
   version: number,
@@ -309,21 +311,21 @@ export const getProductByKey = async (productKey: string): Promise<Product> => {
   }
 };
 
-export const AddCustomerAddress = async (customerID: string, version: number, action: CustomerAddAddressAction) => { 
-  try { 
-    const response = await getApiRoot() 
-      .withProjectKey({ projectKey }) 
-      .customers() 
-      .withId({ ID: customerID }) 
-      .post({ 
-        body: { 
-          version, 
-          actions: [action], 
-        }, 
-      }) 
-      .execute(); 
-    return response; 
-  } catch (error) { 
-    throw error; 
-  } 
+export const AddCustomerAddress = async (customerID: string, version: number, action: CustomerAddAddressAction) => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .customers()
+      .withId({ ID: customerID })
+      .post({
+        body: {
+          version,
+          actions: [action],
+        },
+      })
+      .execute();
+    return response.body;
+  } catch (error) {
+    throw error;
+  }
 };
