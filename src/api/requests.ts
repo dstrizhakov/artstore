@@ -5,6 +5,7 @@ import {
   Product,
   CustomerChangePassword,
   CustomerChangeAddressAction,
+  CustomerAddAddressAction,
 } from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
@@ -306,4 +307,23 @@ export const getProductByKey = async (productKey: string): Promise<Product> => {
   } catch (e) {
     throw e;
   }
+};
+
+export const AddCustomerAddress = async (customerID: string, version: number, action: CustomerAddAddressAction) => { 
+  try { 
+    const response = await getApiRoot() 
+      .withProjectKey({ projectKey }) 
+      .customers() 
+      .withId({ ID: customerID }) 
+      .post({ 
+        body: { 
+          version, 
+          actions: [action], 
+        }, 
+      }) 
+      .execute(); 
+    return response; 
+  } catch (error) { 
+    throw error; 
+  } 
 };
