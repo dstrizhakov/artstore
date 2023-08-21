@@ -1,4 +1,4 @@
-import { ConfigValidator } from './../../pages/Register';
+import { ConfigValidator } from './../pages/Register';
 const validatorConfig: ConfigValidator = {
   email: {
     isRequired: {

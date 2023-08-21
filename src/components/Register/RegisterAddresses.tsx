@@ -44,7 +44,7 @@ const RegisterAddress: FC = () => {
     lastName: '',
     zip: '',
   });
-  const [billingSame, setBillingSame] = useState(false);
+  const [billingSame, setBillingSame] = useState(true);
 
   const handleShippingChange = (field: keyof AddressType, value: string) => {
     setAddress((prevAddress) => ({
@@ -205,7 +205,7 @@ const RegisterAddress: FC = () => {
               borderRadius: 1,
             }}
           >
-            <h3>Shipping address</h3>
+            <h3>Billing address</h3>
             <div>
               <FormControl sx={{ m: 0, minWidth: 120 }} error={!addressBilling?.country}>
                 <InputLabel id="demo-simple-select-error-label">Country</InputLabel>
