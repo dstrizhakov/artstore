@@ -30,9 +30,9 @@ export async function signIn(email: string, password: string): Promise<CustomerS
 
 export async function signUp(
   email: string,
+  password: string,
   firstName: string,
-  lastName: string,
-  password: string
+  lastName: string
 ): Promise<CustomerSignInResult> {
   try {
     const response = await getApiRoot()
