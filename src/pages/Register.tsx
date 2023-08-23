@@ -134,11 +134,15 @@ const Register: FC = () => {
     try {
       console.log(addreses);
       if (addreses.isBillingSame && addreses.shipping.country === '') {
-        throw new Error('Country is requered');
+        throw new Error('Shipping country is requered');
+      }
+      if (!addreses.isBillingSame && (addreses.shipping.country === '' || addreses.billing.country === '')) {
+        throw new Error('Shipping and Billing country is requered');
       }
       const response = await signUp(email, password, firsName, lastName);
       const customer = response.customer;
-      const newCustomer = await AddCustomerAddress(customer.id, customer.version, {
+      // Если пользователь добавил адрес доставки
+      let newCustomer = await AddCustomerAddress(customer.id, customer.version, {
         action: 'addAddress',
         address: {
           firstName: addreses.shipping.firstName,
@@ -151,6 +155,22 @@ const Register: FC = () => {
           apartment: addreses.shipping.apartment,
         },
       });
+      // Если пользователь добавил и адрес выставления счета
+      if (!addreses.isBillingSame) {
+        newCustomer = await AddCustomerAddress(customer.id, newCustomer.version, {
+          action: 'addAddress',
+          address: {
+            firstName: addreses.billing.firstName,
+            lastName: addreses.billing.lastName,
+            streetName: addreses.billing.street,
+            postalCode: addreses.billing.zip,
+            city: addreses.billing.city,
+            country: addreses.billing.country,
+            building: addreses.billing.building,
+            apartment: addreses.billing.apartment,
+          },
+        });
+      }
 
       dispatch(login(newCustomer));
       if (customer) {
