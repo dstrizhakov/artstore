@@ -34,6 +34,8 @@ export interface DataRegister {
   password: string;
   firstName: string;
   lastName: string;
+  country?: string;
+  billingCountry?: string;
 }
 export interface Required {
   message: string;
@@ -65,6 +67,12 @@ export interface ConfigValidator {
   lastName: {
     isRequired: Required;
   };
+  country: {
+    isRequired: Required;
+  };
+  billingCountry: {
+    isRequired: Required;
+  };
 }
 
 const Register: FC = () => {
@@ -83,6 +91,8 @@ const Register: FC = () => {
   const [firstNameDirty, setFirstNameDirty] = useState(false);
   const [lastNameDirty, setLastNameDirty] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [shippingDirty, setShippingDirty] = useState(false);
+  const [billingDirty, setBillingDirty] = useState(false);
   const [address, setAddress] = useState<AddressType>({
     country: '',
     state: '',
@@ -116,7 +126,6 @@ const Register: FC = () => {
   const [registerError, setRegisterError] = useState({ status: false, message: '' });
 
   const isAuth = useAppSelector((state) => state.user.isAuth);
-  const addreses = useAppSelector((state) => state.addresses);
 
   useEffect(() => {
     if (isAuth) {
@@ -124,8 +133,25 @@ const Register: FC = () => {
     }
   }, [isAuth, navigate]);
 
-  const blurHandler = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const eventTarget = e.target as HTMLInputElement;
+  const blurHandler = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const eventTarget = e.currentTarget;
+    switch (eventTarget.id) {
+      case 'shipping-country': {
+        setShippingDirty(true);
+        console.log('shipping');
+
+        break;
+      }
+      case 'billing-country': {
+        console.log('billing');
+        setBillingDirty(true);
+        break;
+      }
+
+      default:
+        break;
+    }
+
     switch (eventTarget.name) {
       case 'email': {
         setEmailDirty(true);
@@ -151,39 +177,57 @@ const Register: FC = () => {
   };
   const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = event.currentTarget;
-    console.log(target);
+    const dataType = target.dataset.type;
+    switch (dataType) {
+      case 'register':
+        setData((prevState) => ({
+          ...prevState,
+          [target!.name]: target!.value,
+        }));
+        break;
+      case 'shipping':
+        setAddress((prevState) => ({
+          ...prevState,
+          [target!.name]: target!.value,
+        }));
+        break;
+      case 'billing':
+        setAddressBilling((prevState) => ({
+          ...prevState,
+          [target!.name]: target!.value,
+        }));
+        break;
 
-    setData((prevState) => ({
-      ...prevState,
-      [target!.name]: target!.value,
-    }));
-    setAddress((prevState) => ({
-      ...prevState,
-      [target!.name]: target!.value,
-    }));
-    setAddressBilling((prevState) => ({
-      ...prevState,
-      [target!.name]: target!.value,
-    }));
+      default:
+        break;
+    }
   };
   const handleCountryShippingChange = (event: SelectChangeEvent<string>) => {
-    const { value } = event.target;
-    setAddress((prevState) => ({
-      ...prevState,
-      country: value,
-    }));
+    const { value, name } = event.target;
+
+    switch (name) {
+      case 'shipping-country':
+        setAddress((prevState) => ({
+          ...prevState,
+          country: value,
+        }));
+
+        break;
+      case 'billing-country':
+        setAddressBilling((prevState) => ({
+          ...prevState,
+          country: value,
+        }));
+        break;
+
+      default:
+        break;
+    }
   };
 
   const handleRegister = async (email: string, password: string, firsName: string, lastName: string) => {
     try {
-      console.log(addreses);
-      if (addreses.isBillingSame && addreses.shipping.country === '') {
-        throw new Error('Shipping country is requered');
-      }
-      if (!addreses.isBillingSame && (addreses.shipping.country === '' || addreses.billing.country === '')) {
-        throw new Error('Shipping and Billing country is requered');
-      }
-      const response = await signUp(email, password, firsName, lastName, addreses.shipping, addreses.billing);
+      const response = await signUp(email, password, firsName, lastName, address, addressBilling);
 
       const customer = response.customer;
       const res = await addShippingBillingAddress(
@@ -209,14 +253,18 @@ const Register: FC = () => {
 
   const validate = useCallback(async () => {
     try {
-      const error: Erroring = await validator(data, validatorConfig);
+      const error: Erroring = validator(
+        { ...data, country: address.country, billingCountry: addressBilling.country },
+        validatorConfig
+      );
+
       setErrors(error);
       return Object.keys(error).length === 0;
     } catch (validationError) {
       console.error('Validation Error:', validationError);
       return false;
     }
-  }, [data]);
+  }, [data, address, addressBilling]);
 
   const isValid = Object.keys(errors).length === 0;
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -228,7 +276,10 @@ const Register: FC = () => {
 
   useEffect(() => {
     validate();
-  }, [data, validate]);
+  }, [data, address, addressBilling, validate]);
+  useEffect(() => {
+    if (billingSame) setAddressBilling(address);
+  }, [billingSame, address]);
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -253,8 +304,11 @@ const Register: FC = () => {
       <form className={styles.wrapper} onSubmit={handleSubmit}>
         <TextField
           error={errors.email && emailDirty ? true : false}
+          inputProps={{
+            'data-type': 'register',
+          }}
           onChange={handleChange}
-          id="outlined-basic-email"
+          id="register-email"
           label="email"
           onBlur={(e) => blurHandler(e)}
           variant="outlined"
@@ -264,6 +318,9 @@ const Register: FC = () => {
           helperText={errors.email && emailDirty ? errors.email : ''}
         />
         <TextField
+          inputProps={{
+            'data-type': 'register',
+          }}
           error={errors.firstName && firstNameDirty ? true : false}
           onChange={handleChange}
           onBlur={(e) => blurHandler(e)}
@@ -276,6 +333,9 @@ const Register: FC = () => {
           helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
         />
         <TextField
+          inputProps={{
+            'data-type': 'register',
+          }}
           error={errors.lastName && lastNameDirty ? true : false}
           onChange={handleChange}
           onBlur={(e) => blurHandler(e)}
@@ -292,6 +352,9 @@ const Register: FC = () => {
             password
           </InputLabel>
           <OutlinedInput
+            inputProps={{
+              'data-type': 'register',
+            }}
             error={errors.password && passwordDirty ? true : false}
             id="outlined-adornment-password"
             onChange={handleChange}
@@ -336,6 +399,9 @@ const Register: FC = () => {
         addressBilling={addressBilling}
         setBillingSame={setBillingSame}
         handleCountryShippingChange={handleCountryShippingChange}
+        errors={errors}
+        dirty={{ shippingDirty, billingDirty }}
+        blurHandler={blurHandler}
       />
       <Snackbar
         open={registerError.status}

@@ -33,6 +33,16 @@ const validatorConfig: ConfigValidator = {
       message: 'LastName required to fill',
     },
   },
+  country: {
+    isRequired: {
+      message: 'Country required to fill',
+    },
+  },
+  billingCountry: {
+    isRequired: {
+      message: 'Country required to fill',
+    },
+  },
 };
 
 export default validatorConfig;

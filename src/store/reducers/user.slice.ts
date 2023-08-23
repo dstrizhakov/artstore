@@ -1,5 +1,6 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { clear } from './address.slice';
 
 export interface IUser {
   isAuth: boolean;
@@ -19,7 +20,9 @@ const userReducer = createSlice({
       state.isAuth = true;
     },
     logout: (state) => {
+      state.customer = {} as Customer;
       state.isAuth = false;
+      clear();
     },
   },
 });

@@ -21,6 +21,7 @@ import { Avatar, Button, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import style from './PrimaryAppBar.module.scss';
+import { clear } from '../../store/reducers/address.slice';
 
 interface IActive {
   isActive: boolean;
@@ -115,6 +116,7 @@ export default function PrimarySearchAppBar() {
   const handleLogout = () => {
     handleMenuClose();
     dispatch(logout());
+    dispatch(clear());
   };
 
   const handleLogin = () => {

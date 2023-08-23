@@ -30,9 +30,15 @@ const addressSlice = createSlice({
     changeBillingSame: (state, action: PayloadAction<boolean>) => {
       state.isBillingSame = action.payload;
     },
+    clear: (state) => {
+      console.log(state, 'state');
+      state.billing = { country: '' };
+      state.shipping = { country: '' };
+      state.isBillingSame = false;
+    },
   },
 });
 
-export const { changeBillingSame, setField } = addressSlice.actions;
+export const { changeBillingSame, setField, clear } = addressSlice.actions;
 
 export default addressSlice.reducer;
