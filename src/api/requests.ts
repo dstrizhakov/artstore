@@ -33,7 +33,31 @@ export async function signUp(
   email: string,
   password: string,
   firstName: string,
-  lastName: string
+  lastName: string,
+  shippingAddress: {
+    firstName?: string;
+    lastName?: string;
+    state?: string;
+    streetName?: string;
+    postalCode?: string;
+    city?: string;
+    country: string;
+    building?: string;
+    apartment?: string;
+    streetNumber?: string;
+  },
+  billingAddress: {
+    firstName?: string;
+    lastName?: string;
+    state?: string;
+    streetName?: string;
+    postalCode?: string;
+    city?: string;
+    country: string;
+    building?: string;
+    apartment?: string;
+    streetNumber?: string;
+  }
 ): Promise<CustomerSignInResult> {
   try {
     const response = await getApiRoot()
@@ -48,6 +72,7 @@ export async function signUp(
           firstName: firstName,
           lastName: lastName || '',
           password: password,
+          addresses: [shippingAddress, billingAddress],
         },
       })
       .execute();
@@ -57,6 +82,40 @@ export async function signUp(
     throw error;
   }
 }
+export const addShippingBillingAddress = async (
+  cutomerId: string,
+  version: number,
+  shippingAddressId: string,
+  billingAddressId: string
+) => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({
+        projectKey,
+      })
+      .customers()
+      .withId({ ID: cutomerId })
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'addShippingAddressId',
+              addressId: shippingAddressId,
+            },
+            {
+              action: 'addBillingAddressId',
+              addressId: billingAddressId,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const updateCustomer = async (
   customerID: string,

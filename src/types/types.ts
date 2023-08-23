@@ -1,11 +1,12 @@
 export type AddressType = {
-  country: string;
-  state?: string;
-  city?: string;
-  street?: string;
-  building?: string;
-  apartment?: string;
   firstName?: string;
   lastName?: string;
-  zip?: string;
+  state?: string;
+  streetName?: string;
+  postalCode?: string;
+  city?: string;
+  country: string;
+  building?: string;
+  apartment?: string;
+  streetNumber?: string;
 };
