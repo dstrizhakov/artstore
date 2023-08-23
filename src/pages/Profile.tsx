@@ -9,9 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal/Modal';
 
 const Profile = () => {
-  const [isBillingSame, setIsBillingSame] = useState(false);
   const [modalPassword, setModalPassword] = useState(false);
   const customer = useAppSelector((state) => state.user.customer);
+  const isBillingSame = useAppSelector((state) => state.addresses.isBillingSame);
   const isAuth = useAppSelector((state) => state.user.isAuth);
   const navigate = useNavigate();
 
@@ -52,13 +52,7 @@ const Profile = () => {
               </Box>
             </Paper>
           </Grid>
-          {/* <CustomerPassword password={customer.password} /> */}
-          <CustomerAddress
-            customer={customer}
-            type="shipping"
-            billingSame={isBillingSame}
-            setBillingSame={setIsBillingSame}
-          />
+          <CustomerAddress customer={customer} type="shipping" />
           {!isBillingSame && <CustomerAddress customer={customer} type="billing" />}
         </Grid>
       </Box>

@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { FC, useState, useEffect, useCallback } from 'react';
-import styles from './Login.module.scss';
+import styles from './Register.module.scss';
 import {
   Alert,
   Box,
@@ -134,14 +134,12 @@ const Register: FC = () => {
     try {
       console.log(addreses);
       if (addreses.isBillingSame && addreses.shipping.country === '') {
-        throw Error('Country is requered');
+        throw new Error('Country is requered');
       }
       const response = await signUp(email, password, firsName, lastName);
-
       const customer = response.customer;
-      const customerAddress = await AddCustomerAddress(customer.id, customer.version, {
+      const newCustomer = await AddCustomerAddress(customer.id, customer.version, {
         action: 'addAddress',
-
         address: {
           firstName: addreses.shipping.firstName,
           lastName: addreses.shipping.lastName,
@@ -154,7 +152,7 @@ const Register: FC = () => {
         },
       });
 
-      dispatch(login(customerAddress));
+      dispatch(login(newCustomer));
       if (customer) {
         navigate('/');
       }
@@ -280,7 +278,10 @@ const Register: FC = () => {
         </FormControl>
 
         <p>
-          Have an account <Link to="/login">Login</Link>
+          Have an account{' '}
+          <Link className={styles.link} to="/login">
+            Login
+          </Link>
         </p>
         <Button type="submit" disabled={!isValid} variant="contained">
           Register
