@@ -11,82 +11,23 @@ import {
   Switch,
   TextField,
 } from '@mui/material';
-import { useAppDispatch } from '../../hooks/redux';
-import { FC, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { FC } from 'react';
 
-import { AddressType } from 'types/types';
-import { changeShipping, changeBilling, changeBillingSame } from '../../store/reducers/address.slice';
+import { changeBillingSame, setField } from '../../store/reducers/address.slice';
 import { countries } from '../../constants/countries';
 
 const RegisterAddress: FC = () => {
-  const type = 'shipping';
   const dispatch = useAppDispatch();
+  const addreses = useAppSelector((state) => state.addresses);
 
-  const [address, setAddress] = useState<AddressType>({
-    country: '',
-    state: '',
-    city: '',
-    street: '',
-    building: '',
-    apartment: '',
-    firstName: '',
-    lastName: '',
-    zip: '',
-  });
-  const [addressBilling, setAddressBilling] = useState<AddressType>({
-    country: '',
-    state: '',
-    city: '',
-    street: '',
-    building: '',
-    apartment: '',
-    firstName: '',
-    lastName: '',
-    zip: '',
-  });
-  const [billingSame, setBillingSame] = useState(true);
-
-  const handleShippingChange = (field: keyof AddressType, value: string) => {
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      [field]: value,
-    }));
-    dispatch(changeShipping(address));
-  };
-
-  const handleBillingChange = (field: keyof AddressType, value: string) => {
-    setAddressBilling((prevAddress) => ({
-      ...prevAddress,
-      [field]: value,
-    }));
-    dispatch(changeBilling(addressBilling));
-  };
-
-  const handleCountryShippingChange = (event: SelectChangeEvent<string>) => {
-    const { value } = event.target;
-    setAddress((prevState) => ({
-      ...prevState,
-      country: value,
-    }));
-    dispatch(changeShipping(address));
-  };
-
-  const handleCountryBillingChange = (event: SelectChangeEvent<string>) => {
-    const { value } = event.target;
-    setAddressBilling((prevState) => ({
-      ...prevState,
-      country: value,
-    }));
-    dispatch(changeBilling(addressBilling));
-  };
   const handleSetBillingSame = () => {
-    setBillingSame(!billingSame);
-    dispatch(changeBillingSame(billingSame));
+    dispatch(changeBillingSame(!addreses.isBillingSame));
   };
 
   return (
     <Grid item xs={12} md={12}>
-      <Box sx={{ display: 'flex', p: 1, m: 1, borderRadius: 1, gap: 2 }}>
+      <Box sx={{ display: 'flex', p: 1, m: 1, borderRadius: 1, gap: 2, justifyContent: 'center' }}>
         <Box
           sx={{
             display: 'block',
@@ -96,18 +37,19 @@ const RegisterAddress: FC = () => {
             borderRadius: 1,
           }}
         >
-          <h3>Shipping address</h3>
-          <div>
-            <FormControl sx={{ m: 0, minWidth: 120 }} error={!address?.country}>
-              <InputLabel id="demo-simple-select-error-label">Country</InputLabel>
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: 300 }}>
+            <h3>Shipping address</h3>
+            <FormControl sx={{ m: 0, minWidth: 120 }} error={!addreses.shipping.country}>
+              <InputLabel id="shipping-country">Country</InputLabel>
               <Select
                 variant="standard"
-                labelId="demo-simple-select-error-label"
-                id="demo-simple-select-error"
-                value={address?.country || ''}
+                id="shipping-country"
+                value={addreses.shipping.country}
                 label="Country"
                 renderValue={(value) => ` - ${value} -`}
-                onChange={handleCountryShippingChange}
+                onChange={(event: SelectChangeEvent<string>) =>
+                  dispatch(setField({ addressType: 'shipping', fieldName: 'country', fieldValue: event?.target.value }))
+                }
               >
                 <MenuItem value="">
                   <em>None</em>
@@ -118,66 +60,82 @@ const RegisterAddress: FC = () => {
                   </MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{'errors'}</FormHelperText>
+              {!addreses.shipping.country && <FormHelperText>{'Country is required'}</FormHelperText>}
             </FormControl>
 
             <TextField
               variant="standard"
-              id={`${type}_state`}
+              id="shipping-state"
               label="State"
-              value={address?.state || ''}
-              onChange={(e) => handleShippingChange('state', e.target.value)}
+              value={addreses.shipping.state}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                dispatch(setField({ addressType: 'shipping', fieldName: 'state', fieldValue: event?.target.value }))
+              }
             />
             <TextField
               variant="standard"
-              id={`${type}_city`}
+              id="shipping-city"
               label="City"
-              value={address?.city || ''}
-              onChange={(e) => handleShippingChange('city', e.target.value)}
+              value={addreses.shipping.city}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                dispatch(setField({ addressType: 'shipping', fieldName: 'city', fieldValue: event?.target.value }))
+              }
             />
             <TextField
               variant="standard"
-              id={`${type}_street_name`}
+              id="shipping-street_name"
               label="Street name"
-              value={address?.street || ''}
-              onChange={(e) => handleShippingChange('street', e.target.value)}
+              value={addreses.shipping.street}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                dispatch(setField({ addressType: 'shipping', fieldName: 'street', fieldValue: event?.target.value }))
+              }
             />
             <TextField
               variant="standard"
-              id={`${type}_street_number`}
+              id="shipping-street_number"
               label="Street number"
-              value={address?.building || ''}
-              onChange={(e) => handleShippingChange('building', e.target.value)}
+              value={addreses.shipping.building}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                dispatch(setField({ addressType: 'shipping', fieldName: 'building', fieldValue: event?.target.value }))
+              }
             />
             <TextField
               variant="standard"
-              id={`${type}_apart`}
+              id="shipping-apart"
               label="Apartment"
-              value={address?.apartment || ''}
-              onChange={(e) => handleShippingChange('apartment', e.target.value)}
+              value={addreses.shipping.apartment}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                dispatch(setField({ addressType: 'shipping', fieldName: 'apartment', fieldValue: event?.target.value }))
+              }
             />
             <TextField
               variant="standard"
-              id={`${type}_zip`}
+              id="shipping-zip"
               label="Zip"
-              value={address?.zip || ''}
-              onChange={(e) => handleShippingChange('zip', e.target.value)}
+              value={addreses.shipping.zip}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                dispatch(setField({ addressType: 'shipping', fieldName: 'zip', fieldValue: event?.target.value }))
+              }
             />
             <TextField
               variant="standard"
-              id={`${type}_first_name`}
+              id="shipping-first_name"
               label="First name"
-              value={address?.firstName || ''}
-              onChange={(e) => handleShippingChange('firstName', e.target.value)}
+              value={addreses.shipping.firstName}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                dispatch(setField({ addressType: 'shipping', fieldName: 'firstName', fieldValue: event?.target.value }))
+              }
             />
             <TextField
               variant="standard"
-              id={`${type}_last_name`}
+              id="shipping-last_name"
               label="Last name"
-              value={address?.lastName || ''}
-              onChange={(e) => handleShippingChange('lastName', e.target.value)}
+              value={addreses.shipping.lastName}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                dispatch(setField({ addressType: 'shipping', fieldName: 'lastName', fieldValue: event?.target.value }))
+              }
             />
-          </div>
+          </Box>
           <Box
             sx={{
               display: 'flex',
@@ -189,13 +147,13 @@ const RegisterAddress: FC = () => {
             }}
           >
             <FormControlLabel
-              control={<Switch color="primary" checked={billingSame} onChange={handleSetBillingSame} />}
+              control={<Switch color="primary" checked={addreses.isBillingSame} onChange={handleSetBillingSame} />}
               label="The billing address is the same"
               labelPlacement="start"
             />
           </Box>
         </Box>
-        {!billingSame && (
+        {!addreses.isBillingSame && (
           <Box
             sx={{
               display: 'block',
@@ -205,18 +163,21 @@ const RegisterAddress: FC = () => {
               borderRadius: 1,
             }}
           >
-            <h3>Billing address</h3>
-            <div>
-              <FormControl sx={{ m: 0, minWidth: 120 }} error={!addressBilling?.country}>
-                <InputLabel id="demo-simple-select-error-label">Country</InputLabel>
+            <Box sx={{ display: 'flex', flexDirection: 'column', width: 300 }}>
+              <h3>Billing address</h3>
+              <FormControl sx={{ m: 0, minWidth: 120 }} error={!addreses.billing.country}>
+                <InputLabel id="billing-country">Country</InputLabel>
                 <Select
                   variant="standard"
-                  labelId="demo-simple-select-error-label"
-                  id="demo-simple-select-error"
-                  value={addressBilling?.country || ''}
+                  id="billing-country"
+                  value={addreses.billing.country}
                   label="Country"
                   renderValue={(value) => ` - ${value} -`}
-                  onChange={handleCountryBillingChange}
+                  onChange={(event: SelectChangeEvent<string>) =>
+                    dispatch(
+                      setField({ addressType: 'billing', fieldName: 'country', fieldValue: event?.target.value })
+                    )
+                  }
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -227,66 +188,85 @@ const RegisterAddress: FC = () => {
                     </MenuItem>
                   ))}
                 </Select>
-                <FormHelperText>{'errors'}</FormHelperText>
+                {!addreses.billing.country && <FormHelperText>{'Billing country is required'}</FormHelperText>}
               </FormControl>
-
               <TextField
                 variant="standard"
-                id={`${type}_state`}
+                id="billing-state"
                 label="State"
-                value={addressBilling?.state || ''}
-                onChange={(e) => handleBillingChange('state', e.target.value)}
+                value={addreses.billing.state}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  dispatch(setField({ addressType: 'billing', fieldName: 'state', fieldValue: event?.target.value }))
+                }
               />
               <TextField
                 variant="standard"
-                id={`${type}_city`}
+                id="billing-city"
                 label="City"
-                value={addressBilling?.city || ''}
-                onChange={(e) => handleBillingChange('city', e.target.value)}
+                value={addreses.billing.city}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  dispatch(setField({ addressType: 'billing', fieldName: 'city', fieldValue: event?.target.value }))
+                }
               />
               <TextField
                 variant="standard"
-                id={`${type}_street_name`}
+                id="billing-street_name"
                 label="Street name"
-                value={addressBilling?.street || ''}
-                onChange={(e) => handleBillingChange('street', e.target.value)}
+                value={addreses.billing.street}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  dispatch(setField({ addressType: 'billing', fieldName: 'street', fieldValue: event?.target.value }))
+                }
               />
               <TextField
                 variant="standard"
-                id={`${type}_street_number`}
+                id="billing-street_number"
                 label="Street number"
-                value={addressBilling?.building || ''}
-                onChange={(e) => handleBillingChange('building', e.target.value)}
+                value={addreses.billing.building}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  dispatch(setField({ addressType: 'billing', fieldName: 'building', fieldValue: event?.target.value }))
+                }
               />
               <TextField
                 variant="standard"
-                id={`${type}_apart`}
+                id="billing-apart"
                 label="Apartment"
-                value={addressBilling?.apartment || ''}
-                onChange={(e) => handleBillingChange('apartment', e.target.value)}
+                value={addreses.billing.apartment}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  dispatch(
+                    setField({ addressType: 'billing', fieldName: 'apartment', fieldValue: event?.target.value })
+                  )
+                }
               />
               <TextField
                 variant="standard"
-                id={`${type}_zip`}
+                id="billing-zip"
                 label="Zip"
-                value={addressBilling?.zip || ''}
-                onChange={(e) => handleBillingChange('zip', e.target.value)}
+                value={addreses.billing.zip}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  dispatch(setField({ addressType: 'billing', fieldName: 'zip', fieldValue: event?.target.value }))
+                }
               />
               <TextField
                 variant="standard"
-                id={`${type}_first_name`}
+                id="billing-first_name"
                 label="First name"
-                value={addressBilling?.firstName || ''}
-                onChange={(e) => handleBillingChange('firstName', e.target.value)}
+                value={addreses.billing.firstName}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  dispatch(
+                    setField({ addressType: 'billing', fieldName: 'firstName', fieldValue: event?.target.value })
+                  )
+                }
               />
               <TextField
                 variant="standard"
-                id={`${type}_last_name`}
+                id="billing-last_name"
                 label="Last name"
-                value={addressBilling?.lastName || ''}
-                onChange={(e) => handleBillingChange('lastName', e.target.value)}
+                value={addreses.billing.lastName}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  dispatch(setField({ addressType: 'billing', fieldName: 'lastName', fieldValue: event?.target.value }))
+                }
               />
-            </div>
+            </Box>
           </Box>
         )}
       </Box>

@@ -8,20 +8,24 @@ type AddressesType = {
 };
 
 const initialAddressState: AddressesType = {
-  shipping: { country: 'US' },
-  billing: { country: 'US' },
+  shipping: { country: '' },
+  billing: { country: '' },
   isBillingSame: false,
 };
 
-const addessSlice = createSlice({
+const addressSlice = createSlice({
   name: 'address',
   initialState: initialAddressState,
   reducers: {
-    changeShipping: (state, action: PayloadAction<AddressType>) => {
-      state.shipping = action.payload;
-    },
-    changeBilling: (state, action: PayloadAction<AddressType>) => {
-      state.billing = action.payload;
+    setField: (
+      state,
+      action: PayloadAction<{ addressType: 'shipping' | 'billing'; fieldName: keyof AddressType; fieldValue: string }>
+    ) => {
+      const { addressType, fieldName, fieldValue } = action.payload;
+
+      if (addressType === 'shipping' || addressType === 'billing') {
+        state[addressType][fieldName] = fieldValue;
+      }
     },
     changeBillingSame: (state, action: PayloadAction<boolean>) => {
       state.isBillingSame = action.payload;
@@ -29,6 +33,6 @@ const addessSlice = createSlice({
   },
 });
 
-export const { changeShipping, changeBilling, changeBillingSame } = addessSlice.actions;
+export const { changeBillingSame, setField } = addressSlice.actions;
 
-export default addessSlice.reducer;
+export default addressSlice.reducer;
