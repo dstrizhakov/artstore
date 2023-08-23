@@ -10,6 +10,7 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
+  SelectChangeEvent,
   Snackbar,
   TextField,
 } from '@mui/material';
@@ -17,12 +18,13 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { AddCustomerAddress, signUp } from '../api/requests';
+import { addShippingBillingAddress, signUp } from '../api/requests';
 import { validator } from '../utils/validator';
 import validatorConfig from '../utils/validatorConfig';
 import { login } from '../store/reducers/user.slice';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import RegisterAddress from '../components/Register/RegisterAddresses';
+import { AddressType } from '../types/types';
 
 export interface Erroring {
   [key: string]: string;
@@ -81,6 +83,31 @@ const Register: FC = () => {
   const [firstNameDirty, setFirstNameDirty] = useState(false);
   const [lastNameDirty, setLastNameDirty] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [address, setAddress] = useState<AddressType>({
+    country: '',
+    state: '',
+    city: '',
+    streetName: '',
+    building: '',
+    apartment: '',
+    firstName: '',
+    lastName: '',
+    postalCode: '',
+    streetNumber: '',
+  });
+  const [addressBilling, setAddressBilling] = useState<AddressType>({
+    country: '',
+    state: '',
+    city: '',
+    streetName: '',
+    building: '',
+    apartment: '',
+    firstName: '',
+    lastName: '',
+    postalCode: '',
+    streetNumber: '',
+  });
+  const [billingSame, setBillingSame] = useState(true);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -124,9 +151,26 @@ const Register: FC = () => {
   };
   const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = event.currentTarget;
+    console.log(target);
+
     setData((prevState) => ({
       ...prevState,
       [target!.name]: target!.value,
+    }));
+    setAddress((prevState) => ({
+      ...prevState,
+      [target!.name]: target!.value,
+    }));
+    setAddressBilling((prevState) => ({
+      ...prevState,
+      [target!.name]: target!.value,
+    }));
+  };
+  const handleCountryShippingChange = (event: SelectChangeEvent<string>) => {
+    const { value } = event.target;
+    setAddress((prevState) => ({
+      ...prevState,
+      country: value,
     }));
   };
 
@@ -136,25 +180,31 @@ const Register: FC = () => {
       if (addreses.isBillingSame && addreses.shipping.country === '') {
         throw Error('Country is requered');
       }
-      const response = await signUp(email, password, firsName, lastName);
+      const response = await signUp(email, password, firsName, lastName, addreses.shipping, addreses.billing);
 
       const customer = response.customer;
-      const customerAddress = await AddCustomerAddress(customer.id, customer.version, {
-        action: 'addAddress',
+      const res = await addShippingBillingAddress(
+        customer.id,
+        customer.version,
+        customer.addresses[0].id!,
+        customer.addresses[1].id!
+      );
+      // const customerAddress = await AddCustomerAddress(customer.id, customer.version, {
+      //   action: 'addAddress',
 
-        address: {
-          firstName: addreses.shipping.firstName,
-          lastName: addreses.shipping.lastName,
-          streetName: addreses.shipping.street,
-          postalCode: addreses.shipping.zip,
-          city: addreses.shipping.city,
-          country: addreses.shipping.country,
-          building: addreses.shipping.building,
-          apartment: addreses.shipping.apartment,
-        },
-      });
+      //   address: {
+      //     firstName: addreses.shipping.firstName,
+      //     lastName: addreses.shipping.lastName,
+      //     streetName: addreses.shipping.street,
+      //     postalCode: addreses.shipping.zip,
+      //     city: addreses.shipping.city,
+      //     country: addreses.shipping.country,
+      //     building: addreses.shipping.building,
+      //     apartment: addreses.shipping.apartment,
+      //   },
+      // });
 
-      dispatch(login(customerAddress));
+      dispatch(login(res.body));
       if (customer) {
         navigate('/');
       }
@@ -286,7 +336,14 @@ const Register: FC = () => {
           Register
         </Button>
       </form>
-      <RegisterAddress />
+      <RegisterAddress
+        address={address}
+        handleChange={handleChange}
+        billingSame={billingSame}
+        addressBilling={addressBilling}
+        setBillingSame={setBillingSame}
+        handleCountryShippingChange={handleCountryShippingChange}
+      />
       <Snackbar
         open={registerError.status}
         autoHideDuration={3000}
