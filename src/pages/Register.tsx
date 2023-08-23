@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { FC, useState, useEffect, useCallback } from 'react';
-import styles from './Login.module.scss';
+import styles from './Register.module.scss';
 import {
   Alert,
   Box,
@@ -178,7 +178,10 @@ const Register: FC = () => {
     try {
       console.log(addreses);
       if (addreses.isBillingSame && addreses.shipping.country === '') {
-        throw Error('Country is requered');
+        throw new Error('Shipping country is requered');
+      }
+      if (!addreses.isBillingSame && (addreses.shipping.country === '' || addreses.billing.country === '')) {
+        throw new Error('Shipping and Billing country is requered');
       }
       const response = await signUp(email, password, firsName, lastName, addreses.shipping, addreses.billing);
 
@@ -189,22 +192,9 @@ const Register: FC = () => {
         customer.addresses[0].id!,
         customer.addresses[1].id!
       );
-      // const customerAddress = await AddCustomerAddress(customer.id, customer.version, {
-      //   action: 'addAddress',
-
-      //   address: {
-      //     firstName: addreses.shipping.firstName,
-      //     lastName: addreses.shipping.lastName,
-      //     streetName: addreses.shipping.street,
-      //     postalCode: addreses.shipping.zip,
-      //     city: addreses.shipping.city,
-      //     country: addreses.shipping.country,
-      //     building: addreses.shipping.building,
-      //     apartment: addreses.shipping.apartment,
-      //   },
-      // });
 
       dispatch(login(res.body));
+
       if (customer) {
         navigate('/');
       }
@@ -330,7 +320,10 @@ const Register: FC = () => {
         </FormControl>
 
         <p>
-          Have an account <Link to="/login">Login</Link>
+          Have an account{' '}
+          <Link className={styles.link} to="/login">
+            Login
+          </Link>
         </p>
         <Button type="submit" disabled={!isValid} variant="contained">
           Register
