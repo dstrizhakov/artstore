@@ -18,7 +18,7 @@ export interface ICart {
   price: number;
 }
 
-const initialCartState: ICart = {
+export const initialCartState: ICart = {
   items: [],
   total: 0,
   price: 0,

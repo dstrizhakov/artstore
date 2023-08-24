@@ -241,7 +241,13 @@ export default function PrimarySearchAppBar() {
               </Menu>
             </Box>
             <Link to="/">
-              <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
+              <Typography
+                data-testid="logo"
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ display: { xs: 'none', sm: 'block' } }}
+              >
                 FINEART
               </Typography>
             </Link>
@@ -254,7 +260,7 @@ export default function PrimarySearchAppBar() {
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
                 <Button key={page.title} onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-                  <NavLink to={page.path} className={setActive}>
+                  <NavLink data-testid={`link-${page.title}`} to={page.path} className={setActive}>
                     {page.title}
                   </NavLink>
                 </Button>
