@@ -20,7 +20,11 @@ const MainInfo: FC = (): ReactNode => {
         support means the world to me!
       </p>
       <p>
-        Visit my <Link to="shop">Shop</Link> to find your next cherished piece. Let art inspire your soul!
+        Visit my
+        <Link data-testid="link" to="shop">
+          &nbsp;Shop&nbsp;
+        </Link>
+        to find your next cherished piece. Let art inspire your soul!
       </p>
       <p>Thank you for sharing this artistic journey with me.</p>
       <p>Warmest regards,</p>

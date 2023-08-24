@@ -10,7 +10,7 @@ const Footer: FC = () => {
       <Container maxWidth="xl">
         <div className={styles.wrapper}>
           <div className={styles.footer__top}>
-            <div>FINEART | {new Date().getFullYear()}</div>
+            <div data-testid="copyright">FINEART | {new Date().getFullYear()}</div>
             <ul>
               <li>
                 <Link to="/">Home</Link>
@@ -27,19 +27,24 @@ const Footer: FC = () => {
           <div className={styles.footer__bottom}>
             <ul>
               <li>
-                <a href="https://github.com/dstrizhakov" target="_blank" rel="noopener noreferrer">
+                <a
+                  data-testid="dstrizhakov"
+                  href="https://github.com/dstrizhakov"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <GitHub />
                   <span>dstrizhakov</span>
                 </a>
               </li>
               <li>
-                <a href="https://github.com/mardon07" target="_blank" rel="noopener noreferrer">
+                <a data-testid="mardon07" href="https://github.com/mardon07" target="_blank" rel="noopener noreferrer">
                   <GitHub />
                   <span>mardon07</span>
                 </a>
               </li>
               <li>
-                <a href="https://github.com/webj0ker" target="_blank" rel="noopener noreferrer">
+                <a data-testid="webj0ker" href="https://github.com/webj0ker" target="_blank" rel="noopener noreferrer">
                   <GitHub />
                   <span>webj0ker</span>
                 </a>
