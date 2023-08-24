@@ -42,12 +42,12 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
           <IconButton aria-label="decrement" size="large" onClick={decrement}>
             <RemoveIcon />
           </IconButton>
-          <span>{item.count}</span>
+          <span data-testid="count">{item.count}</span>
           <IconButton aria-label="increment" size="large" onClick={increment}>
             <AddIcon />
           </IconButton>
         </div>
-        <Typography variant="body1" className={styles.price}>
+        <Typography data-testid="price" variant="body1" className={styles.price}>
           {(item.product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
         </Typography>
         <IconButton aria-label="delete" size="large" onClick={deleteItem}>
