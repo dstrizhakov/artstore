@@ -9,4 +9,7 @@ export type AddressType = {
   building?: string;
   apartment?: string;
   streetNumber?: string;
+  billingStreetName?: string;
+  billingCity?: string;
+  billingPostalCode?: string;
 };

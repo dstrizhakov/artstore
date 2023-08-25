@@ -34,6 +34,7 @@ export async function signUp(
   password: string,
   firstName: string,
   lastName: string,
+  dateOfBirth: string,
   shippingAddress: {
     firstName?: string;
     lastName?: string;
@@ -72,6 +73,7 @@ export async function signUp(
           firstName: firstName,
           lastName: lastName || '',
           password: password,
+          dateOfBirth: dateOfBirth,
           addresses: [shippingAddress, billingAddress],
         },
       })
