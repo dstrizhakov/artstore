@@ -15,7 +15,8 @@ import { AddressType } from '../../types/types';
 import { FC } from 'react';
 
 import { countries } from '../../constants/countries';
-import { Erroring } from 'pages/Register';
+import { Erroring } from '../../types/ConfigValidator';
+import { Dirty } from '../../types/Dirty';
 interface RegisterAddressProps {
   address: AddressType;
   handleChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -24,10 +25,7 @@ interface RegisterAddressProps {
   setBillingSame: (value: boolean | ((prevVar: boolean) => boolean)) => void;
   handleCountryShippingChange: (event: SelectChangeEvent<string>) => void;
   errors: Erroring;
-  dirty: {
-    shippingDirty: boolean;
-    billingDirty: boolean;
-  };
+  dirty: Dirty;
   blurHandler: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
 }
 
@@ -56,14 +54,13 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
         >
           <Box sx={{ display: 'flex', flexDirection: 'column', width: 300 }}>
             <h3>Shipping address</h3>
-            <FormControl error={errors.country && dirty.shippingDirty ? true : false} sx={{ m: 0, minWidth: 120 }}>
-              <InputLabel error={errors.country && dirty.shippingDirty ? true : false} id="shipping-country">
-                Country
+            <FormControl error={errors.country && dirty.shipping ? true : false} sx={{ m: 0, minWidth: 120 }}>
+              <InputLabel error={errors.country && dirty.shipping ? true : false} id="shipping-country">
+                Country *
               </InputLabel>
               <Select
-                error={errors.country && dirty.shippingDirty ? true : false}
+                error={errors.country && dirty.shipping ? true : false}
                 onBlur={(e) => blurHandler(e)}
-                // onFocus={(e) => blurHandler(e)}
                 variant="standard"
                 id="shipping-country"
                 value={address.country}
@@ -84,13 +81,14 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
                 ))}
               </Select>
               {
-                <FormHelperText error={errors.country && dirty.shippingDirty ? true : false}>
-                  {errors.country && dirty.shippingDirty ? errors.country : ''}
+                <FormHelperText error={errors.country && dirty.shipping ? true : false}>
+                  {errors.country && dirty.shipping ? errors.country : ''}
                 </FormHelperText>
               }
             </FormControl>
 
             <TextField
+              onChange={handleChange}
               inputProps={{
                 'data-type': 'shipping',
               }}
@@ -98,30 +96,36 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
               id="shipping-state"
               label="State"
               value={address?.state || ''}
-              onChange={handleChange}
               name="state"
             />
             <TextField
+              error={errors.city && dirty.shippingCity ? true : false}
+              onChange={handleChange}
               inputProps={{
                 'data-type': 'shipping',
               }}
+              onBlur={(e) => blurHandler(e)}
               variant="standard"
-              id="shipping-city"
-              label="City"
-              value={address?.city || ''}
-              onChange={handleChange}
+              id="shippingCity"
+              label="City *"
+              value={address.city}
+              autoComplete="username"
               name="city"
+              helperText={errors.city && dirty.shippingCity ? errors.city : ''}
             />
             <TextField
+              error={errors.streetName && dirty.shippingStreet ? true : false}
               inputProps={{
                 'data-type': 'shipping',
               }}
+              onBlur={(e) => blurHandler(e)}
               variant="standard"
-              id="shipping-street_name"
-              label="Street name"
+              id="shippingStreet"
+              label="Street name *"
               value={address?.streetName || ''}
               onChange={handleChange}
               name="streetName"
+              helperText={errors.streetName && dirty.shippingStreet ? errors.streetName : ''}
             />
             <TextField
               inputProps={{
@@ -146,15 +150,18 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
               name="apartment"
             />
             <TextField
+              error={errors.postalCode && dirty.shippingZip ? true : false}
               inputProps={{
                 'data-type': 'shipping',
               }}
+              onBlur={(e) => blurHandler(e)}
               variant="standard"
-              id="shipping-zip"
-              label="Zip"
+              id="shippingZip"
+              label="Zip *"
               value={address?.postalCode || ''}
               onChange={handleChange}
               name="postalCode"
+              helperText={errors.postalCode && dirty.shippingZip ? errors.zip : ''}
             />
             <TextField
               inputProps={{
@@ -214,9 +221,9 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
           >
             <Box sx={{ display: 'flex', flexDirection: 'column', width: 300 }}>
               <h3>Billing address</h3>
-              <FormControl sx={{ m: 0, minWidth: 120 }} error={!!errors.billingCountry && dirty.billingDirty}>
-                <InputLabel error={!!errors.billingCountry && dirty.billingDirty} id="billing-country">
-                  Country
+              <FormControl sx={{ m: 0, minWidth: 120 }} error={!!errors.billingCountry && dirty.billing}>
+                <InputLabel error={!!errors.billingCountry && dirty.billing} id="billing-country">
+                  Country *
                 </InputLabel>
                 <Select
                   onBlur={blurHandler}
@@ -240,8 +247,8 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
                   ))}
                 </Select>
                 {
-                  <FormHelperText error={errors.billingCountry && dirty.billingDirty ? true : false}>
-                    {errors.billingCountry && dirty.billingDirty ? errors.billingCountry : ''}
+                  <FormHelperText error={errors.billingCountry && dirty.billing ? true : false}>
+                    {errors.billingCountry && dirty.billing ? errors.billingCountry : ''}
                   </FormHelperText>
                 }
               </FormControl>
@@ -254,29 +261,35 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
                 label="State"
                 value={addressBilling?.state || ''}
                 onChange={handleChange}
-                name="state"
+                name="billingState"
               />
               <TextField
+                error={errors.billingCity && dirty.billingCity ? true : false}
                 inputProps={{
                   'data-type': 'billing',
                 }}
+                onBlur={(e) => blurHandler(e)}
                 variant="standard"
-                id="billing-city"
-                label="City"
+                id="billingCity"
+                label="City *"
                 value={addressBilling?.city || ''}
                 onChange={handleChange}
                 name="city"
+                helperText={errors.billingCity && dirty.billingCity ? errors.billingCity : ''}
               />
               <TextField
+                error={errors.billingStreetName && dirty.billingStreet ? true : false}
                 inputProps={{
                   'data-type': 'billing',
                 }}
+                onBlur={(e) => blurHandler(e)}
                 variant="standard"
-                id="billing-street_name"
-                label="Street name"
+                id="billingStreet"
+                label="Street name *"
                 value={addressBilling?.streetName || ''}
                 onChange={handleChange}
                 name="streetName"
+                helperText={errors.billingStreetName && dirty.billingStreet ? errors.billingStreetName : ''}
               />
               <TextField
                 inputProps={{
@@ -287,7 +300,7 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
                 label="Street number"
                 value={addressBilling?.building || ''}
                 onChange={handleChange}
-                name="streetNumber"
+                name="billingStreetNumber"
               />
               <TextField
                 inputProps={{
@@ -298,18 +311,21 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
                 label="Apartment"
                 value={addressBilling?.apartment || ''}
                 onChange={handleChange}
-                name="apartment"
+                name="billingApartment"
               />
               <TextField
+                error={errors.billingPostalCode && dirty.billingZip ? true : false}
                 inputProps={{
                   'data-type': 'billing',
                 }}
+                onBlur={(e) => blurHandler(e)}
                 variant="standard"
-                id="billing-zip"
-                label="Zip"
+                id="billingZip"
+                label="Zip *"
                 value={addressBilling?.postalCode || ''}
                 onChange={handleChange}
                 name="postalCode"
+                helperText={errors.billingPostalCode && dirty.billingZip ? errors.billingPostalCode : ''}
               />
               <TextField
                 inputProps={{
@@ -320,7 +336,7 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
                 label="First name"
                 value={addressBilling?.firstName || ''}
                 onChange={handleChange}
-                name="firstName"
+                name="billingFirstName"
               />
               <TextField
                 inputProps={{
@@ -331,7 +347,7 @@ const RegisterAddress: FC<RegisterAddressProps> = ({
                 label="Last name"
                 value={addressBilling?.lastName || ''}
                 onChange={handleChange}
-                name="lastName"
+                name="billingLastName"
               />
             </Box>
           </Box>

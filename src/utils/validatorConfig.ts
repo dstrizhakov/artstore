@@ -1,4 +1,5 @@
-import { ConfigValidator } from './../pages/Register';
+import { ConfigValidator } from '../types/ConfigValidator';
+
 const validatorConfig: ConfigValidator = {
   email: {
     isRequired: {
@@ -13,7 +14,10 @@ const validatorConfig: ConfigValidator = {
       message: 'Password required to fill',
     },
     isCapitalSymbol: {
-      message: 'Password must contain at least one letter',
+      message: 'Password must contain at least one capital letter',
+    },
+    isSmallSymbol: {
+      message: 'Password must contain at least one lowercase letter',
     },
     isContainDigit: {
       message: 'Password must contain at least one number',
@@ -27,10 +31,22 @@ const validatorConfig: ConfigValidator = {
     isRequired: {
       message: 'FirstName required to fill',
     },
+    isNotNumber: {
+      message: 'Digits and numbers cannot be used',
+    },
+    isNotSpecial: {
+      message: 'Special characters cannot be used',
+    },
   },
   lastName: {
     isRequired: {
       message: 'LastName required to fill',
+    },
+    isNotNumber: {
+      message: 'Digits and numbers cannot be used',
+    },
+    isNotSpecial: {
+      message: 'Special characters cannot be used',
     },
   },
   country: {
@@ -38,9 +54,65 @@ const validatorConfig: ConfigValidator = {
       message: 'Country required to fill',
     },
   },
+  streetName: {
+    isRequired: {
+      message: 'Street Name required to fill',
+    },
+  },
+  city: {
+    isRequired: {
+      message: 'City required to fill',
+    },
+    isNotNumber: {
+      message: 'Digits and numbers cannot be used',
+    },
+    isNotSpecial: {
+      message: 'Special characters cannot be used',
+    },
+  },
+  postalCode: {
+    isRequired: {
+      message: 'Zip required to fill',
+    },
+    zip: {
+      message: 'Zip code entered incorrectly',
+    },
+  },
   billingCountry: {
     isRequired: {
       message: 'Country required to fill',
+    },
+  },
+  billingStreetName: {
+    isRequired: {
+      message: 'Street Name required to fill',
+    },
+  },
+  billingCity: {
+    isRequired: {
+      message: 'City required to fill',
+    },
+    isNotNumber: {
+      message: 'Digits and numbers cannot be used',
+    },
+    isNotSpecial: {
+      message: 'Special characters cannot be used',
+    },
+  },
+  billingPostalCode: {
+    isRequired: {
+      message: 'Zip required to fill',
+    },
+    zip: {
+      message: 'Zip code entered incorrectly',
+    },
+  },
+  dateOfBirth: {
+    isRequired: {
+      message: 'Date required to fill',
+    },
+    isValidDate: {
+      message: 'User must be over 13 years old',
     },
   },
 };

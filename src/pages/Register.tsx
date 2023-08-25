@@ -1,21 +1,8 @@
 import Button from '@mui/material/Button';
 import { FC, useState, useEffect, useCallback } from 'react';
 import styles from './Register.module.scss';
-import {
-  Alert,
-  Box,
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  SelectChangeEvent,
-  Snackbar,
-  TextField,
-} from '@mui/material';
-
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Alert, Box, SelectChangeEvent, Snackbar } from '@mui/material';
+import RegisterForm from '../components/Register/RegisterForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { addShippingBillingAddress, signUp } from '../api/requests';
@@ -25,55 +12,7 @@ import { login } from '../store/reducers/user.slice';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import RegisterAddress from '../components/Register/RegisterAddresses';
 import { AddressType } from '../types/types';
-
-export interface Erroring {
-  [key: string]: string;
-}
-export interface DataRegister {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  country?: string;
-  billingCountry?: string;
-}
-export interface Required {
-  message: string;
-  value?: number;
-}
-export interface ConfigValidator {
-  email: {
-    isRequired: Required;
-    isEmail: {
-      message: string;
-    };
-  };
-  password: {
-    isRequired: Required;
-    isCapitalSymbol: {
-      message: string;
-    };
-    isContainDigit: {
-      message: string;
-    };
-    min: {
-      message: string;
-      value: number;
-    };
-  };
-  firstName: {
-    isRequired: Required;
-  };
-  lastName: {
-    isRequired: Required;
-  };
-  country: {
-    isRequired: Required;
-  };
-  billingCountry: {
-    isRequired: Required;
-  };
-}
+import { Erroring } from '../types/ConfigValidator';
 
 const Register: FC = () => {
   const navigate = useNavigate();
@@ -83,16 +22,26 @@ const Register: FC = () => {
     password: '',
     firstName: '',
     lastName: '',
+    dateOfBirth: '',
   });
 
   const [errors, setErrors] = useState({} as Erroring);
-  const [emailDirty, setEmailDirty] = useState(false);
-  const [passwordDirty, setPasswordDirty] = useState(false);
-  const [firstNameDirty, setFirstNameDirty] = useState(false);
-  const [lastNameDirty, setLastNameDirty] = useState(false);
+  const [dirty, setDirty] = useState({
+    email: false,
+    password: false,
+    firstName: false,
+    lastName: false,
+    shipping: false,
+    shippingCity: false,
+    shippingStreet: false,
+    shippingZip: false,
+    billingCity: false,
+    billingStreet: false,
+    billingZip: false,
+    billing: false,
+    date: false,
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const [shippingDirty, setShippingDirty] = useState(false);
-  const [billingDirty, setBillingDirty] = useState(false);
   const [address, setAddress] = useState<AddressType>({
     country: '',
     state: '',
@@ -137,14 +86,65 @@ const Register: FC = () => {
     const eventTarget = e.currentTarget;
     switch (eventTarget.id) {
       case 'shipping-country': {
-        setShippingDirty(true);
-        console.log('shipping');
+        setDirty((prevState) => ({
+          ...prevState,
+          shipping: true,
+        }));
 
         break;
       }
       case 'billing-country': {
-        console.log('billing');
-        setBillingDirty(true);
+        setDirty((prevState) => ({
+          ...prevState,
+          billing: true,
+        }));
+        break;
+      }
+
+      default:
+        break;
+    }
+    switch (eventTarget.id) {
+      case 'shippingStreet': {
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.id]: true,
+        }));
+        break;
+      }
+      case 'shippingCity': {
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.id]: true,
+        }));
+        break;
+      }
+      case 'shippingZip': {
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.id]: true,
+        }));
+        break;
+      }
+      case 'billingStreet': {
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.id]: true,
+        }));
+        break;
+      }
+      case 'billingCity': {
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.id]: true,
+        }));
+        break;
+      }
+      case 'billingZip': {
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.id]: true,
+        }));
         break;
       }
 
@@ -154,20 +154,39 @@ const Register: FC = () => {
 
     switch (eventTarget.name) {
       case 'email': {
-        setEmailDirty(true);
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.name]: true,
+        }));
         break;
       }
 
       case 'password': {
-        setPasswordDirty(true);
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.name]: true,
+        }));
         break;
       }
       case 'firstName': {
-        setFirstNameDirty(true);
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.name]: true,
+        }));
         break;
       }
       case 'lastName': {
-        setLastNameDirty(true);
+        setDirty((prevState) => ({
+          ...prevState,
+          [eventTarget!.name]: true,
+        }));
+        break;
+      }
+      case 'dateOfBirth': {
+        setDirty((prevState) => ({
+          ...prevState,
+          date: true,
+        }));
         break;
       }
 
@@ -176,7 +195,9 @@ const Register: FC = () => {
     }
   };
   const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    blurHandler(event);
     const target = event.currentTarget;
+
     const dataType = target.dataset.type;
     switch (dataType) {
       case 'register':
@@ -225,9 +246,15 @@ const Register: FC = () => {
     }
   };
 
-  const handleRegister = async (email: string, password: string, firsName: string, lastName: string) => {
+  const handleRegister = async (
+    email: string,
+    password: string,
+    firsName: string,
+    lastName: string,
+    dateOfBirth: string
+  ) => {
     try {
-      const response = await signUp(email, password, firsName, lastName, address, addressBilling);
+      const response = await signUp(email, password, firsName, lastName, dateOfBirth, address, addressBilling);
 
       const customer = response.customer;
       const res = await addShippingBillingAddress(
@@ -254,7 +281,17 @@ const Register: FC = () => {
   const validate = useCallback(async () => {
     try {
       const error: Erroring = validator(
-        { ...data, country: address.country, billingCountry: addressBilling.country },
+        {
+          ...data,
+          country: address.country,
+          city: address.city,
+          streetName: address.streetName,
+          postalCode: address.postalCode,
+          billingCountry: addressBilling.country,
+          billingStreetName: addressBilling.country,
+          billingCity: addressBilling.city,
+          billingPostalCode: addressBilling.postalCode,
+        },
         validatorConfig
       );
 
@@ -271,7 +308,7 @@ const Register: FC = () => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    handleRegister(data.email, data.password, data.firstName, data.lastName);
+    handleRegister(data.email, data.password, data.firstName, data.lastName, data.dateOfBirth);
   };
 
   useEffect(() => {
@@ -302,86 +339,16 @@ const Register: FC = () => {
     >
       <h2>Register Page</h2>
       <form className={styles.wrapper} onSubmit={handleSubmit}>
-        <TextField
-          error={errors.email && emailDirty ? true : false}
-          inputProps={{
-            'data-type': 'register',
-          }}
-          onChange={handleChange}
-          id="register-email"
-          label="email"
-          onBlur={(e) => blurHandler(e)}
-          variant="outlined"
-          name="email"
-          value={data.email}
-          autoComplete="username"
-          helperText={errors.email && emailDirty ? errors.email : ''}
+        <RegisterForm
+          errors={errors}
+          data={data}
+          dirty={dirty}
+          handleChange={handleChange}
+          showPassword={showPassword}
+          blurHandler={blurHandler}
+          handleClickShowPassword={handleClickShowPassword}
+          handleMouseDownPassword={handleMouseDownPassword}
         />
-        <TextField
-          inputProps={{
-            'data-type': 'register',
-          }}
-          error={errors.firstName && firstNameDirty ? true : false}
-          onChange={handleChange}
-          onBlur={(e) => blurHandler(e)}
-          id="outlined-basic-firsName"
-          label="first name"
-          variant="outlined"
-          name="firstName"
-          value={data.firstName}
-          autoComplete="username"
-          helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
-        />
-        <TextField
-          inputProps={{
-            'data-type': 'register',
-          }}
-          error={errors.lastName && lastNameDirty ? true : false}
-          onChange={handleChange}
-          onBlur={(e) => blurHandler(e)}
-          id="outlined-basic-lastName"
-          label="last name"
-          variant="outlined"
-          name="lastName"
-          value={data.lastName}
-          autoComplete="username"
-          helperText={errors.lastName && lastNameDirty ? errors.lastName : ''}
-        />
-        <FormControl>
-          <InputLabel error={errors.password && passwordDirty ? true : false} htmlFor="outlined-adornment-password">
-            password
-          </InputLabel>
-          <OutlinedInput
-            inputProps={{
-              'data-type': 'register',
-            }}
-            error={errors.password && passwordDirty ? true : false}
-            id="outlined-adornment-password"
-            onChange={handleChange}
-            value={data.password}
-            onBlur={(e) => blurHandler(e)}
-            label="password"
-            name="password"
-            type={showPassword ? 'text' : 'password'}
-            autoComplete="current-password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-          <FormHelperText error={errors.password && passwordDirty ? true : false}>
-            {errors.password && passwordDirty ? errors.password : ''}
-          </FormHelperText>
-        </FormControl>
-
         <p>
           Have an account{' '}
           <Link className={styles.link} to="/login">
@@ -392,6 +359,7 @@ const Register: FC = () => {
           Register
         </Button>
       </form>
+
       <RegisterAddress
         address={address}
         handleChange={handleChange}
@@ -400,7 +368,7 @@ const Register: FC = () => {
         setBillingSame={setBillingSame}
         handleCountryShippingChange={handleCountryShippingChange}
         errors={errors}
-        dirty={{ shippingDirty, billingDirty }}
+        dirty={dirty}
         blurHandler={blurHandler}
       />
       <Snackbar

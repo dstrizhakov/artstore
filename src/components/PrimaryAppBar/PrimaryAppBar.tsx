@@ -117,6 +117,7 @@ export default function PrimarySearchAppBar() {
     handleMenuClose();
     dispatch(logout());
     dispatch(clear());
+    navigate('/');
   };
 
   const handleLogin = () => {

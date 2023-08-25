@@ -1,8 +1,9 @@
+import { ConfigValidator, DataRegister, Erroring, Required } from '../types/ConfigValidator';
 import { DataCustomerInfo } from '../components/Profile/CustomerInfo/CustomerInfo';
 import { DataLogin } from '../pages/Login';
-import { DataRegister, Erroring, ConfigValidator, Required } from '../pages/Register';
+import { AddressType } from '../types/types';
 
-export const validator = (data: DataRegister | DataLogin | DataCustomerInfo, config: ConfigValidator) => {
+export const validator = (data: DataRegister | DataLogin | DataCustomerInfo | AddressType, config: ConfigValidator) => {
   const errors: Erroring = {};
   const validate = (validateMethod: string, data: string, config: Required) => {
     let statusVlidate;
@@ -21,13 +22,48 @@ export const validator = (data: DataRegister | DataLogin | DataCustomerInfo, con
         statusVlidate = !capitalRegExp.test(data);
         break;
       }
+      case 'isSmallSymbol': {
+        const smallRegExp = /[a-z]+/g;
+        statusVlidate = !smallRegExp.test(data);
+        break;
+      }
       case 'isContainDigit': {
         const digitRegExp = /\d+/g;
         statusVlidate = !digitRegExp.test(data);
         break;
       }
+
       case 'min': {
         statusVlidate = data.length <= config.value!;
+        break;
+      }
+      case 'isNotNumber': {
+        const dontNumberExp = /\d/g;
+        statusVlidate = dontNumberExp.test(data);
+        break;
+      }
+      case 'isNotSpecial': {
+        const dontSpecialExp = /\W|_/g;
+        statusVlidate = dontSpecialExp.test(data);
+        break;
+      }
+      case 'isValidDate': {
+        const birthDate = new Date(data);
+        const otherDate = new Date();
+        if (birthDate > otherDate) statusVlidate = true;
+        let years = otherDate.getFullYear() - birthDate.getFullYear();
+        if (
+          otherDate.getMonth() < birthDate.getMonth() ||
+          (otherDate.getMonth() == birthDate.getMonth() && otherDate.getDate() < birthDate.getDate())
+        ) {
+          years--;
+        }
+        if (years < 13) statusVlidate = true;
+        break;
+      }
+      case 'zip': {
+        const postalCodeExp = /^\d{5}(?:[-\s]\d{4})?$/g;
+        statusVlidate = !postalCodeExp.test(data);
         break;
       }
 
@@ -41,7 +77,7 @@ export const validator = (data: DataRegister | DataLogin | DataCustomerInfo, con
     for (const validateMethod in config[fildName as keyof ConfigValidator]) {
       const error = validate(
         validateMethod,
-        data[fildName as keyof (DataRegister | DataLogin | DataCustomerInfo)],
+        data[fildName as keyof (DataRegister | DataLogin | DataCustomerInfo | AddressType)],
         config[fildName as keyof ConfigValidator][validateMethod as keyof typeof validate]
       );
       if (error && !errors[fildName as keyof typeof errors]) {
