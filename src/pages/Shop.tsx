@@ -4,7 +4,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
-import { searchProducts } from '../api/requests';
+import { getProducts, searchProducts } from '../api/requests';
 import ShopPagination from '../components/ShopPagination/ShopPagination';
 import { setPagination } from '../store/reducers/filters.slice';
 import ProductItem from '../components/ProductItem/ProductItem';
@@ -30,6 +30,7 @@ const Shop: FC = () => {
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
+      console.log('getProducts', await getProducts(limit, offset));
       const responce = await searchProducts('', limit, offset);
       dispatch(setProducts(responce.results));
       dispatch(setPagination(responce));
@@ -42,7 +43,7 @@ const Shop: FC = () => {
     if (products.length === 0) {
       fetchData();
     }
-  }, [products, fetchData]);
+  }, [products, fetchData, limit, offset]);
 
   return (
     <div>

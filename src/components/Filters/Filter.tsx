@@ -15,7 +15,7 @@ const Filters = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
-  const debounced = useDebounce(search, 1000);
+  const debounced = useDebounce(search, 500);
   const handleSearch = useCallback(async () => {
     const item = await searchProducts(debounced, limit, offset);
 

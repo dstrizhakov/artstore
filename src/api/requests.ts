@@ -418,6 +418,7 @@ export const getProductByKey = async (productKey: string): Promise<Product> => {
       .withKey({ key: productKey })
       .get()
       .execute();
+    console.log('Project', project.body);
 
     return project.body;
   } catch (e) {

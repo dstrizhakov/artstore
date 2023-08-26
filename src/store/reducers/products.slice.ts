@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ProductProjection } from '@commercetools/platform-sdk';
+import { Product, ProductProjection } from '@commercetools/platform-sdk';
 
 interface ProductsState {
   items: ProductProjection[];
-  item: ProductProjection;
+  item: Product;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ProductsState = {
   items: [],
-  item: {} as ProductProjection,
+  item: {} as Product,
   loading: true,
   error: null,
 };
@@ -24,7 +24,7 @@ const productsSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-    setProduct: (state, action: PayloadAction<ProductProjection>) => {
+    setProduct: (state, action: PayloadAction<Product>) => {
       state.item = action.payload;
       state.loading = false;
       state.error = null;

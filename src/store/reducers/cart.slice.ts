@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ProductProjection } from '@commercetools/platform-sdk';
+import { Product } from '@commercetools/platform-sdk';
 
 export interface IChangeQuantityPayload {
   id: string;
@@ -8,7 +8,7 @@ export interface IChangeQuantityPayload {
 
 export interface ICartItem {
   id: string;
-  product: ProductProjection;
+  product: Product;
   count: number;
 }
 
@@ -28,7 +28,7 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState: initialCartState,
   reducers: {
-    addProductToCart: (state, action: PayloadAction<ProductProjection>) => {
+    addProductToCart: (state, action: PayloadAction<Product>) => {
       const itemIndex = state.items.findIndex((item) => item.id === action.payload.id);
 
       if (itemIndex >= 0) {
@@ -60,7 +60,7 @@ const cartSlice = createSlice({
     countTotalAndPrice: (state) => {
       const totalQuantity = state.items.reduce((total, item) => total + item.count, 0);
       const totalPrice = state.items.reduce((total, item) => {
-        const price = item.product.masterVariant?.prices?.[0]?.value?.centAmount ?? 0;
+        const price = item.product.masterData.staged.masterVariant?.prices?.[0]?.value?.centAmount ?? 0;
         return total + (price / 100) * item.count;
       }, 0);
 
