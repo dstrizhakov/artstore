@@ -4,28 +4,25 @@ import React from 'react';
 import { Card, CardHeader, CardMedia } from '@mui/material';
 
 import { Link } from 'react-router-dom';
-import { Product } from '@commercetools/platform-sdk';
+import { ProductProjection } from '@commercetools/platform-sdk';
 import { dateConverter } from '../../utils/dateConverter';
 import styles from './ProductItem.module.scss';
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductProjection;
 }
 
 const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link to={product.key || '/'} className={styles.productLink}>
-      <Card key={product.id} variant="outlined" className={styles.productCard}>
+      <Card key={product.key} variant="outlined" className={styles.productCard}>
         <CardMedia
           component="img"
           height="200"
-          image={product.masterData.staged.masterVariant?.images?.[0]?.url || ''}
-          alt={product.masterData.current.name['en-US']}
+          image={(product && product.masterVariant?.images?.[0]?.url) || ''}
+          alt={product.name['en-US']}
         />
-        <CardHeader
-          title={product.masterData.current.name['en-US']}
-          subheader={dateConverter(product.createdAt)}
-        ></CardHeader>
+        <CardHeader title={product.name['en-US']} subheader={dateConverter(product.createdAt)}></CardHeader>
 
         {/* <CardActions> */}
         {/* <Stack direction="row" spacing={3}> */}

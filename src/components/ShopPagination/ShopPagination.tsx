@@ -4,7 +4,7 @@ import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { getProducts } from '../../api/requests';
+import { searchProducts } from '../../api/requests';
 import { setProducts, setLoading } from '../../store/reducers/products.slice';
 import { setPagination } from '../../store/reducers/filters.slice';
 
@@ -14,6 +14,7 @@ const ShopPagination = () => {
   const page = parseInt(query.get('page') || '1');
 
   const { total, count, limit } = useAppSelector((state) => state.filters.pagination);
+  const searchString = useAppSelector((state) => state.filters.search);
   const pages = Math.ceil((total || count) / limit);
 
   const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ const ShopPagination = () => {
 
   const handlePaginationChange = async (newPage: number, newLimit?: number) => {
     dispatch(setLoading(true));
-    const response = await getProducts(newLimit || limit, (newPage - 1) * (newLimit || limit));
+    const response = await searchProducts(searchString, newLimit || limit, (newPage - 1) * (newLimit || limit));
     dispatch(setPagination(response));
     dispatch(setProducts(response.results));
   };

@@ -1,12 +1,12 @@
 import { FC, useEffect, useCallback } from 'react';
-import { getProducts } from '../api/requests';
+import { searchProducts } from '../api/requests';
 import MainSlider from '../components/MainSlider/MainSlider';
 import MainInfo from '../components/MainInfo/MainInfo';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import styles from './Home.module.scss';
-import { Image, Product } from '@commercetools/platform-sdk';
+import { Image, ProductProjection } from '@commercetools/platform-sdk';
 import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { setPagination } from '../store/reducers/filters.slice';
@@ -24,14 +24,14 @@ const Home: FC = () => {
   const loading = useAppSelector((store) => store.products.loading);
   const error = useAppSelector((store) => store.products.error);
 
-  const getSlides = (products: Product[]): ISlide[] => {
+  const getSlides = (products: ProductProjection[]): ISlide[] => {
     return products.map((item) => {
-      const firstImage = item.masterData.staged.masterVariant.images?.[0];
+      const firstImage = item.masterVariant.images?.[0];
       return {
         id: item.id,
         img: firstImage?.url || '',
-        images: item.masterData.staged.masterVariant.images || [],
-        title: item.masterData.current.name['en-US'],
+        images: item.masterVariant.images || [],
+        title: item.name['en-US'],
       };
     });
   };
@@ -39,7 +39,7 @@ const Home: FC = () => {
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
-      const responce = await getProducts(10, 0);
+      const responce = await searchProducts('', 10, 0);
       dispatch(setProducts(responce.results));
       dispatch(setPagination(responce));
     } catch (e) {

@@ -1,4 +1,4 @@
-import { ProductPagedQueryResponse } from '@commercetools/platform-sdk';
+import { ProductProjectionPagedSearchResponse } from '@commercetools/platform-sdk';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface IFilters {
@@ -28,11 +28,11 @@ const filtersSlice = createSlice({
   name: 'filters',
   initialState,
   reducers: {
-    setSearch: (state, action: PayloadAction<string>) => {
+    setSearchString: (state, action: PayloadAction<string>) => {
       state.search = action.payload;
       state.pagination.offset = 0;
     },
-    setPagination: (state, action: PayloadAction<ProductPagedQueryResponse>) => {
+    setPagination: (state, action: PayloadAction<ProductProjectionPagedSearchResponse>) => {
       state.pagination.limit = action.payload.limit;
       state.pagination.total = action.payload.total;
       state.pagination.count = action.payload.count;
@@ -44,6 +44,6 @@ const filtersSlice = createSlice({
   },
 });
 
-export const { setSearch, setPagination, setPerPage } = filtersSlice.actions;
+export const { setSearchString, setPagination, setPerPage } = filtersSlice.actions;
 
 export default filtersSlice.reducer;
