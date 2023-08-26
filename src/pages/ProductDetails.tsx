@@ -16,21 +16,24 @@ const ProductDetails: FC = () => {
   const { id: key } = useParams();
   const dispatch = useAppDispatch();
   const [productRender, setProductRender] = useState<Product>();
+
   const getCurrentProduct = useCallback(async () => {
-    const responce = await getProductByKey(key!);
+    if (!key) return;
+    const responce = await getProductByKey(key);
     setProductRender(responce);
 
     dispatch(setProduct(responce));
   }, [dispatch, key]);
+
   useEffect(() => {
     getCurrentProduct();
-  }, [getCurrentProduct, productRender]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const addToCart = (product: Product) => {
     dispatch(addProductToCart(product));
   };
 
-   const imagesArray = productRender.masterData.staged.masterVariant?.images;
-  
   const getSlides = (imagesArr: Image[]): ImagesSlide[] => {
     return imagesArr.map((item: Image, index: number) => {
       return {
@@ -40,42 +43,25 @@ const ProductDetails: FC = () => {
       };
     });
   };
-  
 
   if (productRender) {
-  return (
-    <div>
-      <Grid container padding={2}>
-        <Breadcrumbs aria-label="breadcrumb">
-          <Link to="/">Home</Link>
-          <Link to="/shop">Shop</Link>
-          <Typography color="text.primary">
-             {productRender!.masterData.staged.name['en-US'].slice(0, 22).concat('...')}
-          </Typography>
-        </Breadcrumbs>
-      </Grid>
-      <Paper className={styles.root}>
-        <Grid container>
-          <Grid item xs={12} sm={12} md={6} padding={2}>
-            {imagesArray && <ProductSlider slides={getSlides(imagesArray)} />}
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} padding={2} className={styles.productInfo}>
-            <Typography variant="h4" gutterBottom>
-              {product.masterData.current.name['en-US']}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" className={styles.data}>
-              {<CalendarToday />} {dateConverter(product.createdAt)}
+    return (
+      <div>
+        <Grid container padding={2}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link to="/">Home</Link>
+            <Link to="/shop">Shop</Link>
+            <Typography color="text.primary">
+              {productRender!.masterData.staged.name['en-US'].slice(0, 22).concat('...')}
             </Typography>
           </Breadcrumbs>
         </Grid>
         <Paper className={styles.root}>
           <Grid container>
             <Grid item xs={12} sm={12} md={6} padding={2}>
-              <img
-                src={productRender!.masterData.staged.masterVariant?.images?.[0]?.url || ''}
-                alt={productRender!.masterData.staged.name['en-US']}
-                className={styles.productImage}
-              />
+              {productRender!.masterData.staged.masterVariant?.images && (
+                <ProductSlider slides={getSlides(productRender!.masterData.staged.masterVariant?.images)} />
+              )}
             </Grid>
             <Grid item xs={12} sm={12} md={6} padding={2} className={styles.productInfo}>
               <Typography variant="h4" gutterBottom>
@@ -98,7 +84,7 @@ const ProductDetails: FC = () => {
                   ))}
 
               <Typography variant="h5" gutterBottom>
-                ${(productRender!.masterData.staged.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
+                ${(productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
               </Typography>
               <div className={styles.buttons}>
                 <Button
@@ -125,8 +111,6 @@ const ProductDetails: FC = () => {
         </Paper>
       </div>
     );
-  } else {
-    return <div>{'loading...'}</div>;
   }
 };
 

@@ -14,7 +14,7 @@ interface ProductCardProps {
 
 const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
   return (
-    <Link to={product.key || '/'} className={styles.productLink}>
+    <Link data-id={product.id} to={product.key || '/'} className={styles.productLink}>
       <Card key={product.key} variant="outlined" className={styles.productCard}>
         <CardMedia
           component="img"
