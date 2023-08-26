@@ -22,7 +22,6 @@ type ProductSliderProps = {
 // const ProductSlider: FC<Product> = () => {
 
 const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
- 
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore>();
   const [firstSwiper] = useState<SwiperClass>();
   const [secondSwiper] = useState<SwiperClass>();
