@@ -1,10 +1,11 @@
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { FC } from 'react';
 import { useParams } from 'react-router';
+import ProductSlider, { ImagesSlide } from '../components/ProductSlider/ProductSlider';
 import { Breadcrumbs, Button, Divider, Grid, IconButton, Paper, Typography } from '@mui/material';
 import { AddShoppingCart, CalendarToday, Favorite, Share } from '@mui/icons-material';
 import { addProductToCart } from '../store/reducers/cart.slice';
-import { Product } from '@commercetools/platform-sdk';
+import { Image, Product } from '@commercetools/platform-sdk';
 import styles from './ProductDetails.module.scss';
 import { dateConverter } from '../utils/dateConverter';
 import { Link } from 'react-router-dom';
@@ -23,6 +24,18 @@ const ProductDetails: FC = () => {
     product.masterData.current.description &&
     product.masterData.current.description['en-US'].split('\n').filter((elem) => elem !== '');
 
+  const imagesArray = product.masterData.staged.masterVariant?.images;
+
+  const getSlides = (imagesArr: Image[]): ImagesSlide[] => {
+    return imagesArr.map((item: Image, index: number) => {
+      return {
+        id: index.toString(),
+        img: item!.url || '',
+        title: item!.label || '',
+      };
+    });
+  };
+
   return (
     <div>
       <Grid container padding={2}>
@@ -37,11 +50,7 @@ const ProductDetails: FC = () => {
       <Paper className={styles.root}>
         <Grid container>
           <Grid item xs={12} sm={12} md={6} padding={2}>
-            <img
-              src={product.masterData.staged.masterVariant?.images?.[0]?.url || ''}
-              alt={product.masterData.current.name['en-US']}
-              className={styles.productImage}
-            />
+            {imagesArray && <ProductSlider slides={getSlides(imagesArray)} />}
           </Grid>
           <Grid item xs={12} sm={12} md={6} padding={2} className={styles.productInfo}>
             <Typography variant="h4" gutterBottom>
