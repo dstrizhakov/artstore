@@ -12,7 +12,7 @@ const initialState: IUser = {
 };
 
 const userReducer = createSlice({
-  name: 'user1',
+  name: 'user',
   initialState,
   reducers: {
     login: (state, action: PayloadAction<Customer>) => {

@@ -9,6 +9,7 @@ import styles from './Home.module.scss';
 import { Image, Product } from '@commercetools/platform-sdk';
 import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { setPagination } from '../store/reducers/filters.slice';
 
 interface ISlide {
   id: string;
@@ -38,8 +39,9 @@ const Home: FC = () => {
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
-      const items = await getProducts();
-      dispatch(setProducts(items.results));
+      const responce = await getProducts(10, 0);
+      dispatch(setProducts(responce.results));
+      dispatch(setPagination(responce));
     } catch (e) {
       dispatch(setError('Произошла ошибка при получении данных'));
     }
@@ -56,7 +58,7 @@ const Home: FC = () => {
   return (
     <div className={styles.wrapper}>
       <h2>Home Page</h2>
-      {loading ? (
+      {loading && products ? (
         <div className={styles.loadingOverlay}>
           <CircularProgress size={100} />
         </div>
