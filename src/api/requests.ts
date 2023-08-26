@@ -6,6 +6,7 @@ import {
   CustomerChangePassword,
   CustomerChangeAddressAction,
   CustomerAddAddressAction,
+  ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
@@ -209,6 +210,25 @@ export const changeCustomerAddress = async (
 export const getProducts = async (): Promise<ProductPagedQueryResponse> => {
   try {
     const project = await getApiRoot().withProjectKey({ projectKey }).products().get().execute();
+    return project.body;
+  } catch (error) {
+    throw error;
+  }
+};
+export const searchProducts = async (search: string): Promise<ProductProjectionPagedSearchResponse> => {
+  try {
+    const project = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .productProjections()
+      .search()
+      .get({
+        queryArgs: {
+          ['text.en-US']: search,
+          fuzzy: true,
+        },
+      })
+      .execute();
+
     return project.body;
   } catch (error) {
     throw error;
