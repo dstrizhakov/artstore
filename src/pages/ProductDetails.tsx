@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { FC } from 'react';
+import { useAppDispatch } from '../hooks/redux';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import ProductSlider, { ImagesSlide } from '../components/ProductSlider/ProductSlider';
 import { Breadcrumbs, Button, Divider, Grid, IconButton, Paper, Typography } from '@mui/material';
@@ -9,23 +9,28 @@ import { Image, Product } from '@commercetools/platform-sdk';
 import styles from './ProductDetails.module.scss';
 import { dateConverter } from '../utils/dateConverter';
 import { Link } from 'react-router-dom';
+import { getProductByKey } from '../api/requests';
+import { setProduct } from '../store/reducers/products.slice';
 
 const ProductDetails: FC = () => {
   const { id: key } = useParams();
-
-  const product = useAppSelector((store) => store.products.items.find((item) => item.key === key)) as Product;
   const dispatch = useAppDispatch();
+  const [productRender, setProductRender] = useState<Product>();
+  const getCurrentProduct = useCallback(async () => {
+    const responce = await getProductByKey(key!);
+    setProductRender(responce);
 
+    dispatch(setProduct(responce));
+  }, [dispatch, key]);
+  useEffect(() => {
+    getCurrentProduct();
+  }, [getCurrentProduct, productRender]);
   const addToCart = (product: Product) => {
     dispatch(addProductToCart(product));
   };
 
-  const description =
-    product.masterData.current.description &&
-    product.masterData.current.description['en-US'].split('\n').filter((elem) => elem !== '');
-
-  const imagesArray = product.masterData.staged.masterVariant?.images;
-
+   const imagesArray = productRender.masterData.staged.masterVariant?.images;
+  
   const getSlides = (imagesArr: Image[]): ImagesSlide[] => {
     return imagesArr.map((item: Image, index: number) => {
       return {
@@ -35,7 +40,9 @@ const ProductDetails: FC = () => {
       };
     });
   };
+  
 
+  if (productRender) {
   return (
     <div>
       <Grid container padding={2}>
@@ -43,7 +50,7 @@ const ProductDetails: FC = () => {
           <Link to="/">Home</Link>
           <Link to="/shop">Shop</Link>
           <Typography color="text.primary">
-            {product.masterData.current.name['en-US'].slice(0, 22).concat('...')}
+             {productRender!.masterData.staged.name['en-US'].slice(0, 22).concat('...')}
           </Typography>
         </Breadcrumbs>
       </Grid>
@@ -59,37 +66,68 @@ const ProductDetails: FC = () => {
             <Typography variant="body2" color="textSecondary" className={styles.data}>
               {<CalendarToday />} {dateConverter(product.createdAt)}
             </Typography>
-
-            {description &&
-              description.map((item, index) => (
-                <Typography key={index} variant="body1" gutterBottom>
-                  {item}
-                </Typography>
-              ))}
-
-            <Typography variant="h5" gutterBottom>
-              ${(product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
-            </Typography>
-            <div className={styles.buttons}>
-              <Button size="small" variant="outlined" endIcon={<AddShoppingCart />} onClick={() => addToCart(product)}>
-                Add to cart
-              </Button>
-              <IconButton aria-label="Add to Favorites">
-                <Favorite />
-              </IconButton>
-              <IconButton aria-label="Share">
-                <Share />
-              </IconButton>
-            </div>
-            <Divider />
-            <Typography variant="body2" color="textSecondary" className={styles.productInfo}>
-              Additional information about the product can be displayed here.
-            </Typography>
-          </Grid>
+          </Breadcrumbs>
         </Grid>
-      </Paper>
-    </div>
-  );
+        <Paper className={styles.root}>
+          <Grid container>
+            <Grid item xs={12} sm={12} md={6} padding={2}>
+              <img
+                src={productRender!.masterData.staged.masterVariant?.images?.[0]?.url || ''}
+                alt={productRender!.masterData.staged.name['en-US']}
+                className={styles.productImage}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} padding={2} className={styles.productInfo}>
+              <Typography variant="h4" gutterBottom>
+                {productRender!.masterData.staged.name['en-US']}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" className={styles.data}>
+                {<CalendarToday />} {dateConverter(productRender!.createdAt)}
+              </Typography>
+
+              {productRender!.masterData.staged.description &&
+                productRender!.masterData.staged.description['en-US'].split('\n').filter((elem) => elem !== '') &&
+                productRender!.masterData.staged.description &&
+                productRender!.masterData.staged.description['en-US']
+                  .split('\n')
+                  .filter((elem) => elem !== '')
+                  .map((item, index) => (
+                    <Typography key={index} variant="body1" gutterBottom>
+                      {item}
+                    </Typography>
+                  ))}
+
+              <Typography variant="h5" gutterBottom>
+                ${(productRender!.masterData.staged.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
+              </Typography>
+              <div className={styles.buttons}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  endIcon={<AddShoppingCart />}
+                  onClick={() => addToCart(productRender!)}
+                >
+                  Add to cart
+                </Button>
+                <IconButton aria-label="Add to Favorites">
+                  <Favorite />
+                </IconButton>
+                <IconButton aria-label="Share">
+                  <Share />
+                </IconButton>
+              </div>
+              <Divider />
+              <Typography variant="body2" color="textSecondary" className={styles.productInfo}>
+                Additional information about the product can be displayed here.
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>
+      </div>
+    );
+  } else {
+    return <div>{'loading...'}</div>;
+  }
 };
 
 export default ProductDetails;

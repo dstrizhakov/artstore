@@ -242,6 +242,31 @@ export const getProductsSearch = async (
     throw error;
   }
 };
+export const searchProducts = async (
+  search: string,
+  limit: number,
+  offset: number
+): Promise<ProductProjectionPagedSearchResponse> => {
+  try {
+    const project = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .productProjections()
+      .search()
+      .get({
+        queryArgs: {
+          ['text.en-US']: search,
+          fuzzy: true,
+          limit,
+          offset,
+        },
+      })
+      .execute();
+
+    return project.body;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getProjectDetails = async () => {
   try {
@@ -393,6 +418,7 @@ export const getProductByKey = async (productKey: string): Promise<Product> => {
       .withKey({ key: productKey })
       .get()
       .execute();
+    console.log('Project', project.body);
 
     return project.body;
   } catch (e) {
