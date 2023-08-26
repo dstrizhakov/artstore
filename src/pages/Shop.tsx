@@ -1,29 +1,26 @@
-import { FC, useEffect, useCallback } from 'react';
-import Button from '@mui/material/Button';
-import { Card, CardActions, CardHeader, CardMedia } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import React, { FC, useEffect, useCallback } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import Stack from '@mui/material/Stack';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
 import { getProducts } from '../api/requests';
-import styles from './Shop.module.scss';
-import { Product } from '@commercetools/platform-sdk';
-import { addProductToCart } from '../store/reducers/cart.slice';
-import { dateConverter } from '../utils/dateConverter';
-import { Link } from 'react-router-dom';
+import ShopPagination from '../components/ShopPagination/ShopPagination';
+import { setPagination } from '../store/reducers/filters.slice';
+import ProductItem from '../components/ProductItem/ProductItem';
+import { Grid, Stack } from '@mui/material';
 
 export interface IArtwork {}
 export interface IResponce {}
 
 const Shop: FC = () => {
   const dispatch = useAppDispatch();
-  const products = useAppSelector((store) => store.products.items);
-  const loading = useAppSelector((store) => store.products.loading);
-  const error = useAppSelector((store) => store.products.error);
+  const products = useAppSelector((state) => state.products.items);
+  const loading = useAppSelector((state) => state.products.loading);
+  const error = useAppSelector((state) => state.products.error);
+
+  const limit = useAppSelector((state) => state.filters.pagination.limit);
+  const offset = useAppSelector((state) => state.filters.pagination.offset);
 
   const handleCloseSnackbar = () => {
     dispatch(setError(null));
@@ -32,8 +29,9 @@ const Shop: FC = () => {
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
-      const items = await getProducts();
-      dispatch(setProducts(items.results));
+      const responce = await getProducts(limit, offset);
+      dispatch(setProducts(responce.results));
+      dispatch(setPagination(responce));
     } catch (e) {
       dispatch(setError('Произошла ошибка при получении данных'));
     }
@@ -45,55 +43,26 @@ const Shop: FC = () => {
     }
   }, [products, fetchData]);
 
-  const addToCart = (product: Product) => {
-    dispatch(addProductToCart(product));
-  };
-
   return (
     <div>
       <h2>Shop Page</h2>
+      <ShopPagination />
       {loading ? (
-        <div className={styles.loadingOverlay}>
+        <div style={{ textAlign: 'center' }}>
           <CircularProgress size={100} />
         </div>
       ) : (
         <Grid container spacing={2}>
           {products.map((product) => (
             <Grid key={product.id} item xs={12} sm={6} md={4}>
-              <Card key={product.id} variant="outlined">
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={product.masterData.staged.masterVariant?.images?.[0]?.url || ''}
-                  alt={product.masterData.current.name['en-US']}
-                />
-                <CardHeader
-                  title={product.masterData.current.name['en-US']}
-                  subheader={dateConverter(product.createdAt)}
-                ></CardHeader>
-
-                <CardActions>
-                  <Stack direction="row" spacing={3}>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      endIcon={<AddShoppingCartIcon />}
-                      onClick={() => addToCart(product)}
-                    >
-                      Add to cart
-                    </Button>
-                    {product.key && (
-                      <Button>
-                        <Link to={product.key}>Learn More</Link>
-                      </Button>
-                    )}
-                  </Stack>
-                </CardActions>
-              </Card>
+              <Stack alignItems="stretch" justifyContent="space-between" height="100%">
+                <ProductItem product={product} />
+              </Stack>
             </Grid>
           ))}
         </Grid>
       )}
+
       <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <MuiAlert elevation={6} variant="filled" severity="error" onClose={handleCloseSnackbar}>
           {error}

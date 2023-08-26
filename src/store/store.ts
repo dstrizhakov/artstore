@@ -3,12 +3,14 @@ import productsReducer from './reducers/products.slice';
 import cartReducer from './reducers/cart.slice';
 import userReducer from './reducers/user.slice';
 import addressReducer from './reducers/address.slice';
+import filtersReducer from './reducers/filters.slice';
 
 const rootReducer = combineReducers({
   products: productsReducer,
   user: userReducer,
   cart: cartReducer,
   addresses: addressReducer,
+  filters: filtersReducer,
 });
 
 const loadState = () => {
