@@ -1,0 +1,24 @@
+.productLink {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    .productCard {
+      position: relative;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      &::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #00a7f514;
+      }
+    }
+  }
+}
+
+.productCard {
+  height: 400px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+}
