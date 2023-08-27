@@ -1,20 +1,22 @@
 import { FormControlLabel, Switch } from '@mui/material';
-import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setIsFuzzy } from '../../store/reducers/filters.slice';
+import { SyntheticEvent, useState } from 'react';
 
 const FilterSettings = () => {
-  const [isFuzzy, setIsFuzzy] = useState(true);
+  const dispatch = useAppDispatch();
+  const isFuzzy = useAppSelector((state) => state.filters.isFuzzy);
 
-  const handleToggleFuzzy = () => {
-    setIsFuzzy((prev) => !prev);
-    console.log(isFuzzy);
+  const [fuzzy, setFuzzy] = useState<boolean>(isFuzzy);
+
+  const handleToggleFuzzy = (event: SyntheticEvent<Element, Event>, checked: boolean) => {
+    setFuzzy((prev) => !prev);
+    dispatch(setIsFuzzy(checked));
   };
-
   return (
     <>
       <FormControlLabel
-        value={isFuzzy}
-        onChange={handleToggleFuzzy}
-        control={<Switch color="primary" />}
+        control={<Switch checked={fuzzy} onChange={handleToggleFuzzy} color="primary" />}
         label="Fuzzy search"
         labelPlacement="bottom"
       />

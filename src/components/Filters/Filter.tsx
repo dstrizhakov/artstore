@@ -1,4 +1,4 @@
-import { Paper, TextField } from '@mui/material';
+import { Paper, Stack, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import useDebounce from '../../hooks/useDebounce';
 import { useEffect, useState } from 'react';
@@ -35,15 +35,16 @@ const Filters = () => {
         <Paper
           sx={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-start',
             alignItems: 'center',
             padding: '1rem',
             width: '100%',
           }}
         >
-          <TextField label="Search" sx={{ width: '300px' }} type="text" onChange={handleChange} value={search} />
-
-          <FilterSettings />
+          <Stack direction="row" spacing={2}>
+            <TextField label="Search" sx={{ width: '300px' }} type="text" onChange={handleChange} value={search} />
+            <FilterSettings />
+          </Stack>
         </Paper>
       </Box>
     </>
