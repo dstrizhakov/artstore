@@ -13,7 +13,6 @@ interface IPagination {
   count: number;
   offset: number;
   limit: number;
-  perPage: number;
 }
 
 const initialState: IFilters = {
@@ -25,8 +24,7 @@ const initialState: IFilters = {
     total: 0,
     count: 0,
     offset: 0,
-    limit: 0,
-    perPage: 5,
+    limit: 10,
   },
 };
 

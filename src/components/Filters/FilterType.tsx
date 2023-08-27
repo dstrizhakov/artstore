@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAppDispatch } from '../../hooks/redux';
 import { setFilterCategory, setFilterType } from '../../store/reducers/filters.slice';
 import { getProductCategories, getProductTypes } from '../../api/requests';
 
 const FilterType = () => {
   const dispatch = useAppDispatch();
-  const filterType = useAppSelector((state) => state.filters.type);
-  const filterCategory = useAppSelector((state) => state.filters.type);
+  //   const filterType = useAppSelector((state) => state.filters.type);
+  //   const filterCategory = useAppSelector((state) => state.filters.category);
 
-  const [type, setType] = useState<string>(filterType);
-  const [category, setCategory] = useState<string>(filterCategory);
+  const [type, setType] = useState<string>('');
+  const [category, setCategory] = useState<string>('');
   const [types, setTypes] = useState<string[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
 
