@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useCallback } from 'react';
+import { FC, useEffect, useCallback } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -6,10 +6,10 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
 import { searchProducts } from '../api/requests';
 import ShopPagination from '../components/ShopPagination/ShopPagination';
-import { setPagination } from '../store/reducers/filters.slice';
 import ProductItem from '../components/ProductItem/ProductItem';
 import { Grid, Stack } from '@mui/material';
 import Filter from '../components/Filters/Filter';
+import { setPagination } from '../store/reducers/filters.slice';
 
 export interface IArtwork {}
 export interface IResponce {}
@@ -22,6 +22,7 @@ const Shop: FC = () => {
 
   const limit = useAppSelector((state) => state.filters.pagination.limit);
   const offset = useAppSelector((state) => state.filters.pagination.offset);
+  const searchString = useAppSelector((state) => state.filters.search);
 
   const handleCloseSnackbar = () => {
     dispatch(setError(null));
@@ -30,19 +31,17 @@ const Shop: FC = () => {
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
-      const responce = await searchProducts('', limit, offset);
+      const responce = await searchProducts(searchString, true, limit, offset);
       dispatch(setProducts(responce.results));
       dispatch(setPagination(responce));
     } catch (e) {
       dispatch(setError('Произошла ошибка при получении данных'));
     }
-  }, [dispatch, limit, offset]);
+  }, [dispatch, limit, offset, searchString]);
 
   useEffect(() => {
-    if (products.length === 0) {
-      fetchData();
-    }
-  }, [products, fetchData, limit, offset]);
+    fetchData();
+  }, [fetchData, limit, offset, searchString]);
 
   return (
     <div>

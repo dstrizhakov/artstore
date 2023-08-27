@@ -28,22 +28,26 @@ const filtersSlice = createSlice({
   name: 'filters',
   initialState,
   reducers: {
-    setSearchString: (state, action: PayloadAction<string>) => {
-      state.search = action.payload;
-      state.pagination.offset = 0;
-    },
     setPagination: (state, action: PayloadAction<ProductProjectionPagedSearchResponse>) => {
       state.pagination.limit = action.payload.limit;
       state.pagination.total = action.payload.total;
       state.pagination.count = action.payload.count;
       state.pagination.offset = action.payload.offset;
     },
-    setPerPage: (state, action: PayloadAction<number>) => {
+    setSearchString: (state, action: PayloadAction<string>) => {
+      state.search = action.payload;
+      state.pagination.offset = 0;
+    },
+    setLimit: (state, action: PayloadAction<number>) => {
       state.pagination.limit = action.payload;
+    },
+    setOffset: (state, action: PayloadAction<number>) => {
+      console.log('setOFFset', action.payload);
+      state.pagination.offset = action.payload;
     },
   },
 });
 
-export const { setSearchString, setPagination, setPerPage } = filtersSlice.actions;
+export const { setSearchString, setPagination, setLimit, setOffset } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

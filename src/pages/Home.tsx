@@ -39,7 +39,7 @@ const Home: FC = () => {
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
-      const responce = await searchProducts('', 10, 0);
+      const responce = await searchProducts('', true, 10, 0);
       dispatch(setProducts(responce.results));
       dispatch(setPagination(responce));
     } catch (e) {

@@ -1,30 +1,25 @@
 import { Paper, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import useDebounce from '../../hooks/useDebounce';
-import { useCallback, useEffect, useState } from 'react';
-import { searchProducts } from '../../api/requests';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setProducts } from '../../store/reducers/products.slice';
 import { setSearchString } from '../../store/reducers/filters.slice';
+import FilterSettings from './FilterSettings';
 
 const Filters = () => {
-  const [search, setSearch] = useState('');
-  const limit = useAppSelector((state) => state.filters.pagination.limit);
-  const offset = useAppSelector((state) => state.filters.pagination.offset);
+  const searchString = useAppSelector((state) => state.filters.search);
   const dispatch = useAppDispatch();
+
+  const [search, setSearch] = useState(searchString);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
-  const debounced = useDebounce(search, 500);
-  const handleSearch = useCallback(async () => {
-    const item = await searchProducts(debounced, limit, offset);
 
-    dispatch(setProducts(item.results));
-    dispatch(setSearchString(debounced));
-  }, [debounced, dispatch, limit, offset]);
+  const debounced = useDebounce(search, 500);
+
   useEffect(() => {
-    handleSearch();
-  }, [handleSearch]);
+    dispatch(setSearchString(debounced));
+  }, [debounced, dispatch]);
 
   return (
     <>
@@ -46,7 +41,9 @@ const Filters = () => {
             width: '100%',
           }}
         >
-          <TextField fullWidth type="text" onChange={handleChange} value={search} />
+          <TextField label="Search" sx={{ width: '300px' }} type="text" onChange={handleChange} value={search} />
+
+          <FilterSettings />
         </Paper>
       </Box>
     </>
