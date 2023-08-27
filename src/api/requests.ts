@@ -7,6 +7,8 @@ import {
   CustomerChangeAddressAction,
   CustomerAddAddressAction,
   ProductProjectionPagedSearchResponse,
+  CategoryPagedQueryResponse,
+  ProductTypePagedQueryResponse,
 } from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
@@ -263,6 +265,24 @@ export const searchProducts = async (
       })
       .execute();
 
+    return project.body;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductTypes = async (): Promise<ProductTypePagedQueryResponse> => {
+  try {
+    const project = await getApiRoot().withProjectKey({ projectKey }).productTypes().get().execute();
+    return project.body;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductCategories = async (): Promise<CategoryPagedQueryResponse> => {
+  try {
+    const project = await getApiRoot().withProjectKey({ projectKey }).categories().get().execute();
     return project.body;
   } catch (error) {
     throw error;

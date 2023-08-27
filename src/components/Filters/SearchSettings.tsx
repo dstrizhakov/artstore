@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setIsFuzzy } from '../../store/reducers/filters.slice';
 import { SyntheticEvent, useState } from 'react';
 
-const FilterSettings = () => {
+const SearchSettings = () => {
   const dispatch = useAppDispatch();
   const isFuzzy = useAppSelector((state) => state.filters.isFuzzy);
 
@@ -24,4 +24,4 @@ const FilterSettings = () => {
   );
 };
 
-export default FilterSettings;
+export default SearchSettings;

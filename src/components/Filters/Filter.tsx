@@ -4,7 +4,8 @@ import useDebounce from '../../hooks/useDebounce';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setSearchString } from '../../store/reducers/filters.slice';
-import FilterSettings from './FilterSettings';
+import SearchSettings from './SearchSettings';
+import FilterType from './FilterType';
 
 const Filters = () => {
   const searchString = useAppSelector((state) => state.filters.search);
@@ -35,7 +36,7 @@ const Filters = () => {
         <Paper
           sx={{
             display: 'flex',
-            justifyContent: 'flex-start',
+            justifyContent: 'space-between',
             alignItems: 'center',
             padding: '1rem',
             width: '100%',
@@ -43,8 +44,9 @@ const Filters = () => {
         >
           <Stack direction="row" spacing={2}>
             <TextField label="Search" sx={{ width: '300px' }} type="text" onChange={handleChange} value={search} />
-            <FilterSettings />
+            <SearchSettings />
           </Stack>
+          <FilterType />
         </Paper>
       </Box>
     </>

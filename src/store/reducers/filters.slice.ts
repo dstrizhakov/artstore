@@ -4,6 +4,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface IFilters {
   search: string;
   isFuzzy: boolean;
+  type: string;
+  category: string;
   pagination: IPagination;
 }
 interface IPagination {
@@ -17,6 +19,8 @@ interface IPagination {
 const initialState: IFilters = {
   search: '',
   isFuzzy: true,
+  type: '',
+  category: '',
   pagination: {
     total: 0,
     count: 0,
@@ -49,9 +53,16 @@ const filtersSlice = createSlice({
     setIsFuzzy: (state, action: PayloadAction<boolean>) => {
       state.isFuzzy = action.payload;
     },
+    setFilterType: (state, action: PayloadAction<string>) => {
+      state.type = action.payload;
+    },
+    setFilterCategory: (state, action: PayloadAction<string>) => {
+      state.category = action.payload;
+    },
   },
 });
 
-export const { setSearchString, setPagination, setLimit, setOffset, setIsFuzzy } = filtersSlice.actions;
+export const { setSearchString, setPagination, setLimit, setOffset, setIsFuzzy, setFilterType, setFilterCategory } =
+  filtersSlice.actions;
 
 export default filtersSlice.reducer;

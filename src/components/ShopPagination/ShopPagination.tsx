@@ -47,7 +47,7 @@ const ShopPagination = () => {
           width: '100%',
         }}
       >
-        <FormControl sx={{ minWidth: 120 }} size="small">
+        <FormControl sx={{ minWidth: 120 }}>
           <InputLabel id="per-page">Perpage</InputLabel>
           <Select
             placeholder="Perpage"
@@ -57,12 +57,13 @@ const ShopPagination = () => {
             label="Perpage"
             onChange={handleChangeLimit}
           >
-            <MenuItem value={5}>5</MenuItem>
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={20}>20</MenuItem>
+            <MenuItem value={3}>3</MenuItem>
+            <MenuItem value={6}>6</MenuItem>
+            <MenuItem value={12}>12</MenuItem>
           </Select>
         </FormControl>
         <Pagination
+          size="large"
           variant="outlined"
           color="primary"
           page={page}
