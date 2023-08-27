@@ -244,6 +244,7 @@ export const getProductsSearch = async (
 };
 export const searchProducts = async (
   search: string,
+  fuzzy: boolean,
   limit: number,
   offset: number
 ): Promise<ProductProjectionPagedSearchResponse> => {
@@ -255,7 +256,7 @@ export const searchProducts = async (
       .get({
         queryArgs: {
           ['text.en-US']: search,
-          fuzzy: true,
+          fuzzy: fuzzy,
           limit,
           offset,
         },
