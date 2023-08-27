@@ -1,10 +1,11 @@
-import { Paper, TextField } from '@mui/material';
+import { Paper, Stack, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import useDebounce from '../../hooks/useDebounce';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setSearchString } from '../../store/reducers/filters.slice';
-import FilterSettings from './FilterSettings';
+import SearchSettings from './SearchSettings';
+import FilterType from './FilterType';
 
 const Filters = () => {
   const searchString = useAppSelector((state) => state.filters.search);
@@ -41,9 +42,11 @@ const Filters = () => {
             width: '100%',
           }}
         >
-          <TextField label="Search" sx={{ width: '300px' }} type="text" onChange={handleChange} value={search} />
-
-          <FilterSettings />
+          <Stack direction="row" spacing={2}>
+            <TextField label="Search" sx={{ width: '300px' }} type="text" onChange={handleChange} value={search} />
+            <SearchSettings />
+          </Stack>
+          <FilterType />
         </Paper>
       </Box>
     </>
