@@ -2,11 +2,12 @@ import React from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeEvent } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setLimit, setOffset } from '../../store/reducers/filters.slice';
 
 const ShopPagination = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const page = parseInt(query.get('page') || '1');
@@ -14,7 +15,7 @@ const ShopPagination = () => {
   const { total, count, limit } = useAppSelector((state) => state.filters.pagination);
 
   const pages = Math.ceil((total || count) / limit);
-  // const currentPage = offset / limit + 1;
+  // const currentPage = Math.floor(offset / limit) + 1;
 
   const dispatch = useAppDispatch();
 
@@ -24,8 +25,10 @@ const ShopPagination = () => {
   };
 
   const handleChangeLimit = async (event: SelectChangeEvent<string>) => {
-    const newPerPage = +event.target.value;
-    dispatch(setLimit(newPerPage));
+    const newLimit = parseInt(event.target.value);
+    dispatch(setLimit(newLimit));
+    navigate('/shop');
+    dispatch(setOffset(0));
   };
 
   return (
@@ -59,7 +62,7 @@ const ShopPagination = () => {
           >
             <MenuItem value={3}>3</MenuItem>
             <MenuItem value={6}>6</MenuItem>
-            <MenuItem value={12}>12</MenuItem>
+            <MenuItem value={10}>10</MenuItem>
           </Select>
         </FormControl>
         <Pagination
