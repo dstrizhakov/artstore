@@ -42,7 +42,6 @@ const filtersSlice = createSlice({
       state.pagination.limit = action.payload;
     },
     setOffset: (state, action: PayloadAction<number>) => {
-      console.log('setOFFset', action.payload);
       state.pagination.offset = action.payload;
     },
   },
