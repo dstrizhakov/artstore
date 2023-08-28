@@ -51,7 +51,6 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
           {item.product.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0
             ? (item.product.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0) / 100
             : (item.product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
-          {/* {(item.product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100} */}
         </Typography>
         <IconButton aria-label="delete" size="large" onClick={deleteItem}>
           <DeleteSharpIcon />
