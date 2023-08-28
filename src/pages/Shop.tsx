@@ -24,6 +24,8 @@ const Shop: FC = () => {
   const offset = useAppSelector((state) => state.filters.pagination.offset);
   const searchString = useAppSelector((state) => state.filters.search);
   const isFuzzy = useAppSelector((state) => state.filters.isFuzzy);
+  const categoryId = useAppSelector((state) => state.filters.categoryId);
+  const typeId = useAppSelector((state) => state.filters.typeId);
 
   const handleCloseSnackbar = () => {
     dispatch(setError(null));
@@ -32,17 +34,17 @@ const Shop: FC = () => {
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
-      const responce = await searchProducts(searchString, isFuzzy, limit, offset);
+      const responce = await searchProducts(searchString, isFuzzy, limit, offset, categoryId, typeId);
       dispatch(setProducts(responce.results));
       dispatch(setPagination(responce));
     } catch (e) {
       dispatch(setError('Произошла ошибка при получении данных'));
     }
-  }, [dispatch, limit, offset, searchString, isFuzzy]);
+  }, [dispatch, limit, offset, searchString, isFuzzy, categoryId, typeId]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, limit, offset, searchString, isFuzzy]);
+  }, [fetchData, limit, offset, searchString, isFuzzy, categoryId, typeId]);
 
   return (
     <div>

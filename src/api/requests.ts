@@ -248,8 +248,17 @@ export const searchProducts = async (
   search: string,
   fuzzy: boolean,
   limit: number,
-  offset: number
+  offset: number,
+  categoryId?: string,
+  typeId?: string
 ): Promise<ProductProjectionPagedSearchResponse> => {
+  const filter = [];
+  if (!!categoryId) {
+    filter.push(`categories.id:"${categoryId}"`);
+  }
+  if (!!typeId) {
+    filter.push(`productType.id:"${typeId}"`);
+  }
   try {
     const project = await getApiRoot()
       .withProjectKey({ projectKey })
@@ -258,9 +267,10 @@ export const searchProducts = async (
       .get({
         queryArgs: {
           ['text.en-US']: search,
-          fuzzy: fuzzy,
+          fuzzy,
           limit,
           offset,
+          filter,
         },
       })
       .execute();
@@ -283,6 +293,7 @@ export const getProductTypes = async (): Promise<ProductTypePagedQueryResponse> 
 export const getProductCategories = async (): Promise<CategoryPagedQueryResponse> => {
   try {
     const project = await getApiRoot().withProjectKey({ projectKey }).categories().get().execute();
+    console.log('getProductCategories ', project.body);
     return project.body;
   } catch (error) {
     throw error;

@@ -4,15 +4,20 @@ import { useAppDispatch } from '../../hooks/redux';
 import { setFilterCategory, setFilterType } from '../../store/reducers/filters.slice';
 import { getProductCategories, getProductTypes } from '../../api/requests';
 
-const FilterType = () => {
+type CategoryTypeItem = {
+  id: string;
+  name: string;
+};
+
+const FilterTypeCategory = () => {
   const dispatch = useAppDispatch();
   //   const filterType = useAppSelector((state) => state.filters.type);
   //   const filterCategory = useAppSelector((state) => state.filters.category);
 
   const [type, setType] = useState<string>('');
   const [category, setCategory] = useState<string>('');
-  const [types, setTypes] = useState<string[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [types, setTypes] = useState<CategoryTypeItem[]>([]);
+  const [categories, setCategories] = useState<CategoryTypeItem[]>([]);
 
   const handleSetType = (event: SelectChangeEvent<string>) => {
     const newType = event.target.value;
@@ -22,6 +27,8 @@ const FilterType = () => {
 
   const handleSetCategory = (event: SelectChangeEvent<string>) => {
     const newCategory = event.target.value;
+    console.log(event);
+
     setCategory(newCategory);
     dispatch(setFilterCategory(newCategory));
   };
@@ -30,8 +37,18 @@ const FilterType = () => {
     const categoryResponse = await getProductCategories();
     const typeResponse = await getProductTypes();
 
-    setCategories(categoryResponse.results.map((item) => item.name['en-US']));
-    setTypes(typeResponse.results.map((item) => item.name));
+    setCategories(
+      categoryResponse.results.map((item) => ({
+        id: item.id,
+        name: item.name['en-US'],
+      }))
+    );
+    setTypes(
+      typeResponse.results.map((item) => ({
+        id: item.id,
+        name: item.name,
+      }))
+    );
   };
 
   useEffect(() => {
@@ -47,8 +64,8 @@ const FilterType = () => {
             <em>None</em>
           </MenuItem>
           {types.map((item) => (
-            <MenuItem key={item} value={item}>
-              {item}
+            <MenuItem key={item.id} value={item.id}>
+              {item.name}
             </MenuItem>
           ))}
         </Select>
@@ -60,8 +77,8 @@ const FilterType = () => {
             <em>None</em>
           </MenuItem>
           {categories.map((item) => (
-            <MenuItem key={item} value={item}>
-              {item}
+            <MenuItem key={item.id} value={item.id}>
+              {item.name}
             </MenuItem>
           ))}
         </Select>
@@ -70,4 +87,4 @@ const FilterType = () => {
   );
 };
 
-export default FilterType;
+export default FilterTypeCategory;
