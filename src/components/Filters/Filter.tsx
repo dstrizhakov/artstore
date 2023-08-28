@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setSearchString } from '../../store/reducers/filters.slice';
 import SearchSettings from './SearchSettings';
-import FilterType from './FilterType';
+import FilterTypeCategory from './FilterTypeCategory';
 
 const Filters = () => {
   const searchString = useAppSelector((state) => state.filters.search);
@@ -46,7 +46,7 @@ const Filters = () => {
             <TextField label="Search" sx={{ width: '300px' }} type="text" onChange={handleChange} value={search} />
             <SearchSettings />
           </Stack>
-          <FilterType />
+          <FilterTypeCategory />
         </Paper>
       </Box>
     </>
