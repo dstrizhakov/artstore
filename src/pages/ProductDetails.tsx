@@ -11,8 +11,7 @@ import { dateConverter } from '../utils/dateConverter';
 import { Link } from 'react-router-dom';
 import { getProductByKey } from '../api/requests';
 import { setProduct } from '../store/reducers/products.slice';
-import RenderPrice from '../utils/renderPrice';
-// import {RenderPrice} from '../utils/RenderPrice';
+import RenderPrice from '../components/RenderPrice/RenderPrice';
 
 const ProductDetails: FC = () => {
   const { id: key } = useParams();
