@@ -14,7 +14,6 @@ import { setProduct } from '../store/reducers/products.slice';
 import RenderPrice from '../utils/renderPrice';
 // import {RenderPrice} from '../utils/RenderPrice';
 
-
 const ProductDetails: FC = () => {
   const { id: key } = useParams();
   const dispatch = useAppDispatch();
@@ -87,9 +86,11 @@ const ProductDetails: FC = () => {
                   ))}
 
               <Typography variant="h5" gutterBottom>
-                <RenderPrice 
-                  price={(productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0)} 
-                  discount={(productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0)} 
+                <RenderPrice
+                  price={productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0}
+                  discount={
+                    productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0
+                  }
                 />
               </Typography>
               <div className={styles.buttons}>
