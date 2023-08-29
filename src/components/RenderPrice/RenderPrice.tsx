@@ -10,7 +10,13 @@ interface RenderPriceProps {
 const RenderPrice: FC<RenderPriceProps> = ({ price, discount }) => {
   if (discount) {
     return (
-      <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
+      <Stack
+        className={styles.container_price}
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="flex-end"
+        spacing={1}
+      >
         <div className={styles.price}>${price / 100}</div>
         <div className={styles.discount}>${discount / 100}</div>
         <div>Discount {Math.floor((price / discount) * 100 - 100)}%</div>
@@ -18,7 +24,7 @@ const RenderPrice: FC<RenderPriceProps> = ({ price, discount }) => {
     );
   } else {
     return (
-      <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
+      <Stack direction="row" justifyContent="flex-start" alignItems="flex-end" spacing={1}>
         <div className={styles.nodiscount}>${price / 100}</div>
       </Stack>
     );

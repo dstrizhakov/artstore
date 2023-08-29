@@ -64,7 +64,7 @@ const cartSlice = createSlice({
           item.product.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0
             ? item.product.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0
             : item.product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0;
-        return total + (price / 100) * item.count;
+        return Number((total + (price / 100) * item.count).toFixed(2));
       }, 0);
 
       state.total = totalQuantity;
