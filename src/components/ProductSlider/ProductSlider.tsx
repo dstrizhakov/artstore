@@ -1,6 +1,6 @@
 import { FC, useLayoutEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-
+import styles from './ProductSlider.module.scss';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
@@ -8,6 +8,7 @@ import 'swiper/css/thumbs';
 import SwiperClass from 'swiper/types/swiper-class';
 import SwiperCore from 'swiper';
 import { FreeMode, Navigation, Thumbs, Controller } from 'swiper/modules';
+import Modal from '../Modal/Modal';
 
 export interface ImagesSlide {
   id: string;
@@ -18,23 +19,25 @@ type ProductSliderProps = {
   slides: ImagesSlide[];
 };
 
-// const ProductSlider: FC = () => {
-// const ProductSlider: FC<Product> = () => {
-
 const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
+  const [modal, setModal] = useState(false);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore>();
   const [firstSwiper] = useState<SwiperClass>();
   const [secondSwiper] = useState<SwiperClass>();
   const swiper1Ref = useRef<SwiperCore | null>(null);
   const swiper2Ref = useRef();
-  // const imagesArray = product.masterData.staged.masterVariant.images
-  // console.log(imagesArray);
+  const [activeSlideImg, setActiveSlideImg] = useState<string | null>(null);
 
   useLayoutEffect(() => {
     if (swiper1Ref.current !== null) {
       swiper1Ref.current.controller.control = swiper2Ref.current;
     }
   }, []);
+
+  const popupImage = (img: string) => {
+    setActiveSlideImg(img);
+    setModal(true);
+  };
 
   return (
     <div>
@@ -57,7 +60,7 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
-            <img src={slide.img} alt={slide.title} />
+            <img onClick={() => popupImage(slide.img)} src={slide.img} alt={slide.title} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -78,6 +81,9 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
           </SwiperSlide>
         ))}
       </Swiper>
+      <Modal isOpen={modal} setIsOpen={setModal}>
+        {activeSlideImg && <img className={styles.popup_img} src={activeSlideImg} alt="Active Slide" />}
+      </Modal>
     </div>
   );
 };
