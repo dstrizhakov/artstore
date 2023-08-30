@@ -60,8 +60,11 @@ const cartSlice = createSlice({
     countTotalAndPrice: (state) => {
       const totalQuantity = state.items.reduce((total, item) => total + item.count, 0);
       const totalPrice = state.items.reduce((total, item) => {
-        const price = item.product.masterData.staged.masterVariant?.prices?.[0]?.value?.centAmount ?? 0;
-        return total + (price / 100) * item.count;
+        const price =
+          item.product.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0
+            ? item.product.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0
+            : item.product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0;
+        return Number((total + (price / 100) * item.count).toFixed(2));
       }, 0);
 
       state.total = totalQuantity;

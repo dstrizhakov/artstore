@@ -1,12 +1,13 @@
 // ProductCard.js
 
 import React from 'react';
-import { Card, CardHeader, CardMedia } from '@mui/material';
+import { Card, CardActions, CardHeader, CardMedia } from '@mui/material';
 
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { dateConverter } from '../../utils/dateConverter';
 import styles from './ProductItem.module.scss';
+import RenderPrice from '../../components/RenderPrice/RenderPrice';
 
 interface ProductCardProps {
   product: ProductProjection;
@@ -23,6 +24,13 @@ const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
           alt={product.name['en-US']}
         />
         <CardHeader title={product.name['en-US']} subheader={dateConverter(product.createdAt)}></CardHeader>
+
+        <CardActions>
+          <RenderPrice
+            price={product.masterVariant?.prices?.[0]?.value?.centAmount ?? 0}
+            discount={product.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0}
+          />
+        </CardActions>
 
         {/* <CardActions> */}
         {/* <Stack direction="row" spacing={3}> */}

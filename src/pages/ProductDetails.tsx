@@ -11,6 +11,7 @@ import { dateConverter } from '../utils/dateConverter';
 import { Link } from 'react-router-dom';
 import { getProductByKey } from '../api/requests';
 import { setProduct } from '../store/reducers/products.slice';
+import RenderPrice from '../components/RenderPrice/RenderPrice';
 
 const ProductDetails: FC = () => {
   const { id: key } = useParams();
@@ -84,7 +85,12 @@ const ProductDetails: FC = () => {
                   ))}
 
               <Typography variant="h5" gutterBottom>
-                ${(productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100}
+                <RenderPrice
+                  price={productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0}
+                  discount={
+                    productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0
+                  }
+                />
               </Typography>
               <div className={styles.buttons}>
                 <Button
