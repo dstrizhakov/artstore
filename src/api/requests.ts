@@ -5,10 +5,10 @@ import {
   Product,
   CustomerChangePassword,
   CustomerChangeAddressAction,
-  CustomerAddAddressAction,
   ProductProjectionPagedSearchResponse,
   CategoryPagedQueryResponse,
   ProductTypePagedQueryResponse,
+  CustomerUpdateAction,
 } from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
@@ -458,7 +458,7 @@ export const getProductByKey = async (productKey: string): Promise<Product> => {
   }
 };
 
-export const AddCustomerAddress = async (customerID: string, version: number, action: CustomerAddAddressAction) => {
+export const AddCustomerAddress = async (customerID: string, version: number, actions: CustomerUpdateAction[]) => {
   try {
     const response = await getApiRoot()
       .withProjectKey({ projectKey })
@@ -467,7 +467,30 @@ export const AddCustomerAddress = async (customerID: string, version: number, ac
       .post({
         body: {
           version,
-          actions: [action],
+          actions,
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export const DeleteCustomerAddress = async (customerID: string, version: number, id: string) => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .customers()
+      .withId({ ID: customerID })
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'removeAddress',
+              addressId: id,
+            },
+          ],
         },
       })
       .execute();
