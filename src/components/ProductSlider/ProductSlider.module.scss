@@ -1,3 +1,22 @@
+.popup_content {
+  position: relative;
+}
+
+.popup_content .close {
+  position: absolute;
+  margin-bottom: auto;
+  top: -28px;
+  right: -28px;
+  z-index: 1000;
+}
+
 .popup_img {
-  height: 80vh;
+  height: 85vh;
+}
+
+@media screen and (max-width: 1000px) {
+  .popup_img {
+    height: auto;
+    width: 80vw;
+  }
 }
