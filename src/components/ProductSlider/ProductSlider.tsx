@@ -1,6 +1,5 @@
 import { FC, useLayoutEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import styles from './ProductSlider.module.scss';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
@@ -9,6 +8,9 @@ import SwiperClass from 'swiper/types/swiper-class';
 import SwiperCore from 'swiper';
 import { FreeMode, Navigation, Thumbs, Controller } from 'swiper/modules';
 import Modal from '../Modal/Modal';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import styles from './ProductSlider.module.scss';
 
 export interface ImagesSlide {
   id: string;
@@ -40,7 +42,7 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
   };
 
   return (
-    <div>
+    <div className={styles.slider}>
       <Swiper
         onSwiper={(swiper) => {
           if (swiper1Ref.current !== null) {
@@ -82,7 +84,14 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
         ))}
       </Swiper>
       <Modal isOpen={modal} setIsOpen={setModal}>
-        {activeSlideImg && <img className={styles.popup_img} src={activeSlideImg} alt="Active Slide" />}
+        {activeSlideImg && (
+          <div className={styles.popup_content}>
+            <img className={styles.popup_img} src={activeSlideImg} alt="Active Slide" />
+            <IconButton className={styles.close} onClick={() => setModal(false)} aria-label="close" size="medium">
+              <CloseIcon fontSize="medium" />
+            </IconButton>
+          </div>
+        )}
       </Modal>
     </div>
   );
