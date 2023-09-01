@@ -4,7 +4,7 @@ import {
   Button,
   FormControl,
   FormControlLabel,
-  // FormHelperText,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -15,11 +15,13 @@ import {
   Typography,
 } from '@mui/material';
 import { AddCustomerAddress } from '../../../api/requests';
-import { FC, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { login } from '../../../store/reducers/user.slice';
 import { useAppDispatch } from '../../../hooks/redux';
 import { countries } from '../../../constants/countries';
-import { AddressType } from '../../../types/types';
+import { Erroring } from '../../../types/ConfigValidator';
+import { validator } from '../../../utils/validator';
+import validatorConfig from '../../../utils/validatorConfig';
 
 interface CustomerAddressProps {
   customer: Customer;
@@ -27,7 +29,35 @@ interface CustomerAddressProps {
 }
 
 const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
-  const [address, setAddress] = useState<AddressType>({} as AddressType);
+  const [address, setAddress] = useState({
+    title: '',
+    country: '',
+    state: '',
+    city: '',
+    streetName: '',
+    streetNumber: '',
+    building: '',
+    apartment: '',
+    postalCode: '',
+    firstNameShipping: '',
+    lastNameShipping: '',
+    mobile: '',
+  });
+  const [dirty, setDirty] = useState({
+    title: false,
+    country: false,
+    state: false,
+    city: false,
+    streetName: false,
+    streetNumber: false,
+    building: false,
+    apartment: false,
+    postalCode: false,
+    firstNameShipping: false,
+    lastNameShipping: false,
+    mobile: false,
+  });
+  const [errors, setErrors] = useState<Erroring>({});
   const [isShipping, setIsShipping] = useState(false);
   const [isBilling, setIsBilling] = useState(false);
 
@@ -40,26 +70,32 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
 
   const dispatch = useAppDispatch();
 
-  // const validateAddress = () => {
-  //   return true;
-  // };
+  const validateAddress = () => {
+    return true;
+  };
+  const blurHandler = (field: string) => {
+    setDirty((prevState) => ({
+      ...prevState,
+      [field]: true,
+    }));
+  };
 
   const handleSave = async () => {
-    // const validateState = validateAddress();
-    // if (!validateState) {
-    //   return;
-    // }
+    const validateState = validateAddress();
+    if (!validateState) {
+      return;
+    }
 
     let newCustomer = await AddCustomerAddress(customer.id, customer.version, [
       {
         action: 'addAddress',
         address: {
-          firstName: address.firstName,
+          firstName: address.firstNameShipping,
           state: address.state,
           streetNumber: address.streetNumber,
           title: address.title,
           mobile: address.mobile,
-          lastName: address.lastName,
+          lastName: address.lastNameShipping,
           streetName: address.streetName,
           postalCode: address.postalCode,
           city: address.city,
@@ -92,6 +128,28 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
     dispatch(login(newCustomer.body));
     setIsOpen(false);
   };
+  const validate = useCallback(async () => {
+    try {
+      const error: Erroring = validator(
+        {
+          ...address,
+        },
+        validatorConfig,
+        customer.addresses
+      );
+
+      setErrors(error);
+      return Object.keys(error).length === 0;
+    } catch (validationError) {
+      console.error('Validation Error:', validationError);
+      return false;
+    }
+  }, [address, customer.addresses]);
+  useEffect(() => {
+    validate();
+  }, [validate]);
+
+  const isValid = Object.keys(errors).length === 0;
 
   return (
     <>
@@ -109,23 +167,30 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
             <Typography variant="h4" sx={{ margin: ' 0 auto', paddingBottom: '40px' }}>
               Add Address
             </Typography>
-            {/* <Grid item xs={10} lg={4}>
-              <Stack direction="row" spacing={2}></Stack>
-            </Grid> */}
             <Grid item xs={10} lg={4}>
               <Stack direction="row" spacing={2}>
                 <TextField
+                  onBlur={() => blurHandler('title')}
+                  error={errors.title && dirty.title ? true : false}
                   variant="standard"
                   id="title"
-                  label="Title"
-                  value={address?.title}
+                  label="Title *"
+                  name="title"
+                  value={address?.title || ''}
                   onChange={(e) => handleAddressChange('title', e.target.value)}
+                  helperText={errors.title && dirty.title ? errors.title : ''}
                 />
-                <FormControl sx={{ m: 0, minWidth: 180 }}>
-                  <InputLabel sx={{ marginBottom: 0 }} id="country">
-                    Country
+                <FormControl error={errors.country && dirty.country ? true : false} sx={{ m: 0, minWidth: 180 }}>
+                  <InputLabel
+                    error={errors.country && dirty.country ? true : false}
+                    sx={{ marginBottom: 0 }}
+                    id="country"
+                  >
+                    Country *
                   </InputLabel>
                   <Select
+                    error={errors.country && dirty.country ? true : false}
+                    onBlur={() => blurHandler('country')}
                     sx={{ marginBottom: 0 }}
                     variant="standard"
                     id="country"
@@ -133,6 +198,9 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
                     label="Country"
                     renderValue={(value) => ` - ${value} -`}
                     onChange={(e) => handleAddressChange('country', e.target.value)}
+                    inputProps={{
+                      name: 'country',
+                    }}
                   >
                     <MenuItem value="">
                       <em>None</em>
@@ -143,14 +211,22 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
                       </MenuItem>
                     ))}
                   </Select>
-                  {/* {!address?.country && <FormHelperText>{'Country is required'}</FormHelperText>} */}
+                  {
+                    <FormHelperText sx={{ marginBottom: 0 }} error={errors.country && dirty.country ? true : false}>
+                      {errors.country && dirty.country ? errors.country : ''}
+                    </FormHelperText>
+                  }
                 </FormControl>
                 <TextField
+                  error={errors.state && dirty.state ? true : false}
+                  onBlur={() => blurHandler('state')}
                   variant="standard"
                   id="state"
                   label="State"
-                  value={address?.state}
+                  name="state"
+                  value={address?.state || ''}
                   onChange={(e) => handleAddressChange('state', e.target.value)}
+                  helperText={errors.state && dirty.state ? errors.state : ''}
                 />
               </Stack>
             </Grid>
@@ -158,50 +234,74 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
               <Stack direction="row" spacing={2}>
                 {' '}
                 <TextField
+                  error={errors.city && dirty.city ? true : false}
+                  onBlur={() => blurHandler('city')}
                   variant="standard"
                   id="city"
-                  label="City"
-                  value={address?.city}
+                  name="city"
+                  label="City *"
+                  value={address?.city || ''}
                   onChange={(e) => handleAddressChange('city', e.target.value)}
+                  helperText={errors.city && dirty.city ? errors.city : ''}
                 />
                 <TextField
+                  error={errors.streetName && dirty.streetName ? true : false}
+                  onBlur={() => blurHandler('streetName')}
                   variant="standard"
                   id="street_name"
-                  label="Street name"
-                  value={address?.streetName}
+                  label="Street name *"
+                  value={address?.streetName || ''}
                   onChange={(e) => handleAddressChange('streetName', e.target.value)}
+                  name="streetName"
+                  helperText={errors.streetName && dirty.streetName ? errors.streetName : ''}
                 />
                 <TextField
+                  error={errors.streetNumber && dirty.streetNumber ? true : false}
+                  onBlur={() => blurHandler('streetNumber')}
                   variant="standard"
                   id="street_number"
-                  label="Street number"
-                  value={address?.streetNumber}
+                  label="Street number *"
+                  name="streetNumber"
+                  value={address?.streetNumber || ''}
                   onChange={(e) => handleAddressChange('streetNumber', e.target.value)}
+                  helperText={errors.streetNumber && dirty.streetNumber ? errors.streetNumber : ''}
                 />
               </Stack>
             </Grid>
             <Grid item xs={10} lg={4}>
               <Stack direction="row" spacing={2}>
                 <TextField
+                  error={errors.building && dirty.building ? true : false}
+                  onBlur={() => blurHandler('building')}
                   variant="standard"
                   id="building"
                   label="Building"
-                  value={address?.building}
+                  name="building"
+                  value={address?.building || ''}
                   onChange={(e) => handleAddressChange('building', e.target.value)}
+                  helperText={errors.building && dirty.building ? errors.building : ''}
                 />
                 <TextField
+                  error={errors.apartment && dirty.apartment ? true : false}
+                  onBlur={() => blurHandler('apartment')}
                   variant="standard"
                   id="apart"
-                  label="Apartment"
-                  value={address?.apartment}
+                  label="Apartment *"
+                  name="apartment"
+                  value={address?.apartment || ''}
                   onChange={(e) => handleAddressChange('apartment', e.target.value)}
+                  helperText={errors.apartment && dirty.apartment ? errors.apartment : ''}
                 />
                 <TextField
+                  error={errors.postalCode && dirty.postalCode ? true : false}
+                  onBlur={() => blurHandler('postalCode')}
                   variant="standard"
                   id="zip"
-                  label="Zip"
-                  value={address?.postalCode}
+                  label="Zip *"
+                  value={address?.postalCode || ''}
                   onChange={(e) => handleAddressChange('postalCode', e.target.value)}
+                  name="postalCode"
+                  helperText={errors.postalCode && dirty.postalCode ? errors.postalCode : ''}
                 />
               </Stack>
             </Grid>
@@ -210,25 +310,37 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
               <Stack direction="row" spacing={2}>
                 {' '}
                 <TextField
+                  error={errors.firstNameShipping && dirty.firstNameShipping ? true : false}
+                  onBlur={() => blurHandler('firstNameShipping')}
                   variant="standard"
                   id="first_name"
-                  label="First name"
-                  value={address?.firstName}
-                  onChange={(e) => handleAddressChange('firstName', e.target.value)}
+                  label="First name *"
+                  name="firstNameShipping"
+                  value={address?.firstNameShipping || ''}
+                  onChange={(e) => handleAddressChange('firstNameShipping', e.target.value)}
+                  helperText={errors.firstNameShipping && dirty.firstNameShipping ? errors.firstNameShipping : ''}
                 />
                 <TextField
+                  error={errors.lastNameShipping && dirty.lastNameShipping ? true : false}
+                  onBlur={() => blurHandler('lastNameShipping')}
                   variant="standard"
                   id="last_name"
-                  label="Last name"
-                  value={address?.lastName}
-                  onChange={(e) => handleAddressChange('lastName', e.target.value)}
+                  label="Last name *"
+                  name="lastNameShipping"
+                  value={address?.lastNameShipping || ''}
+                  onChange={(e) => handleAddressChange('lastNameShipping', e.target.value)}
+                  helperText={errors.lastNameShipping && dirty.lastNameShipping ? errors.lastNameShipping : ''}
                 />
                 <TextField
+                  error={errors.mobile && dirty.mobile ? true : false}
+                  onBlur={() => blurHandler('mobile')}
                   variant="standard"
                   id="phone"
-                  label="Phone number"
-                  value={address?.mobile}
+                  label="Phone number *"
+                  name="mobile"
+                  value={address?.mobile || ''}
                   onChange={(e) => handleAddressChange('mobile', e.target.value)}
+                  helperText={errors.mobile && dirty.mobile ? errors.mobile : ''}
                 />
               </Stack>
             </Grid>
@@ -262,7 +374,6 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
                 />
               </Stack>
             </Grid>
-            {/* <Grid item xs={10} lg={4}></Grid> */}
           </Grid>
         </div>
 
@@ -276,9 +387,10 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
             borderRadius: 1,
           }}
         >
-          <Button onClick={() => handleSave()} variant="outlined">
+          <Button disabled={!isValid} onClick={() => handleSave()} variant="outlined">
             Save
           </Button>
+          <FormHelperText error={!isValid}>{!isValid && 'Fill in the required fields marked as "*"'}</FormHelperText>
         </Box>
       </Box>
     </>

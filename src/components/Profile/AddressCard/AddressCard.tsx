@@ -39,7 +39,7 @@ const AddressCard: FC<AddresCardProps> = ({ address }) => {
   const isShipping = customer.shippingAddressIds?.includes(address.id!);
   const isBilling = customer.billingAddressIds?.includes(address.id!);
   return (
-    <Grid spacing={2} item sx={{ minHeight: '250px' }} sm={6} md={4} xs={12} lg={3} xl={2}>
+    <Grid item sx={{ minHeight: '250px' }} sm={6} md={4} xs={12} lg={3} xl={2}>
       <Modal isOpen={edit} setIsOpen={setEdit}>
         <EditAddress setIsOpen={setEdit} customer={customer} addressId={address.id!} />
       </Modal>
@@ -96,7 +96,6 @@ const AddressCard: FC<AddresCardProps> = ({ address }) => {
           </Box>
         </Box>
       </Paper>
-      {/* </Grid> */}
     </Grid>
   );
 };

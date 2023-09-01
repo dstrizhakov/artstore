@@ -2,8 +2,11 @@ import { ConfigValidator, DataRegister, Erroring, Required } from '../types/Conf
 import { DataCustomerInfo } from '../components/Profile/CustomerInfo/CustomerInfo';
 import { DataLogin } from '../pages/Login';
 import { AddressType } from '../types/types';
-
-export const validator = (data: DataRegister | DataLogin | DataCustomerInfo | AddressType, config: ConfigValidator) => {
+export const validator = (
+  data: DataRegister | DataLogin | DataCustomerInfo | AddressType,
+  config: ConfigValidator,
+  address?: AddressType[]
+) => {
   const errors: Erroring = {};
   const validate = (validateMethod: string, data: string, config: Required) => {
     let statusVlidate;
@@ -64,6 +67,23 @@ export const validator = (data: DataRegister | DataLogin | DataCustomerInfo | Ad
       case 'zip': {
         const postalCodeExp = /^\d{5}(?:[-\s]\d{4})?$/g;
         statusVlidate = !postalCodeExp.test(data);
+        break;
+      }
+      case 'onlyNumber': {
+        const onlyNumberExp = /^[0-9]+$/g;
+        if (data !== '') {
+          statusVlidate = !onlyNumberExp.test(data);
+        }
+        break;
+      }
+      case 'notMobile': {
+        const notMobileExp = /(?:\+|\d)[\d\-\(\) ]{9,}\d/g;
+        statusVlidate = !notMobileExp.test(data);
+        break;
+      }
+      case 'isNotDublicateTitle': {
+        const isNotDublicateTitleExp = address?.find((item) => item.title === data);
+        statusVlidate = isNotDublicateTitleExp;
         break;
       }
 

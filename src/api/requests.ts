@@ -39,6 +39,7 @@ export async function signUp(
   lastName: string,
   dateOfBirth: string,
   shippingAddress: {
+    title?: string;
     firstName?: string;
     lastName?: string;
     state?: string;
@@ -49,8 +50,10 @@ export async function signUp(
     building?: string;
     apartment?: string;
     streetNumber?: string;
+    mobile?: string;
   },
   billingAddress: {
+    title?: string;
     firstName?: string;
     lastName?: string;
     state?: string;
@@ -61,6 +64,7 @@ export async function signUp(
     building?: string;
     apartment?: string;
     streetNumber?: string;
+    mobile?: string;
   }
 ): Promise<CustomerSignInResult> {
   try {
@@ -128,7 +132,8 @@ export const updateCustomer = async (
   firstName: string,
   lastName: string,
   email: string,
-  middleName: string
+  middleName: string,
+  date: string
 ) => {
   try {
     const response = await getApiRoot()
@@ -154,6 +159,10 @@ export const updateCustomer = async (
             {
               action: 'setMiddleName',
               middleName: middleName,
+            },
+            {
+              action: 'setDateOfBirth',
+              dateOfBirth: date,
             },
           ],
         },

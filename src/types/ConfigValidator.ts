@@ -6,8 +6,6 @@ export interface DataRegister {
   password: string;
   firstName: string;
   lastName: string;
-  country?: string;
-  billingCountry?: string;
   dateOfBirth: string;
 }
 
@@ -56,10 +54,22 @@ export interface ConfigValidator {
       message: string;
     };
   };
-  country: {
+  dateOfBirth: {
     isRequired: Required;
+    isValidDate: {
+      message: string;
+    };
   };
-  streetName: {
+  title: {
+    isRequired: Required;
+    isNotNumber: {
+      message: string;
+    };
+    isNotDublicateTitle: {
+      message: string;
+    };
+  };
+  country: {
     isRequired: Required;
   };
   city: {
@@ -71,6 +81,62 @@ export interface ConfigValidator {
       message: string;
     };
   };
+  state: {
+    isNotNumber: {
+      message: string;
+    };
+    isNotSpecial: {
+      message: string;
+    };
+  };
+  streetName: {
+    isRequired: Required;
+    isNotNumber: {
+      message: string;
+    };
+  };
+  streetNumber: {
+    isRequired: Required;
+    onlyNumber: {
+      message: string;
+    };
+  };
+  building: {
+    onlyNumber: {
+      message: string;
+    };
+  };
+  apartment: {
+    isRequired: Required;
+    onlyNumber: {
+      message: string;
+    };
+  };
+  firstNameShipping: {
+    isRequired: Required;
+    isNotNumber: {
+      message: string;
+    };
+    isNotSpecial: {
+      message: string;
+    };
+  };
+  lastNameShipping: {
+    isRequired: Required;
+    isNotNumber: {
+      message: string;
+    };
+    isNotSpecial: {
+      message: string;
+    };
+  };
+  mobile: {
+    isRequired: Required;
+    notMobile: {
+      message: string;
+    };
+  };
+
   postalCode: {
     isRequired: {
       message: string;
@@ -79,36 +145,88 @@ export interface ConfigValidator {
       message: string;
     };
   };
+  billingTitle: {
+    isRequired: Required;
+    isNotNumber: {
+      message: string;
+    };
+    isNotDublicateTitle: {
+      message: string;
+    };
+  };
   billingCountry: {
     isRequired: Required;
   };
+  billingState: {
+    isNotNumber: {
+      message: string;
+    };
+    isNotSpecial: {
+      message: string;
+    };
+  };
   billingStreetName: {
-    isRequired: {
-      message: 'Street Name required to fill';
+    isRequired: Required;
+    isNotNumber: {
+      message: string;
+    };
+    isNotSpecial: {
+      message: string;
     };
   };
   billingCity: {
-    isRequired: {
-      message: 'City required to fill';
-    };
+    isRequired: Required;
     isNotNumber: {
-      message: 'Digits and numbers cannot be used';
+      message: string;
     };
     isNotSpecial: {
-      message: 'Special characters cannot be used';
+      message: string;
+    };
+  };
+  billingStreetNumber: {
+    isRequired: Required;
+    onlyNumber: {
+      message: string;
+    };
+  };
+  billingBuilding: {
+    onlyNumber: {
+      message: string;
+    };
+  };
+  billingApartment: {
+    isRequired: Required;
+    onlyNumber: {
+      message: string;
+    };
+  };
+  firstNameBilling: {
+    isRequired: Required;
+    isNotNumber: {
+      message: string;
+    };
+    isNotSpecial: {
+      message: string;
+    };
+  };
+  lastNameBilling: {
+    isRequired: Required;
+    isNotNumber: {
+      message: string;
+    };
+    isNotSpecial: {
+      message: string;
+    };
+  };
+  billingMobile: {
+    isRequired: Required;
+    notMobile: {
+      message: string;
     };
   };
   billingPostalCode: {
-    isRequired: {
-      message: 'Zip required to fill';
-    };
-    zip: {
-      message: 'Zip code entered incorrectly';
-    };
-  };
-  dateOfBirth: {
     isRequired: Required;
-    isValidDate: {
+    zip: {
       message: string;
     };
   };
