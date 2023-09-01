@@ -17,7 +17,7 @@ const SearchSettings = () => {
     <>
       <FormControlLabel
         control={<Switch checked={fuzzy} onChange={handleToggleFuzzy} color="primary" />}
-        label="Fuzzy search"
+        label="Fuzzy"
         labelPlacement="bottom"
       />
     </>

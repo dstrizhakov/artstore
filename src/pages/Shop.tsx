@@ -7,7 +7,7 @@ import { setProducts, setLoading, setError } from '../store/reducers/products.sl
 import { searchProducts } from '../api/requests';
 import ShopPagination from '../components/ShopPagination/ShopPagination';
 import ProductItem from '../components/ProductItem/ProductItem';
-import { Grid, Stack } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import Filter from '../components/Filters/Filter';
 import { setPagination } from '../store/reducers/filters.slice';
 
@@ -26,6 +26,7 @@ const Shop: FC = () => {
   const isFuzzy = useAppSelector((state) => state.filters.isFuzzy);
   const categoryId = useAppSelector((state) => state.filters.categoryId);
   const typeId = useAppSelector((state) => state.filters.typeId);
+  const sort = useAppSelector((state) => state.filters.sort);
 
   const handleCloseSnackbar = () => {
     dispatch(setError(null));
@@ -34,29 +35,35 @@ const Shop: FC = () => {
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
-      const responce = await searchProducts(searchString, isFuzzy, limit, offset, categoryId, typeId);
+      const responce = await searchProducts(searchString, isFuzzy, limit, offset, categoryId, typeId, sort);
       dispatch(setProducts(responce.results));
       dispatch(setPagination(responce));
     } catch (e) {
       dispatch(setError('Произошла ошибка при получении данных'));
     }
-  }, [dispatch, limit, offset, searchString, isFuzzy, categoryId, typeId]);
+  }, [dispatch, limit, offset, searchString, isFuzzy, categoryId, typeId, sort]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, limit, offset, searchString, isFuzzy, categoryId, typeId]);
+  }, [fetchData, limit, offset, searchString, isFuzzy, categoryId, typeId, sort]);
 
   return (
     <div>
       <h2>Shop Page</h2>
-      <ShopPagination />
       <Filter />
+      <ShopPagination />
+
       {loading ? (
         <div style={{ textAlign: 'center' }}>
           <CircularProgress size={100} />
         </div>
       ) : (
         <Grid container spacing={2}>
+          {!products.length && (
+            <Typography variant="h6" sx={{ margin: '0 auto' }}>
+              Nothing found by your request...
+            </Typography>
+          )}
           {products.map((product, index) => (
             <Grid key={index} item xs={12} sm={6} md={4}>
               <Stack alignItems="stretch" justifyContent="space-between" height="100%">
@@ -66,7 +73,6 @@ const Shop: FC = () => {
           ))}
         </Grid>
       )}
-
       <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <MuiAlert elevation={6} variant="filled" severity="error" onClose={handleCloseSnackbar}>
           {error}

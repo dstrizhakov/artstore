@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setFilterCategory, setFilterType } from '../../store/reducers/filters.slice';
 import { getProductCategories, getProductTypes } from '../../api/requests';
 
@@ -11,8 +11,8 @@ type CategoryTypeItem = {
 
 const FilterTypeCategory = () => {
   const dispatch = useAppDispatch();
-  //   const filterType = useAppSelector((state) => state.filters.type);
-  //   const filterCategory = useAppSelector((state) => state.filters.category);
+  const filterTypeId = useAppSelector((state) => state.filters.typeId);
+  const filterCategoryId = useAppSelector((state) => state.filters.categoryId);
 
   const [type, setType] = useState<string>('');
   const [category, setCategory] = useState<string>('');
@@ -27,7 +27,6 @@ const FilterTypeCategory = () => {
 
   const handleSetCategory = (event: SelectChangeEvent<string>) => {
     const newCategory = event.target.value;
-    console.log(event);
 
     setCategory(newCategory);
     dispatch(setFilterCategory(newCategory));
@@ -43,12 +42,15 @@ const FilterTypeCategory = () => {
         name: item.name['en-US'],
       }))
     );
+    setCategory(filterCategoryId);
+
     setTypes(
       typeResponse.results.map((item) => ({
         id: item.id,
         name: item.name,
       }))
     );
+    setType(filterTypeId);
   };
 
   useEffect(() => {
@@ -59,7 +61,7 @@ const FilterTypeCategory = () => {
     <Stack direction="row" spacing={2}>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
         <InputLabel id="type">Type</InputLabel>
-        <Select labelId="type" label="Type" value={type} onChange={handleSetType}>
+        <Select labelId="type" label="Type" name="Type" value={type} onChange={handleSetType}>
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
@@ -70,9 +72,9 @@ const FilterTypeCategory = () => {
           ))}
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 220 }}>
+      <FormControl sx={{ m: 1, minWidth: 180 }}>
         <InputLabel id="category">Category</InputLabel>
-        <Select labelId="category" label="Category" value={category} onChange={handleSetCategory}>
+        <Select labelId="category" label="Category" name="Category" value={category} onChange={handleSetCategory}>
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
