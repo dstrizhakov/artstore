@@ -5,13 +5,16 @@ import './index.scss';
 import { setupStore } from './store/store';
 import { Provider } from 'react-redux';
 import './index.scss';
+import ErrorBoundary from './ErrorBoundary';
 
 const store = setupStore();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ErrorBoundary>
   </StrictMode>
 );

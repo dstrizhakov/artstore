@@ -1,3 +1,4 @@
+import { ISort } from 'store/reducers/filters.slice';
 import { getApiRoot, projectKey } from './ClientBuilder';
 import {
   CustomerSignInResult,
@@ -27,7 +28,6 @@ export async function signIn(email: string, password: string): Promise<CustomerS
       .execute();
     return response.body;
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -221,37 +221,39 @@ export const getProducts = async (limit: number, offset: number): Promise<Produc
     throw error;
   }
 };
-export const getProductsSearch = async (
-  search: string,
-  limit: number,
-  offset: number
-): Promise<ProductProjectionPagedSearchResponse> => {
-  try {
-    const project = await getApiRoot()
-      .withProjectKey({ projectKey })
-      .productProjections()
-      .search()
-      .get({
-        queryArgs: {
-          'text.en': search,
-          limit,
-          offset,
-        },
-      })
-      .execute();
-    return project.body;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getProductsSearch = async (
+//   search: string,
+//   limit: number,
+//   offset: number
+// ): Promise<ProductProjectionPagedSearchResponse> => {
+//   try {
+//     const project = await getApiRoot()
+//       .withProjectKey({ projectKey })
+//       .productProjections()
+//       .search()
+//       .get({
+//         queryArgs: {
+//           'text.en': search,
+//           limit,
+//           offset,
+//         },
+//       })
+//       .execute();
+//     return project.body;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 export const searchProducts = async (
   search: string,
   fuzzy: boolean,
   limit: number,
   offset: number,
   categoryId?: string,
-  typeId?: string
+  typeId?: string,
+  sortData?: ISort
 ): Promise<ProductProjectionPagedSearchResponse> => {
+  const sort = sortData && sortData[0] ? [sortData.join(' ')] : undefined;
   const filter = [];
   if (!!categoryId) {
     filter.push(`categories.id:"${categoryId}"`);
@@ -271,6 +273,7 @@ export const searchProducts = async (
           limit,
           offset,
           filter,
+          sort,
         },
       })
       .execute();
@@ -293,7 +296,6 @@ export const getProductTypes = async (): Promise<ProductTypePagedQueryResponse> 
 export const getProductCategories = async (): Promise<CategoryPagedQueryResponse> => {
   try {
     const project = await getApiRoot().withProjectKey({ projectKey }).categories().get().execute();
-    console.log('getProductCategories ', project.body);
     return project.body;
   } catch (error) {
     throw error;
@@ -450,8 +452,6 @@ export const getProductByKey = async (productKey: string): Promise<Product> => {
       .withKey({ key: productKey })
       .get()
       .execute();
-    console.log('Project', project.body);
-
     return project.body;
   } catch (e) {
     throw e;
