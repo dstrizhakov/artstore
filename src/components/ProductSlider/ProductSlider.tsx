@@ -8,9 +8,8 @@ import SwiperClass from 'swiper/types/swiper-class';
 import SwiperCore from 'swiper';
 import { FreeMode, Navigation, Thumbs, Controller } from 'swiper/modules';
 import Modal from '../Modal/Modal';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
 import styles from './ProductSlider.module.scss';
+import ModalSlider from '../../components/ModalSlider/ModalSlider';
 
 export interface ImagesSlide {
   id: string;
@@ -28,7 +27,6 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
   const [secondSwiper] = useState<SwiperClass>();
   const swiper1Ref = useRef<SwiperCore | null>(null);
   const swiper2Ref = useRef();
-  const [activeSlideImg, setActiveSlideImg] = useState<string | null>(null);
 
   useLayoutEffect(() => {
     if (swiper1Ref.current !== null) {
@@ -36,14 +34,13 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
     }
   }, []);
 
-  const popupImage = (img: string) => {
-    setActiveSlideImg(img);
-    setModal(true);
-  };
-
   return (
     <div className={styles.slider}>
+      <Modal isOpen={modal} setIsOpen={setModal}>
+        <ModalSlider slides={slides} />
+      </Modal>
       <Swiper
+        className={styles.mainSlider}
         onSwiper={(swiper) => {
           if (swiper1Ref.current !== null) {
             swiper1Ref.current = swiper;
@@ -61,12 +58,13 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
         modules={[FreeMode, Navigation, Thumbs, Controller]}
       >
         {slides.map((slide) => (
-          <SwiperSlide key={slide.id}>
-            <img onClick={() => popupImage(slide.img)} src={slide.img} alt={slide.title} />
+          <SwiperSlide key={slide.id} className={styles.mainSwiper}>
+            <img onClick={() =>  setModal(true)} src={slide.img} alt={slide.title} />
           </SwiperSlide>
         ))}
       </Swiper>
       <Swiper
+        className={styles.swiper}
         controller={{ control: firstSwiper }}
         loop={true}
         spaceBetween={3}
@@ -78,21 +76,11 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
         modules={[Navigation, Thumbs, Controller]}
       >
         {slides.map((slide) => (
-          <SwiperSlide key={slide.id}>
-            <img src={slide.img} alt={slide.title} />
+          <SwiperSlide key={slide.id} className={styles.swiperSlide}>
+            <img className="thumb" src={slide.img} alt={slide.title} />
           </SwiperSlide>
         ))}
       </Swiper>
-      <Modal isOpen={modal} setIsOpen={setModal}>
-        {activeSlideImg && (
-          <div className={styles.popup_content}>
-            <img className={styles.popup_img} src={activeSlideImg} alt="Active Slide" />
-            <IconButton className={styles.close} onClick={() => setModal(false)} aria-label="close" size="medium">
-              <CloseIcon fontSize="medium" />
-            </IconButton>
-          </div>
-        )}
-      </Modal>
     </div>
   );
 };
