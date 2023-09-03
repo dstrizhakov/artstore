@@ -7,6 +7,7 @@ interface IFilters {
   typeId: string;
   categoryId: string;
   sort: ISort;
+  priceRange: number[];
   pagination: IPagination;
 }
 export type ISortBy = '' | 'name.en-US' | 'price' | 'createdAt' | 'id';
@@ -25,6 +26,7 @@ const initialState: IFilters = {
   isFuzzy: true,
   typeId: '',
   categoryId: '',
+  priceRange: [0, 1000],
   sort: ['', 'asc'],
   pagination: {
     total: 0,
@@ -66,6 +68,9 @@ const filtersSlice = createSlice({
     setFilterSort: (state, action: PayloadAction<ISort>) => {
       state.sort = action.payload;
     },
+    setFilterPriceRange: (state, action: PayloadAction<number[]>) => {
+      state.priceRange = action.payload;
+    },
   },
 });
 
@@ -78,6 +83,7 @@ export const {
   setFilterType,
   setFilterCategory,
   setFilterSort,
+  setFilterPriceRange,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

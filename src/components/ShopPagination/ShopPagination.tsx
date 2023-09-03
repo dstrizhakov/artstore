@@ -38,10 +38,11 @@ const ShopPagination = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginY: '2rem',
+        marginY: '1rem',
       }}
     >
       <Paper
+        variant="outlined"
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -50,7 +51,7 @@ const ShopPagination = () => {
           width: '100%',
         }}
       >
-        <FormControl sx={{ minWidth: 120 }}>
+        <FormControl sx={{ minWidth: '100px' }}>
           <InputLabel id="per-page">Perpage</InputLabel>
           <Select
             placeholder="Perpage"

@@ -24,21 +24,22 @@ const Shop: FC = () => {
   const categoryId = useAppSelector((state) => state.filters.categoryId);
   const typeId = useAppSelector((state) => state.filters.typeId);
   const sort = useAppSelector((state) => state.filters.sort);
+  const priceRange = useAppSelector((state) => state.filters.priceRange);
 
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
     try {
-      const responce = await searchProducts(searchString, isFuzzy, limit, offset, categoryId, typeId, sort);
+      const responce = await searchProducts(searchString, isFuzzy, limit, offset, categoryId, typeId, sort, priceRange);
       dispatch(setProducts(responce.results));
       dispatch(setPagination(responce));
     } catch (e) {
       dispatch(setError('Произошла ошибка при получении данных'));
     }
-  }, [dispatch, limit, offset, searchString, isFuzzy, categoryId, typeId, sort]);
+  }, [dispatch, limit, offset, searchString, isFuzzy, categoryId, typeId, sort, priceRange]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, limit, offset, searchString, isFuzzy, categoryId, typeId, sort]);
+  }, [fetchData, limit, offset, searchString, isFuzzy, categoryId, typeId, sort, priceRange]);
 
   return (
     <div>
@@ -53,7 +54,7 @@ const Shop: FC = () => {
       ) : (
         <Grid container spacing={2}>
           {!products.length && (
-            <Typography variant="h6" sx={{ margin: '0 auto' }}>
+            <Typography variant="h6" sx={{ margin: '0 auto', padding: 2 }}>
               Nothing found by your request...
             </Typography>
           )}

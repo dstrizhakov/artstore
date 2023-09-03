@@ -14,13 +14,11 @@ const SearchSettings = () => {
     dispatch(setIsFuzzy(checked));
   };
   return (
-    <>
-      <FormControlLabel
-        control={<Switch checked={fuzzy} onChange={handleToggleFuzzy} color="primary" />}
-        label="Fuzzy"
-        labelPlacement="bottom"
-      />
-    </>
+    <FormControlLabel
+      control={<Switch checked={fuzzy} onChange={handleToggleFuzzy} color="primary" />}
+      label="Fuzzy"
+      labelPlacement="bottom"
+    />
   );
 };
 

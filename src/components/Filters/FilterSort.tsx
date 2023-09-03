@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack } from '@mui/material';
 import { ISortBy, ISortDir, setFilterSort } from '../../store/reducers/filters.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
@@ -32,24 +32,25 @@ const FilterSort = () => {
   };
 
   return (
-    <Stack direction="row" spacing={2}>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="sort">Sort</InputLabel>
-        <Select labelId="sort" label="Sort" name="Sort" value={sortBy} onChange={handleSetSortBy}>
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {sortSettings.map((item) => (
-            <MenuItem key={item.id} value={item.value}>
-              {item.name}
+    <Paper variant="outlined" sx={{ padding: 2, height: '90px' }}>
+      <Stack direction="row" spacing={2}>
+        <FormControl sx={{ m: 1, width: '70%' }}>
+          <InputLabel id="sort">Sort</InputLabel>
+          <Select labelId="sort" label="Sort" name="Sort" value={sortBy} onChange={handleSetSortBy}>
+            <MenuItem value="">
+              <em>None</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      {sortBy && (
-        <FormControl sx={{ m: 1, minWidth: 80 }}>
+            {sortSettings.map((item) => (
+              <MenuItem key={item.id} value={item.value}>
+                {item.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ m: 1, width: '30%' }}>
           <InputLabel id="direction">Direction</InputLabel>
           <Select
+            disabled={!sortBy}
             labelId="direction"
             label="direction"
             name="Direction"
@@ -60,8 +61,8 @@ const FilterSort = () => {
             <MenuItem value="desc">Desc</MenuItem>
           </Select>
         </FormControl>
-      )}
-    </Stack>
+      </Stack>
+    </Paper>
   );
 };
 
