@@ -9,8 +9,10 @@
 .mainSlider {
   height: 600px;
 }
+
 .mainSwiper {
   height: 600px;
+  cursor: pointer;
 }
 
 .mainSwiper img {
@@ -35,6 +37,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .swiperSlide img {

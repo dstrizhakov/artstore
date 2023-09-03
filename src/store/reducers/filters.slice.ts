@@ -26,7 +26,7 @@ const initialState: IFilters = {
   isFuzzy: true,
   typeId: '',
   categoryId: '',
-  priceRange: [0, 1000],
+  priceRange: [0, 100000],
   sort: ['', 'asc'],
   pagination: {
     total: 0,
