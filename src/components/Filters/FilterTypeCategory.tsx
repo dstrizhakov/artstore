@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setFilterCategory, setFilterType } from '../../store/reducers/filters.slice';
 import { getProductCategories, getProductTypes } from '../../api/requests';
+import { setError } from '../../store/reducers/products.slice';
 
 type CategoryTypeItem = {
   id: string;
@@ -33,24 +34,28 @@ const FilterTypeCategory = () => {
   };
 
   const fetchCategoriesAndTypes = async () => {
-    const categoryResponse = await getProductCategories();
-    const typeResponse = await getProductTypes();
+    try {
+      const categoryResponse = await getProductCategories();
+      const typeResponse = await getProductTypes();
 
-    setCategories(
-      categoryResponse.results.map((item) => ({
-        id: item.id,
-        name: item.name['en-US'],
-      }))
-    );
-    setCategory(filterCategoryId);
+      setCategories(
+        categoryResponse.results.map((item) => ({
+          id: item.id,
+          name: item.name['en-US'],
+        }))
+      );
+      setCategory(filterCategoryId);
 
-    setTypes(
-      typeResponse.results.map((item) => ({
-        id: item.id,
-        name: item.name,
-      }))
-    );
-    setType(filterTypeId);
+      setTypes(
+        typeResponse.results.map((item) => ({
+          id: item.id,
+          name: item.name,
+        }))
+      );
+      setType(filterTypeId);
+    } catch (error) {
+      dispatch(setError('Не удалось загрузить типы или категории'));
+    }
   };
 
   useEffect(() => {
@@ -58,34 +63,36 @@ const FilterTypeCategory = () => {
   }, []);
 
   return (
-    <Stack direction="row" spacing={2}>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="type">Type</InputLabel>
-        <Select labelId="type" label="Type" name="Type" value={type} onChange={handleSetType}>
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {types.map((item) => (
-            <MenuItem key={item.id} value={item.id}>
-              {item.name}
+    <Paper variant="outlined" sx={{ padding: 2, height: '90px' }}>
+      <Stack direction="row" spacing={2}>
+        <FormControl sx={{ m: 1, width: '40%' }}>
+          <InputLabel id="type">Type</InputLabel>
+          <Select labelId="type" label="Type" name="Type" value={type} onChange={handleSetType}>
+            <MenuItem value="">
+              <em>None</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 180 }}>
-        <InputLabel id="category">Category</InputLabel>
-        <Select labelId="category" label="Category" name="Category" value={category} onChange={handleSetCategory}>
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {categories.map((item) => (
-            <MenuItem key={item.id} value={item.id}>
-              {item.name}
+            {types.map((item) => (
+              <MenuItem key={item.id} value={item.id}>
+                {item.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ m: 1, width: '60%' }}>
+          <InputLabel id="category">Category</InputLabel>
+          <Select labelId="category" label="Category" name="Category" value={category} onChange={handleSetCategory}>
+            <MenuItem value="">
+              <em>None</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Stack>
+            {categories.map((item) => (
+              <MenuItem key={item.id} value={item.id}>
+                {item.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Stack>
+    </Paper>
   );
 };
 

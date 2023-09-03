@@ -7,6 +7,7 @@ import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
+import { Box, Typography } from '@mui/material';
 
 export interface ISlide {
   id: string;
@@ -47,6 +48,20 @@ const MainSlider: FC<MainSliderProps> = ({ slides }) => {
           {slides.map((slide) => (
             <SwiperSlide key={slide.id}>
               <img src={slide.img} alt={slide.title} />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 40,
+                  backgroundColor: 'black',
+                  padding: 1,
+                  borderRadius: '5px',
+                  opacity: '0.5',
+                }}
+              >
+                <Typography variant="h6" sx={{ color: 'white' }}>
+                  {slide.title}
+                </Typography>
+              </Box>
             </SwiperSlide>
           ))}
         </Swiper>

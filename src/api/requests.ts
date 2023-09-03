@@ -218,7 +218,7 @@ export const changeCustomerAddress = async (
   }
 };
 
-export const getProducts = async (limit: number, offset: number): Promise<ProductPagedQueryResponse> => {
+export const getProducts = async (limit?: number, offset?: number): Promise<ProductPagedQueryResponse> => {
   try {
     const project = await getApiRoot()
       .withProjectKey({ projectKey })
@@ -260,7 +260,8 @@ export const searchProducts = async (
   offset: number,
   categoryId?: string,
   typeId?: string,
-  sortData?: ISort
+  sortData?: ISort,
+  priceRange?: number[]
 ): Promise<ProductProjectionPagedSearchResponse> => {
   const sort = sortData && sortData[0] ? [sortData.join(' ')] : undefined;
   const filter = [];
@@ -269,6 +270,10 @@ export const searchProducts = async (
   }
   if (!!typeId) {
     filter.push(`productType.id:"${typeId}"`);
+  }
+  if (priceRange?.length === 2) {
+    // filter.push(`variants.price.centAmount:range(${priceRange[0]} to ${priceRange[1]})`);
+    filter.push(`variants.price.centAmount:range(${priceRange[0]} to ${priceRange[1]})`);
   }
   try {
     const project = await getApiRoot()
