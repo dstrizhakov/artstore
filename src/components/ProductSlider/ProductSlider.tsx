@@ -59,7 +59,7 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id} className={styles.mainSwiper}>
-            <img onClick={() =>  setModal(true)} src={slide.img} alt={slide.title} />
+            <img onClick={() => setModal(true)} src={slide.img} alt={slide.title} />
           </SwiperSlide>
         ))}
       </Swiper>
