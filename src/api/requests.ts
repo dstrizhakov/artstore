@@ -1,3 +1,4 @@
+import { ISort } from 'store/reducers/filters.slice';
 import { getApiRoot, projectKey } from './ClientBuilder';
 import {
   CustomerSignInResult,
@@ -5,10 +6,10 @@ import {
   Product,
   CustomerChangePassword,
   CustomerChangeAddressAction,
-  CustomerAddAddressAction,
   ProductProjectionPagedSearchResponse,
   CategoryPagedQueryResponse,
   ProductTypePagedQueryResponse,
+  CustomerUpdateAction,
 } from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
@@ -27,7 +28,6 @@ export async function signIn(email: string, password: string): Promise<CustomerS
       .execute();
     return response.body;
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
@@ -39,6 +39,7 @@ export async function signUp(
   lastName: string,
   dateOfBirth: string,
   shippingAddress: {
+    title?: string;
     firstName?: string;
     lastName?: string;
     state?: string;
@@ -49,8 +50,10 @@ export async function signUp(
     building?: string;
     apartment?: string;
     streetNumber?: string;
+    mobile?: string;
   },
   billingAddress: {
+    title?: string;
     firstName?: string;
     lastName?: string;
     state?: string;
@@ -61,6 +64,7 @@ export async function signUp(
     building?: string;
     apartment?: string;
     streetNumber?: string;
+    mobile?: string;
   }
 ): Promise<CustomerSignInResult> {
   try {
@@ -128,7 +132,8 @@ export const updateCustomer = async (
   firstName: string,
   lastName: string,
   email: string,
-  middleName: string
+  middleName: string,
+  date: string
 ) => {
   try {
     const response = await getApiRoot()
@@ -154,6 +159,10 @@ export const updateCustomer = async (
             {
               action: 'setMiddleName',
               middleName: middleName,
+            },
+            {
+              action: 'setDateOfBirth',
+              dateOfBirth: date,
             },
           ],
         },
@@ -221,37 +230,39 @@ export const getProducts = async (limit: number, offset: number): Promise<Produc
     throw error;
   }
 };
-export const getProductsSearch = async (
-  search: string,
-  limit: number,
-  offset: number
-): Promise<ProductProjectionPagedSearchResponse> => {
-  try {
-    const project = await getApiRoot()
-      .withProjectKey({ projectKey })
-      .productProjections()
-      .search()
-      .get({
-        queryArgs: {
-          'text.en': search,
-          limit,
-          offset,
-        },
-      })
-      .execute();
-    return project.body;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getProductsSearch = async (
+//   search: string,
+//   limit: number,
+//   offset: number
+// ): Promise<ProductProjectionPagedSearchResponse> => {
+//   try {
+//     const project = await getApiRoot()
+//       .withProjectKey({ projectKey })
+//       .productProjections()
+//       .search()
+//       .get({
+//         queryArgs: {
+//           'text.en': search,
+//           limit,
+//           offset,
+//         },
+//       })
+//       .execute();
+//     return project.body;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 export const searchProducts = async (
   search: string,
   fuzzy: boolean,
   limit: number,
   offset: number,
   categoryId?: string,
-  typeId?: string
+  typeId?: string,
+  sortData?: ISort
 ): Promise<ProductProjectionPagedSearchResponse> => {
+  const sort = sortData && sortData[0] ? [sortData.join(' ')] : undefined;
   const filter = [];
   if (!!categoryId) {
     filter.push(`categories.id:"${categoryId}"`);
@@ -271,6 +282,7 @@ export const searchProducts = async (
           limit,
           offset,
           filter,
+          sort,
         },
       })
       .execute();
@@ -293,7 +305,6 @@ export const getProductTypes = async (): Promise<ProductTypePagedQueryResponse> 
 export const getProductCategories = async (): Promise<CategoryPagedQueryResponse> => {
   try {
     const project = await getApiRoot().withProjectKey({ projectKey }).categories().get().execute();
-    console.log('getProductCategories ', project.body);
     return project.body;
   } catch (error) {
     throw error;
@@ -450,15 +461,13 @@ export const getProductByKey = async (productKey: string): Promise<Product> => {
       .withKey({ key: productKey })
       .get()
       .execute();
-    console.log('Project', project.body);
-
     return project.body;
   } catch (e) {
     throw e;
   }
 };
 
-export const AddCustomerAddress = async (customerID: string, version: number, action: CustomerAddAddressAction) => {
+export const AddCustomerAddress = async (customerID: string, version: number, actions: CustomerUpdateAction[]) => {
   try {
     const response = await getApiRoot()
       .withProjectKey({ projectKey })
@@ -467,7 +476,30 @@ export const AddCustomerAddress = async (customerID: string, version: number, ac
       .post({
         body: {
           version,
-          actions: [action],
+          actions,
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export const DeleteCustomerAddress = async (customerID: string, version: number, id: string) => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .customers()
+      .withId({ ID: customerID })
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'removeAddress',
+              addressId: id,
+            },
+          ],
         },
       })
       .execute();

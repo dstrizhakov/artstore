@@ -1,19 +1,26 @@
-import { Box, Button, Grid, Paper } from '@mui/material';
+import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import styles from './Profile.module.scss';
 import { useAppSelector } from '../hooks/redux';
 import { useEffect, useState } from 'react';
 import CustomerInfo from '../components/Profile/CustomerInfo/CustomerInfo';
 import CustomerPassword from '../components/Profile/CustomerPassword/CustomerPassword';
-import CustomerAddress from '../components/Profile/CustomerAddress/CustomerAddress';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal/Modal';
+import AddressCard from '../components/Profile/AddressCard/AddressCard';
+import AddAddress from '../components/Profile/AddAddress/AddAddress';
 
 const Profile = () => {
   const [modalPassword, setModalPassword] = useState(false);
+  const [addAddress, setAddAddress] = useState(false);
+
   const customer = useAppSelector((state) => state.user.customer);
-  const isBillingSame = useAppSelector((state) => state.addresses.isBillingSame);
   const isAuth = useAppSelector((state) => state.user.isAuth);
+
   const navigate = useNavigate();
+
+  const handleAddAddress = () => {
+    setAddAddress(true);
+  };
 
   useEffect(() => {
     if (!isAuth) {
@@ -23,6 +30,9 @@ const Profile = () => {
 
   return (
     <div className={styles.wrapper}>
+      <Modal isOpen={addAddress} setIsOpen={setAddAddress}>
+        <AddAddress setIsOpen={setAddAddress} customer={customer} />
+      </Modal>
       <Modal isOpen={modalPassword} setIsOpen={setModalPassword}>
         <CustomerPassword />
       </Modal>
@@ -48,13 +58,26 @@ const Profile = () => {
                   borderRadius: 1,
                 }}
               >
-                <Button onClick={() => setModalPassword(true)}>Change Password</Button>
+                <Stack direction="column" spacing={2}>
+                  <Button variant="outlined" onClick={() => setModalPassword(true)}>
+                    Change Password
+                  </Button>
+                  <Button variant="outlined" onClick={handleAddAddress}>
+                    Add Address
+                  </Button>
+                </Stack>
               </Box>
             </Paper>
           </Grid>
-          <CustomerAddress customer={customer} type="shipping" />
-          {!isBillingSame && <CustomerAddress customer={customer} type="billing" />}
         </Grid>
+        <Paper sx={{ padding: '20px' }}>
+          <Typography variant="h4">Address List</Typography>
+          <Grid container mt={3} spacing={2}>
+            {customer.addresses.map((item) => (
+              <AddressCard key={item.id} address={item} />
+            ))}
+          </Grid>
+        </Paper>
       </Box>
     </div>
   );

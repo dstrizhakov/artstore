@@ -6,8 +6,13 @@ interface IFilters {
   isFuzzy: boolean;
   typeId: string;
   categoryId: string;
+  sort: ISort;
   pagination: IPagination;
 }
+export type ISortBy = '' | 'name.en-US' | 'price' | 'createdAt' | 'id';
+export type ISortDir = 'asc' | 'desc';
+export type ISort = [ISortBy, ISortDir];
+
 interface IPagination {
   total?: number;
   count: number;
@@ -20,6 +25,7 @@ const initialState: IFilters = {
   isFuzzy: true,
   typeId: '',
   categoryId: '',
+  sort: ['', 'asc'],
   pagination: {
     total: 0,
     count: 0,
@@ -57,10 +63,21 @@ const filtersSlice = createSlice({
     setFilterCategory: (state, action: PayloadAction<string>) => {
       state.categoryId = action.payload;
     },
+    setFilterSort: (state, action: PayloadAction<ISort>) => {
+      state.sort = action.payload;
+    },
   },
 });
 
-export const { setSearchString, setPagination, setLimit, setOffset, setIsFuzzy, setFilterType, setFilterCategory } =
-  filtersSlice.actions;
+export const {
+  setSearchString,
+  setPagination,
+  setLimit,
+  setOffset,
+  setIsFuzzy,
+  setFilterType,
+  setFilterCategory,
+  setFilterSort,
+} = filtersSlice.actions;
 
 export default filtersSlice.reducer;
