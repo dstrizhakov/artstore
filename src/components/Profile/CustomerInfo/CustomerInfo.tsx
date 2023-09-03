@@ -6,7 +6,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { login } from '../../../store/reducers/user.slice';
 import { validator } from '../../../utils/validator';
 import validatorConfig from '../../../utils/validatorConfig';
-import { Erroring } from '../../../pages/Register';
+import { Erroring } from '../../../types/ConfigValidator';
 
 interface CustomerInfoProps {
   customer: Customer;
@@ -16,6 +16,7 @@ export interface DataCustomerInfo {
   lastName: string;
   middleName: string;
   email: string;
+  dateOfBirth: string;
 }
 const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
   const storedCustomer = structuredClone(customer);
@@ -26,10 +27,12 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
     lastName: customer.lastName || '',
     middleName: customer.middleName || '',
     email: customer.email || '',
+    dateOfBirth: customer.dateOfBirth || '',
   });
   const [emailDirty, setEmailDirty] = useState(false);
   const [firstNameDirty, setFirstNameDirty] = useState(false);
   const [lastNameDirty, setLastNameDirty] = useState(false);
+  const [dateDirty, setDateDirty] = useState(false);
   const [errors, setErrors] = useState({} as Erroring);
 
   const dispatch = useAppDispatch();
@@ -45,7 +48,8 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
       data.firstName!,
       data.lastName!,
       data.email!,
-      data.middleName!
+      data.middleName!,
+      data.dateOfBirth!
     );
     dispatch(login(customerUpdate));
   };
@@ -72,6 +76,12 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
         }));
         break;
       case 'middleName':
+        setData((prevState) => ({
+          ...prevState,
+          [eventTarget!.name]: eventTarget!.value,
+        }));
+        break;
+      case 'dateOfBirth':
         setData((prevState) => ({
           ...prevState,
           [eventTarget!.name]: eventTarget!.value,
@@ -118,6 +128,10 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
         setLastNameDirty(true);
         break;
       }
+      case 'dateOfBirth': {
+        setDateDirty(true);
+        break;
+      }
 
       default:
         break;
@@ -130,8 +144,8 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
       lastName: storedCustomer.lastName || '',
       middleName: storedCustomer.middleName || '',
       email: storedCustomer.email || '',
+      dateOfBirth: storedCustomer.dateOfBirth || '',
     });
-    console.log(data);
     setIsEdit(false);
   };
 
@@ -140,7 +154,7 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
   }, [data, validate]);
 
   return (
-    <Grid item xs={12} md={10}>
+    <Grid item xs={12} md={10} xl={10}>
       <Paper>
         <Box
           sx={{
@@ -152,59 +166,77 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customer }) => {
           }}
         >
           <h3>Customer info</h3>
-          <TextField
-            error={errors.firstName && firstNameDirty ? true : false}
-            variant="standard"
-            disabled={!isEdit}
-            onChange={(e) => {
-              handleChange(e);
-            }}
-            onBlur={(e) => blurHandler(e)}
-            id="first_name"
-            label="First name"
-            name="firstName"
-            defaultValue={customer.firstName}
-            helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
-          />
-          <TextField
-            variant="standard"
-            disabled={!isEdit}
-            onChange={(e) => {
-              handleChange(e);
-            }}
-            id="middle_name"
-            label="Middle name"
-            name="middleName"
-            defaultValue={customer.middleName}
-          />
-          <TextField
-            error={errors.lastName && lastNameDirty ? true : false}
-            variant="standard"
-            onChange={(e) => {
-              handleChange(e);
-            }}
-            onBlur={(e) => blurHandler(e)}
-            disabled={!isEdit}
-            id="last_name"
-            label="Last name"
-            name="lastName"
-            defaultValue={customer.lastName}
-            helperText={errors.lastName && lastNameDirty ? errors.lastName : ''}
-          />
-          <TextField
-            error={errors.email && emailDirty ? true : false}
-            variant="standard"
-            disabled={!isEdit}
-            onChange={(e) => {
-              handleChange(e);
-            }}
-            onBlur={(e) => blurHandler(e)}
-            id="customer_email"
-            label="Email"
-            name="email"
-            defaultValue={customer.email}
-            helperText={errors.email && emailDirty ? errors.email : ''}
-          />
+          <Grid item lg={12} xl={12} md={12} sm={12}>
+            <TextField
+              error={errors.firstName && firstNameDirty ? true : false}
+              variant="standard"
+              disabled={!isEdit}
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              onBlur={(e) => blurHandler(e)}
+              id="first_name"
+              label="First name"
+              name="firstName"
+              defaultValue={customer.firstName}
+              helperText={errors.firstName && firstNameDirty ? errors.firstName : ''}
+            />
+            <TextField
+              variant="standard"
+              disabled={!isEdit}
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              id="middle_name"
+              label="Middle name"
+              name="middleName"
+              defaultValue={customer.middleName}
+            />
+
+            <TextField
+              error={errors.lastName && lastNameDirty ? true : false}
+              variant="standard"
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              onBlur={(e) => blurHandler(e)}
+              disabled={!isEdit}
+              id="last_name"
+              label="Last name"
+              name="lastName"
+              defaultValue={customer.lastName}
+              helperText={errors.lastName && lastNameDirty ? errors.lastName : ''}
+            />
+            <TextField
+              error={errors.email && emailDirty ? true : false}
+              variant="standard"
+              disabled={!isEdit}
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              onBlur={(e) => blurHandler(e)}
+              id="customer_email"
+              label="Email"
+              name="email"
+              defaultValue={customer.email}
+              helperText={errors.email && emailDirty ? errors.email : ''}
+            />
+            <TextField
+              error={errors.dateOfBirth && dateDirty ? true : false}
+              variant="standard"
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              sx={{ paddingTop: '15px' }}
+              onBlur={(e) => blurHandler(e)}
+              disabled={!isEdit}
+              type="date"
+              id="dateOfBirth"
+              name="dateOfBirth"
+              defaultValue={customer.dateOfBirth}
+              helperText={errors.dateOfBirth && dateDirty ? errors.dateOfBirth : ''}
+            />
+          </Grid>
 
           <div>
             <Button

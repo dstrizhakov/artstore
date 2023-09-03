@@ -6,10 +6,10 @@ import {
   Product,
   CustomerChangePassword,
   CustomerChangeAddressAction,
-  CustomerAddAddressAction,
   ProductProjectionPagedSearchResponse,
   CategoryPagedQueryResponse,
   ProductTypePagedQueryResponse,
+  CustomerUpdateAction,
 } from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
@@ -39,6 +39,7 @@ export async function signUp(
   lastName: string,
   dateOfBirth: string,
   shippingAddress: {
+    title?: string;
     firstName?: string;
     lastName?: string;
     state?: string;
@@ -49,8 +50,10 @@ export async function signUp(
     building?: string;
     apartment?: string;
     streetNumber?: string;
+    mobile?: string;
   },
   billingAddress: {
+    title?: string;
     firstName?: string;
     lastName?: string;
     state?: string;
@@ -61,6 +64,7 @@ export async function signUp(
     building?: string;
     apartment?: string;
     streetNumber?: string;
+    mobile?: string;
   }
 ): Promise<CustomerSignInResult> {
   try {
@@ -128,7 +132,8 @@ export const updateCustomer = async (
   firstName: string,
   lastName: string,
   email: string,
-  middleName: string
+  middleName: string,
+  date: string
 ) => {
   try {
     const response = await getApiRoot()
@@ -154,6 +159,10 @@ export const updateCustomer = async (
             {
               action: 'setMiddleName',
               middleName: middleName,
+            },
+            {
+              action: 'setDateOfBirth',
+              dateOfBirth: date,
             },
           ],
         },
@@ -458,7 +467,7 @@ export const getProductByKey = async (productKey: string): Promise<Product> => {
   }
 };
 
-export const AddCustomerAddress = async (customerID: string, version: number, action: CustomerAddAddressAction) => {
+export const AddCustomerAddress = async (customerID: string, version: number, actions: CustomerUpdateAction[]) => {
   try {
     const response = await getApiRoot()
       .withProjectKey({ projectKey })
@@ -467,7 +476,30 @@ export const AddCustomerAddress = async (customerID: string, version: number, ac
       .post({
         body: {
           version,
-          actions: [action],
+          actions,
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export const DeleteCustomerAddress = async (customerID: string, version: number, id: string) => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .customers()
+      .withId({ ID: customerID })
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'removeAddress',
+              addressId: id,
+            },
+          ],
         },
       })
       .execute();

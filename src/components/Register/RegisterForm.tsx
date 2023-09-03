@@ -14,8 +14,8 @@ import { Dirty } from '../../types/Dirty';
 interface RegisterFormParams {
   errors: Erroring;
   dirty: Dirty;
-  handleChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  blurHandler: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  handleChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, field: string) => void;
+  blurHandler: (field: string) => void;
   data: DataRegister;
   handleClickShowPassword: () => void;
   handleMouseDownPassword: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -38,10 +38,10 @@ const RegisterForm = ({
         inputProps={{
           'data-type': 'register',
         }}
-        onChange={handleChange}
+        onChange={(e) => handleChange(e, 'email')}
         id="register-email"
         label="email *"
-        onBlur={(e) => blurHandler(e)}
+        onBlur={() => blurHandler('email')}
         variant="outlined"
         name="email"
         value={data.email}
@@ -53,8 +53,8 @@ const RegisterForm = ({
           'data-type': 'register',
         }}
         error={errors.firstName && dirty.firstName ? true : false}
-        onChange={handleChange}
-        onBlur={(e) => blurHandler(e)}
+        onChange={(e) => handleChange(e, 'firstName')}
+        onBlur={() => blurHandler('firstName')}
         id="outlined-basic-firsName"
         label="first name *"
         variant="outlined"
@@ -68,8 +68,8 @@ const RegisterForm = ({
           'data-type': 'register',
         }}
         error={errors.lastName && dirty.lastName ? true : false}
-        onChange={handleChange}
-        onBlur={(e) => blurHandler(e)}
+        onChange={(e) => handleChange(e, 'lastName')}
+        onBlur={() => blurHandler('lastName')}
         id="outlined-basic-lastName"
         label="last name *"
         variant="outlined"
@@ -83,8 +83,8 @@ const RegisterForm = ({
           'data-type': 'register',
         }}
         error={errors.dateOfBirth && dirty.date ? true : false}
-        onChange={handleChange}
-        onBlur={(e) => blurHandler(e)}
+        onChange={(e) => handleChange(e, 'dateOfBirth')}
+        onBlur={() => blurHandler('dateOfBirth')}
         type="date"
         id="outlined-basic-date"
         variant="outlined"
@@ -103,9 +103,9 @@ const RegisterForm = ({
           }}
           error={errors.password && dirty.password ? true : false}
           id="outlined-adornment-password"
-          onChange={handleChange}
+          onChange={(e) => handleChange(e, 'password')}
           value={data.password}
-          onBlur={(e) => blurHandler(e)}
+          onBlur={() => blurHandler('password')}
           label="password"
           name="password"
           type={showPassword ? 'text' : 'password'}

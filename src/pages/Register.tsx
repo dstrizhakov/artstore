@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import { FC, useState, useEffect, useCallback } from 'react';
 import styles from './Register.module.scss';
-import { Alert, Box, SelectChangeEvent, Snackbar } from '@mui/material';
+import { Alert, Box, FormHelperText, SelectChangeEvent, Snackbar } from '@mui/material';
 import RegisterForm from '../components/Register/RegisterForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -31,19 +31,36 @@ const Register: FC = () => {
     password: false,
     firstName: false,
     lastName: false,
-    shipping: false,
-    shippingCity: false,
-    shippingStreet: false,
-    shippingZip: false,
-    billingCity: false,
-    billingStreet: false,
-    billingZip: false,
-    billing: false,
     date: false,
+    title: false,
+    country: false,
+    city: false,
+    state: false,
+    streetName: false,
+    building: false,
+    apartment: false,
+    firstNameShipping: false,
+    lastNameShipping: false,
+    streetNumber: false,
+    mobile: false,
+    zip: false,
+    billingCity: false,
+    billingTitle: false,
+    billingStreetName: false,
+    billingZip: false,
+    billingCountry: false,
+    billingState: false,
+    billingStreetNumber: false,
+    billingBuilding: false,
+    billingApartment: false,
+    billingMobile: false,
+    lastNameBilling: false,
+    firstNameBilling: false,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [address, setAddress] = useState<AddressType>({
     country: '',
+    title: '',
     state: '',
     city: '',
     streetName: '',
@@ -53,8 +70,10 @@ const Register: FC = () => {
     lastName: '',
     postalCode: '',
     streetNumber: '',
+    mobile: '',
   });
   const [addressBilling, setAddressBilling] = useState<AddressType>({
+    title: '',
     country: '',
     state: '',
     city: '',
@@ -65,6 +84,7 @@ const Register: FC = () => {
     lastName: '',
     postalCode: '',
     streetNumber: '',
+    mobile: '',
   });
   const [billingSame, setBillingSame] = useState(true);
 
@@ -82,120 +102,14 @@ const Register: FC = () => {
     }
   }, [isAuth, navigate]);
 
-  const blurHandler = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const eventTarget = e.currentTarget;
-    switch (eventTarget.id) {
-      case 'shipping-country': {
-        setDirty((prevState) => ({
-          ...prevState,
-          shipping: true,
-        }));
-
-        break;
-      }
-      case 'billing-country': {
-        setDirty((prevState) => ({
-          ...prevState,
-          billing: true,
-        }));
-        break;
-      }
-
-      default:
-        break;
-    }
-    switch (eventTarget.id) {
-      case 'shippingStreet': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.id]: true,
-        }));
-        break;
-      }
-      case 'shippingCity': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.id]: true,
-        }));
-        break;
-      }
-      case 'shippingZip': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.id]: true,
-        }));
-        break;
-      }
-      case 'billingStreet': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.id]: true,
-        }));
-        break;
-      }
-      case 'billingCity': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.id]: true,
-        }));
-        break;
-      }
-      case 'billingZip': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.id]: true,
-        }));
-        break;
-      }
-
-      default:
-        break;
-    }
-
-    switch (eventTarget.name) {
-      case 'email': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.name]: true,
-        }));
-        break;
-      }
-
-      case 'password': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.name]: true,
-        }));
-        break;
-      }
-      case 'firstName': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.name]: true,
-        }));
-        break;
-      }
-      case 'lastName': {
-        setDirty((prevState) => ({
-          ...prevState,
-          [eventTarget!.name]: true,
-        }));
-        break;
-      }
-      case 'dateOfBirth': {
-        setDirty((prevState) => ({
-          ...prevState,
-          date: true,
-        }));
-        break;
-      }
-
-      default:
-        break;
-    }
+  const blurHandler = (field: string) => {
+    setDirty((prevState) => ({
+      ...prevState,
+      [field]: true,
+    }));
   };
-  const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    blurHandler(event);
+  const handleChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, field: string) => {
+    blurHandler(event.currentTarget.name);
     const target = event.currentTarget;
 
     const dataType = target.dataset.type;
@@ -203,19 +117,19 @@ const Register: FC = () => {
       case 'register':
         setData((prevState) => ({
           ...prevState,
-          [target!.name]: target!.value,
+          [field]: target!.value,
         }));
         break;
       case 'shipping':
         setAddress((prevState) => ({
           ...prevState,
-          [target!.name]: target!.value,
+          [field]: target!.value,
         }));
         break;
       case 'billing':
         setAddressBilling((prevState) => ({
           ...prevState,
-          [target!.name]: target!.value,
+          [field]: target!.value,
         }));
         break;
 
@@ -283,13 +197,29 @@ const Register: FC = () => {
       const error: Erroring = validator(
         {
           ...data,
+          title: address.title,
           country: address.country,
           city: address.city,
+          state: address.state,
+          streetNumber: address.streetNumber,
+          building: address.building,
+          apartment: address.apartment,
+          firstNameShipping: address.firstName,
+          lastNameShipping: address.lastName,
+          mobile: address.mobile,
           streetName: address.streetName,
           postalCode: address.postalCode,
+          billingTitle: addressBilling.title,
           billingCountry: addressBilling.country,
           billingStreetName: addressBilling.country,
           billingCity: addressBilling.city,
+          billingState: addressBilling.state,
+          billingStreetNumber: addressBilling.streetNumber,
+          billingBuilding: addressBilling.building,
+          billingApartment: addressBilling.apartment,
+          billingMobile: addressBilling.mobile,
+          lastNameBilling: addressBilling.lastName,
+          firstNameBilling: addressBilling.firstName,
           billingPostalCode: addressBilling.postalCode,
         },
         validatorConfig
@@ -358,6 +288,7 @@ const Register: FC = () => {
         <Button type="submit" disabled={!isValid} variant="contained">
           Register
         </Button>
+        <FormHelperText error={!isValid}>{!isValid && 'Fill in the required fields marked as "*"'}</FormHelperText>
       </form>
 
       <RegisterAddress
