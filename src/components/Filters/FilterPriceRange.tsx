@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Paper, Slider, Typography } from '@mui/material';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setFilterPriceRange } from '../../store/reducers/filters.slice';
 import { getProducts } from '../../api/requests';
 import { setError } from '../../store/reducers/products.slice';
@@ -10,7 +10,8 @@ function valueText(value: number) {
 }
 
 export default function FilterPriceRange() {
-  const [minmax, setMinMax] = useState<number[]>([0, 1000]);
+  const range = useAppSelector((state) => state.filters.priceRange).map((item) => item / 100);
+  const [minmax, setMinMax] = useState<number[]>(range);
 
   const getProductsPrices = async () => {
     try {
