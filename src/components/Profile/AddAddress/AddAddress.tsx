@@ -57,6 +57,7 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
     lastNameShipping: false,
     mobile: false,
   });
+
   const [errors, setErrors] = useState<Erroring>({});
   const [isShipping, setIsShipping] = useState(false);
   const [isBilling, setIsBilling] = useState(false);
@@ -105,7 +106,6 @@ const AddAddress: FC<CustomerAddressProps> = ({ customer, setIsOpen }) => {
         },
       },
     ]);
-    console.log(newCustomer);
 
     const newAddressId = newCustomer.body.addresses.find((item) => item.title === address.title)!.id;
     if (isShipping) {

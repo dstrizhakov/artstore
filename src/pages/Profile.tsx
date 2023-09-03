@@ -4,20 +4,20 @@ import { useAppSelector } from '../hooks/redux';
 import { useEffect, useState } from 'react';
 import CustomerInfo from '../components/Profile/CustomerInfo/CustomerInfo';
 import CustomerPassword from '../components/Profile/CustomerPassword/CustomerPassword';
-// import CustomerAddress from '../components/Profile/CustomerAddress/CustomerAddress';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal/Modal';
 import AddressCard from '../components/Profile/AddressCard/AddressCard';
 import AddAddress from '../components/Profile/AddAddress/AddAddress';
-// import AddAddress from '../components/Profile/CustomerAddress/AddAddress';
 
 const Profile = () => {
   const [modalPassword, setModalPassword] = useState(false);
   const [addAddress, setAddAddress] = useState(false);
+
   const customer = useAppSelector((state) => state.user.customer);
-  // const isBillingSame = useAppSelector((state) => state.addresses.isBillingSame);
   const isAuth = useAppSelector((state) => state.user.isAuth);
+
   const navigate = useNavigate();
+
   const handleAddAddress = () => {
     setAddAddress(true);
   };
@@ -69,13 +69,8 @@ const Profile = () => {
               </Box>
             </Paper>
           </Grid>
-
-          {/* <AddAddress /> */}
-          {/* <CustomerAddress customer={customer} type="shipping" />
-          {!isBillingSame && <CustomerAddress customer={customer} type="billing" />} */}
         </Grid>
         <Paper sx={{ padding: '20px' }}>
-          {' '}
           <Typography variant="h4">Address List</Typography>
           <Grid container mt={3} spacing={2}>
             {customer.addresses.map((item) => (

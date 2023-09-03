@@ -1,7 +1,5 @@
 import { FC, useEffect, useCallback } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
 import { searchProducts } from '../api/requests';
@@ -18,7 +16,6 @@ const Shop: FC = () => {
   const dispatch = useAppDispatch();
   const products = useAppSelector((state) => state.products.items);
   const loading = useAppSelector((state) => state.products.loading);
-  const error = useAppSelector((state) => state.products.error);
 
   const limit = useAppSelector((state) => state.filters.pagination.limit);
   const offset = useAppSelector((state) => state.filters.pagination.offset);
@@ -27,10 +24,6 @@ const Shop: FC = () => {
   const categoryId = useAppSelector((state) => state.filters.categoryId);
   const typeId = useAppSelector((state) => state.filters.typeId);
   const sort = useAppSelector((state) => state.filters.sort);
-
-  const handleCloseSnackbar = () => {
-    dispatch(setError(null));
-  };
 
   const fetchData = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
@@ -73,11 +66,6 @@ const Shop: FC = () => {
           ))}
         </Grid>
       )}
-      <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <MuiAlert elevation={6} variant="filled" severity="error" onClose={handleCloseSnackbar}>
-          {error}
-        </MuiAlert>
-      </Snackbar>
     </div>
   );
 };
