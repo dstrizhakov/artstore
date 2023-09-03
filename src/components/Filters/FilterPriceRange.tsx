@@ -10,7 +10,7 @@ function valueText(value: number) {
 }
 
 export default function FilterPriceRange() {
-  const [minmax, setMinMax] = useState<number[]>([]);
+  const [minmax, setMinMax] = useState<number[]>([0, 1000]);
 
   const getProductsPrices = async () => {
     try {
