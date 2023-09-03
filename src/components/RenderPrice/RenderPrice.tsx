@@ -8,6 +8,9 @@ interface RenderPriceProps {
 }
 
 const RenderPrice: FC<RenderPriceProps> = ({ price, discount }) => {
+  console.log('price', price);
+  console.log('discount', discount);
+  
   if (discount) {
     return (
       <Stack
@@ -19,7 +22,7 @@ const RenderPrice: FC<RenderPriceProps> = ({ price, discount }) => {
       >
         <div className={styles.price}>${price / 100}</div>
         <div className={styles.discount}>${discount / 100}</div>
-        <div>Discount {Math.floor((price / discount) * 100 - 100)}%</div>
+        <div>Discount {(100 - (discount / price) * 100).toFixed(0)}%</div>
       </Stack>
     );
   } else {
