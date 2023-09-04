@@ -19,8 +19,6 @@ type MainSliderProps = {
 };
 
 const ModalSlider: FC<MainSliderProps> = ({ slides, activeSlideIndex }) => {
-  
-  
   if (!slides.length) {
     return (
       <div className={styles.wrapper}>

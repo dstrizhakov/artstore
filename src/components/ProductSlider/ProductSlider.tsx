@@ -29,7 +29,6 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
   const swiper2Ref = useRef();
   const [activeSlideIndex, setActiveSlideIndex] = useState<string | null>(null);
 
-
   useLayoutEffect(() => {
     if (swiper1Ref.current !== null) {
       swiper1Ref.current.controller.control = swiper2Ref.current;
@@ -61,7 +60,13 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id} className={styles.mainSwiper}>
-            <img onClick={() => {setActiveSlideIndex(slide.id), setModal(true)}} src={slide.img} alt={slide.title} />
+            <img
+              onClick={() => {
+                setActiveSlideIndex(slide.id), setModal(true);
+              }}
+              src={slide.img}
+              alt={slide.title}
+            />
             {/* <img onClick={() => setModal(true)} src={slide.img} alt={slide.title} /> */}
           </SwiperSlide>
         ))}
