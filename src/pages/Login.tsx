@@ -16,7 +16,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../api/requests';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { login } from '../store/reducers/user.slice';
-import { Erroring } from './Register';
+import { Erroring } from '../types/ConfigValidator';
 import { validator } from '../utils/validator';
 import validatorConfig from '../utils/validatorConfig';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
