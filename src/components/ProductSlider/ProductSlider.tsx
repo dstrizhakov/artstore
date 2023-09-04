@@ -27,6 +27,8 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
   const [secondSwiper] = useState<SwiperClass>();
   const swiper1Ref = useRef<SwiperCore | null>(null);
   const swiper2Ref = useRef();
+  const [activeSlideIndex, setActiveSlideIndex] = useState<string | null>(null);
+
 
   useLayoutEffect(() => {
     if (swiper1Ref.current !== null) {
@@ -37,7 +39,7 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
   return (
     <div className={styles.slider}>
       <Modal isOpen={modal} setIsOpen={setModal}>
-        <ModalSlider slides={slides} />
+        <ModalSlider slides={slides} activeSlideIndex={activeSlideIndex} />
       </Modal>
       <Swiper
         className={styles.mainSlider}
@@ -59,7 +61,8 @@ const ProductSlider: FC<ProductSliderProps> = ({ slides }) => {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id} className={styles.mainSwiper}>
-            <img onClick={() => setModal(true)} src={slide.img} alt={slide.title} />
+            <img onClick={() => {setActiveSlideIndex(slide.id), setModal(true)}} src={slide.img} alt={slide.title} />
+            {/* <img onClick={() => setModal(true)} src={slide.img} alt={slide.title} /> */}
           </SwiperSlide>
         ))}
       </Swiper>

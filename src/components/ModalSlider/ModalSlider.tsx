@@ -15,9 +15,12 @@ export interface ISlide {
 }
 type MainSliderProps = {
   slides: ISlide[];
+  activeSlideIndex: string | null;
 };
 
-const ModalSlider: FC<MainSliderProps> = ({ slides }) => {
+const ModalSlider: FC<MainSliderProps> = ({ slides, activeSlideIndex }) => {
+  
+  
   if (!slides.length) {
     return (
       <div className={styles.wrapper}>
@@ -33,6 +36,7 @@ const ModalSlider: FC<MainSliderProps> = ({ slides }) => {
           className={styles.modalSwiper}
           spaceBetween={0}
           centeredSlides
+          initialSlide={Number(activeSlideIndex)}
           pagination={{
             clickable: true,
           }}
