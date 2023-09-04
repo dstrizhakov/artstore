@@ -8,9 +8,6 @@ interface RenderPriceProps {
 }
 
 const RenderPrice: FC<RenderPriceProps> = ({ price, discount }) => {
-  console.log('price', price);
-  console.log('discount', discount);
-  
   if (discount) {
     return (
       <Stack

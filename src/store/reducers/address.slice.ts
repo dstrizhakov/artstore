@@ -31,7 +31,6 @@ const addressSlice = createSlice({
       state.isBillingSame = action.payload;
     },
     clear: (state) => {
-      console.log(state, 'state');
       state.billing = { country: '' };
       state.shipping = { country: '' };
       state.isBillingSame = false;
