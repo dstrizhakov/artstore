@@ -1,0 +1,31 @@
+export interface Dirty {
+  email: boolean;
+  password: boolean;
+  firstName: boolean;
+  lastName: boolean;
+  date: boolean;
+  title: boolean;
+  country: boolean;
+  city: boolean;
+  state: boolean;
+  streetName: boolean;
+  building: boolean;
+  apartment: boolean;
+  firstNameShipping: boolean;
+  lastNameShipping: boolean;
+  streetNumber: boolean;
+  mobile: boolean;
+  zip: boolean;
+  billingCity: boolean;
+  billingTitle: boolean;
+  billingStreetName: boolean;
+  billingZip: boolean;
+  billingCountry: boolean;
+  billingState: boolean;
+  billingStreetNumber: boolean;
+  billingBuilding: boolean;
+  billingApartment: boolean;
+  billingMobile: boolean;
+  lastNameBilling: boolean;
+  firstNameBilling: boolean;
+}

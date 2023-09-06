@@ -1,0 +1,12 @@
+.wrapper {
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  height: 1000px;
+  & .mainslider {
+    overflow: hidden;
+  }
+}
