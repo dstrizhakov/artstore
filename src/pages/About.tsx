@@ -1,22 +1,24 @@
 import { FC } from 'react';
-import { Button, ButtonGroup, Divider, Grid, Paper, Typography } from '@mui/material';
+import { Button, Chip, Divider, Grid, Paper, Typography } from '@mui/material';
 import styles from './About.module.scss';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import EmailIcon from '@mui/icons-material/Email';
 
 const About: FC = () => {
   return (
     <div>
       <h2>About Page</h2>
-
       <Paper className={styles.root}>
         <Grid container>
           <Grid item xs={12} sm={12} md={4} padding={2}>
             <img src="https://avatars.githubusercontent.com/u/50585824?v=4" alt="Stas" />
           </Grid>
-          <Grid item xs={12} sm={12} md={8} padding={2} className={styles.productInfo}>
+          <Grid item xs={12} sm={12} md={8} padding={2}>
             <Typography variant="h3" gutterBottom>
               Stanislav Shendryk
             </Typography>
-            <Typography variant="body1" color="textSecondary" className={styles.data}>
+            <Typography variant="body1" paddingBottom={2}>
               Ever since high school, I have been interested in computer and everything connected with it, from hardware
               to computer games. I was curious about html and css, which allowed me to do magic in the browser. For the
               first time in practice, I faced the front-end, when I worked as a system administrator in a private
@@ -29,18 +31,37 @@ const About: FC = () => {
             <Typography variant="h4" gutterBottom>
               Technologies stack and my tools
             </Typography>
-            <Typography variant="body1" color="textSecondary" className={styles.data}>
-              HT​ML, CSS (SASS, LESS), JavaScript, TypeScript, GIT, Wordpress, MODX, Figma, CorelDRAW, Photoshop
+
+            <Typography variant="body1" paddingBottom={2} className={styles.tag}>
+              <Chip label="HT​ML" />
+              <Chip label="CSS (SASS, LESS)" />
+              <Chip label="JavaScript" />
+              <Chip label="TypeScript" />
+              <Chip label="GIT" />
+              <Chip label="Wordpress" />
+              <Chip label="MODX" />
+              <Chip label="Figma" />
+              <Chip label="CorelDRAW" />
+              <Chip label="Photoshop" />
             </Typography>
             <Typography variant="h4" gutterBottom>
               Contacts
             </Typography>
-            <Typography variant="body1" color="textSecondary" className={styles.data}>
-              <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                <Button href="https://t.me/webjoker">Telegram</Button>
-                <Button href="https://discordapp.com/users/673500459750785065">Discord</Button>
-                <Button href="mailto:stanislav.shendryk@gmail.com">Email</Button>
-              </ButtonGroup>
+            <Typography color="textSecondary" className={styles.social}>
+              <Button target="_blanc" href="https://github.com/webj0ker" variant="outlined" startIcon={<GitHubIcon />}>
+                Github
+              </Button>
+              <Button target="_blanc" href="https://t.me/webjoker" variant="outlined" startIcon={<TelegramIcon />}>
+                Telegram
+              </Button>
+              <Button
+                target="_blanc"
+                href="mailto:stanislav.shendryk@gmail.com"
+                variant="outlined"
+                startIcon={<EmailIcon />}
+              >
+                Email
+              </Button>
             </Typography>
           </Grid>
         </Grid>
