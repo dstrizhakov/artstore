@@ -1,3 +1,6 @@
+import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { SvgIconTypeMap } from '@mui/material/SvgIcon';
+
 export type AddressType = {
   firstName?: string;
   lastName?: string;
@@ -28,15 +31,17 @@ export type AddressType = {
   billingMobile?: string;
 };
 
-export type ILinks = {
-  github: string;
-  telegram: string;
-  email: string;
+export type ILink = {
+  name: string;
+  url: string;
+  icon: OverridableComponent<SvgIconTypeMap<'svg'>> & {
+    muiName: string;
+  };
 };
-export interface DevelopersList {
+export interface DeveloperItemType {
   name: string;
   description: string;
   img: string;
   skills: string[];
-  links: ILinks;
+  links: ILink[];
 }

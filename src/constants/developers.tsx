@@ -1,4 +1,9 @@
-export const developers = [
+import { DeveloperItemType } from '../types/types';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import EmailIcon from '@mui/icons-material/Email';
+
+export const developers: DeveloperItemType[] = [
   {
     name: 'Stanislav Shendryk',
     description: `Ever since high school, I have been interested in computer and everything connected with it, from hardware
@@ -22,10 +27,22 @@ export const developers = [
       'CorelDRAW',
       'Photoshop',
     ],
-    links: {
-      github: 'https://github.com/webj0ker',
-      telegram: 'https://t.me/webjoker',
-      email: 'mailto:stanislav.shendryk@gmail.com',
-    },
+    links: [
+      {
+        name: 'github',
+        url: 'https://github.com/webj0ker',
+        icon: GitHubIcon,
+      },
+      {
+        name: 'telegram',
+        url: 'https://t.me/webjoker',
+        icon: TelegramIcon,
+      },
+      {
+        name: 'email',
+        url: 'mailto:stanislav.shendryk@gmail.com',
+        icon: EmailIcon,
+      },
+    ],
   },
 ];
