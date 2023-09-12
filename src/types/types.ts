@@ -27,3 +27,16 @@ export type AddressType = {
   lastNameBilling?: string;
   billingMobile?: string;
 };
+
+export type ILinks = {
+  github: string;
+  telegram: string;
+  email: string;
+};
+export interface DevelopersList {
+  name: string;
+  description: string;
+  img: string;
+  skills: string[];
+  links: ILinks;
+}
