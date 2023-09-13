@@ -5,7 +5,7 @@ import { DeveloperItemType } from '../../types/types';
 
 const AboutItem: FC<DeveloperItemType> = ({ name, description, img, skills, links }) => {
   return (
-    <Paper>
+    <Paper sx={{ mb: 2 }}>
       <Grid container>
         <Grid item xs={12} sm={12} md={4} padding={2}>
           <img src={img} alt={name} />
@@ -17,17 +17,16 @@ const AboutItem: FC<DeveloperItemType> = ({ name, description, img, skills, link
           <Typography variant="body1" paddingBottom={2}>
             {description}
           </Typography>
-          <Typography variant="h4" gutterBottom>
-            Technologies stack and my tools
+          <Typography variant="h5" gutterBottom>
+            Technologies stack and my tools:
           </Typography>
-
-          <Typography variant="body1" paddingBottom={2} className={styles.tag}>
+          <div className={styles.tag}>
             {skills.map((skill) => (
-              <Chip key={skill} label={skill} />
+              <Chip key={skill} color="success" variant="outlined" label={skill} />
             ))}
-          </Typography>
-          <Typography variant="h4" gutterBottom>
-            Contacts
+          </div>
+          <Typography variant="h5" gutterBottom>
+            Contacts:
           </Typography>
           <Stack direction="row" spacing={2}>
             {links.map((link) => (

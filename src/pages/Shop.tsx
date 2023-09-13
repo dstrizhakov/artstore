@@ -59,7 +59,7 @@ const Shop: FC = () => {
             </Typography>
           )}
           {products.map((product, index) => (
-            <Grid key={index} item xs={12} sm={6} md={4}>
+            <Grid key={index} item xs={12} sm={6} md={6} lg={4}>
               <Stack alignItems="stretch" justifyContent="space-between" height="100%">
                 <ProductItem product={product} />
               </Stack>

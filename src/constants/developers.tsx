@@ -5,6 +5,49 @@ import EmailIcon from '@mui/icons-material/Email';
 
 export const developers: DeveloperItemType[] = [
   {
+    name: 'Dmitry Strizhakov (TeamLead)',
+    description: `Hello, I'm a JavaScript developer. Currently, I'm studying at the online school RSSchool, and I would like to extend my heartfelt gratitude to our mentors, Vitaliy Boudkin and Shakhzod Kudratov, for their guidance and support throughout this learning journey.
+    During my journey in web development, I've had the privilege of working with various technologies and frameworks, which you can find listed below.
+    My experience has allowed me to tackle various challenges and projects. Collaboration is something I deeply value, and I believe that effective teamwork and communication are key to project success.
+    I have a passion for problem-solving, and I enjoy finding innovative solutions to complex challenges. In the ever-evolving world of web development, I'm committed to continuous learning to stay updated with the latest trends and technologies.`,
+    img: 'https://avatars.githubusercontent.com/u/95134334?v=4',
+    skills: [
+      'React',
+      'NextJS',
+      'Redux',
+      'Redux Toolkit',
+      'Effector',
+      'Axios',
+      'JavaScript',
+      'TypeScript',
+      'Webpack',
+      'StoryBook',
+      'Swagger',
+      'GIT',
+      'Figma',
+      'Styled-components',
+      'Ant-Design',
+      'MIU',
+    ],
+    links: [
+      {
+        name: 'github',
+        url: 'https://github.com/dstrizhakov',
+        icon: GitHubIcon,
+      },
+      {
+        name: 'telegram',
+        url: 'https://t.me/DmitryStrizhakov',
+        icon: TelegramIcon,
+      },
+      {
+        name: 'email',
+        url: 'mailto:d.strizhakov@gmail.com',
+        icon: EmailIcon,
+      },
+    ],
+  },
+  {
     name: 'Stanislav Shendryk',
     description: `Ever since high school, I have been interested in computer and everything connected with it, from hardware
     to computer games. I was curious about html and css, which allowed me to do magic in the browser. For the

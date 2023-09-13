@@ -22,7 +22,6 @@ const ProductDetails: FC = () => {
     if (!key) return;
     const responce = await getProductByKey(key);
     setProductRender(responce);
-
     dispatch(setProduct(responce));
   }, [dispatch, key]);
 
