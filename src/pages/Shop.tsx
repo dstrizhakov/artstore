@@ -32,8 +32,10 @@ const Shop: FC = () => {
       const responce = await searchProducts(searchString, isFuzzy, limit, offset, categoryId, typeId, sort, priceRange);
       dispatch(setProducts(responce.results));
       dispatch(setPagination(responce));
-    } catch (e) {
-      dispatch(setError('Произошла ошибка при получении данных'));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
     }
   }, [dispatch, limit, offset, searchString, isFuzzy, categoryId, typeId, sort, priceRange]);
 
