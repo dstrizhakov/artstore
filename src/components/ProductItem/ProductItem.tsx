@@ -9,8 +9,9 @@ import { dateConverter } from '../../utils/dateConverter';
 import styles from './ProductItem.module.scss';
 import RenderPrice from '../../components/RenderPrice/RenderPrice';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { getProductByKey } from '../../api/requests';
-import { useAppDispatch } from '../../hooks/redux';
+import { incrementLineItem, getProductByKey } from '../../api/requests';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { createStoreCart } from '../../store/reducers/commerceCart.slice';
 
 interface ProductCardProps {
   product: ProductProjection;
@@ -18,6 +19,7 @@ interface ProductCardProps {
 
 const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
   const dispatch = useAppDispatch();
+  const cart = useAppSelector((store) => store.storeCart.cart);
 
   const getCurrentProduct = useCallback(async (key: string) => {
     if (!key) return;
@@ -30,6 +32,9 @@ const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
     const productItem = await getCurrentProduct(product.key);
     if (productItem) {
       dispatch(addProductToCart(productItem));
+
+      const response = await incrementLineItem(cart.id, cart.version, productItem.id, 1);
+      dispatch(createStoreCart(response.body));
     }
   };
 
