@@ -1,28 +1,37 @@
-import { useAppDispatch } from '../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import ProductSlider, { ImagesSlide } from '../components/ProductSlider/ProductSlider';
 import { Breadcrumbs, Button, Divider, Grid, IconButton, Paper, Typography } from '@mui/material';
 import { AddShoppingCart, CalendarToday, Favorite, Share } from '@mui/icons-material';
-import { addProductToCart } from '../store/reducers/cart.slice';
 import { Image, Product } from '@commercetools/platform-sdk';
 import styles from './ProductDetails.module.scss';
 import { dateConverter } from '../utils/dateConverter';
 import { Link } from 'react-router-dom';
-import { getProductByKey } from '../api/requests';
-import { setProduct } from '../store/reducers/products.slice';
+import { getProductByKey, incrementLineItem } from '../api/requests';
+import { setError, setProduct } from '../store/reducers/products.slice';
 import RenderPrice from '../components/RenderPrice/RenderPrice';
+import { createStoreCart } from '../store/reducers/commerceCart.slice';
 
 const ProductDetails: FC = () => {
   const { id: key } = useParams();
+
   const dispatch = useAppDispatch();
+  const cart = useAppSelector((store) => store.storeCart.cart);
+
   const [productRender, setProductRender] = useState<Product>();
 
   const getCurrentProduct = useCallback(async () => {
     if (!key) return;
-    const responce = await getProductByKey(key);
-    setProductRender(responce);
-    dispatch(setProduct(responce));
+    try {
+      const responce = await getProductByKey(key);
+      setProductRender(responce);
+      dispatch(setProduct(responce));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
+    }
   }, [dispatch, key]);
 
   useEffect(() => {
@@ -30,8 +39,16 @@ const ProductDetails: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const addToCart = (product: Product) => {
-    dispatch(addProductToCart(product));
+  const addToCart = async (product: Product) => {
+    if (!product.key) return;
+    try {
+      const response = await incrementLineItem(cart.id, cart.version, product.id, 1);
+      dispatch(createStoreCart(response.body));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
+    }
   };
 
   const getSlides = (imagesArr: Image[]): ImagesSlide[] => {
@@ -70,7 +87,6 @@ const ProductDetails: FC = () => {
               <Typography variant="body2" color="textSecondary" className={styles.data}>
                 {<CalendarToday />} {dateConverter(productRender!.createdAt)}
               </Typography>
-
               {productRender!.masterData.staged.description &&
                 productRender!.masterData.staged.description['en-US'].split('\n').filter((elem) => elem !== '') &&
                 productRender!.masterData.staged.description &&
@@ -82,7 +98,6 @@ const ProductDetails: FC = () => {
                       {item}
                     </Typography>
                   ))}
-
               <Typography variant="h5" gutterBottom>
                 <RenderPrice
                   price={productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0}

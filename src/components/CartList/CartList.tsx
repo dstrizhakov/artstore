@@ -6,8 +6,7 @@ import CartItem from '../CartItem/CartItem';
 import Modal from '../Modal/Modal';
 import Button from '@mui/material/Button';
 import { Box, Stack } from '@mui/material';
-import { decrementLineItem } from '../../api/requests';
-import { Cart } from '@commercetools/platform-sdk';
+import { createCart } from '../../api/requests';
 import { createStoreCart } from '../../store/reducers/commerceCart.slice';
 import { setError } from '../../store/reducers/products.slice';
 
@@ -16,7 +15,6 @@ const CartList: FC = () => {
   const dispatch = useAppDispatch();
   const cartTotal = useAppSelector((state) => state.storeCart.cart.totalPrice.centAmount / 100);
   const cartList = useAppSelector((state) => state.storeCart.cart.lineItems);
-  const cart = useAppSelector((state) => state.storeCart.cart);
   const totalCount = useAppSelector((state) => state.storeCart.cart.totalLineItemQuantity);
 
   const completeOrder = async () => {
@@ -27,24 +25,14 @@ const CartList: FC = () => {
     }, 1500);
   };
 
-  const removeAllItems = async (cart: Cart) => {
+  const removeAllItems = async () => {
     try {
-      // if (cart.lineItems.length === 0) return;
-      // const response = await decrementLineItem(cart.id, cart.version, cart.lineItems[0].id, cart.lineItems[0].quantity);
-      // dispatch(createStoreCart(response.body));
-      // await removeAllItems(cart);
-      // !работает не правильно
-      for (let i = 0; i <= cart.lineItems.length; i++) {
-        const response = await decrementLineItem(
-          cart.id,
-          cart.version + i,
-          cart.lineItems[i].id,
-          cart.lineItems[i].quantity
-        );
-        dispatch(createStoreCart(response.body));
+      const response = await createCart();
+      dispatch(createStoreCart(response.body));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
       }
-    } catch (error) {
-      dispatch(setError('Произошла ошибка при очистке корзины'));
     }
   };
 
@@ -67,7 +55,7 @@ const CartList: FC = () => {
             <Button size="large" color="success" variant="contained" onClick={completeOrder}>
               Enter promocode
             </Button>
-            <Button size="large" color="warning" variant="contained" onClick={() => removeAllItems(cart)}>
+            <Button size="large" color="warning" variant="contained" onClick={() => removeAllItems()}>
               Clear cart
             </Button>
           </Stack>

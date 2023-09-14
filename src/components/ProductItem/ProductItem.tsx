@@ -1,17 +1,15 @@
-// ProductCard.js
-
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Button, Card, CardActions, CardHeader, CardMedia, Stack } from '@mui/material';
-import { addProductToCart } from '../../store/reducers/cart.slice';
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { dateConverter } from '../../utils/dateConverter';
 import styles from './ProductItem.module.scss';
 import RenderPrice from '../../components/RenderPrice/RenderPrice';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { incrementLineItem, getProductByKey } from '../../api/requests';
+import { incrementLineItem } from '../../api/requests';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { createStoreCart } from '../../store/reducers/commerceCart.slice';
+import { setError } from '../../store/reducers/products.slice';
 
 interface ProductCardProps {
   product: ProductProjection;
@@ -21,20 +19,15 @@ const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
   const dispatch = useAppDispatch();
   const cart = useAppSelector((store) => store.storeCart.cart);
 
-  const getCurrentProduct = useCallback(async (key: string) => {
-    if (!key) return;
-    const responce = await getProductByKey(key);
-    return responce;
-  }, []);
-
   const addToCart = async (product: ProductProjection) => {
     if (!product.key) return;
-    const productItem = await getCurrentProduct(product.key);
-    if (productItem) {
-      dispatch(addProductToCart(productItem));
-
-      const response = await incrementLineItem(cart.id, cart.version, productItem.id, 1);
+    try {
+      const response = await incrementLineItem(cart.id, cart.version, product.id, 1);
       dispatch(createStoreCart(response.body));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
     }
   };
 
