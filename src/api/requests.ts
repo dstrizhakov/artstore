@@ -584,3 +584,76 @@ export const clearShopCart = async (cart: Cart): Promise<ClientResponse<Cart>> =
     throw error;
   }
 };
+
+export const getDiscountsCodes = async () => {
+  try {
+    const response = await getApiRoot().withProjectKey({ projectKey }).discountCodes().get().execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addDiscountCode = async (
+  cartId: string,
+  cartVersion: number,
+  code: string
+): Promise<ClientResponse<Cart>> => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID: cartId })
+      .post({ body: { version: cartVersion, actions: [{ action: 'addDiscountCode', code }] } })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const removeDiscountCode = async (
+  cartId: string,
+  cartVersion: number,
+  codeId: string
+): Promise<ClientResponse<Cart>> => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion,
+          actions: [{ action: 'removeDiscountCode', discountCode: { typeId: 'discount-code', id: codeId } }],
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const recalculateCart = async (
+  cartId: string,
+  cartVersion: number,
+  updateProductData?: boolean
+): Promise<ClientResponse<Cart>> => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion,
+          actions: [{ action: 'recalculate', updateProductData }],
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

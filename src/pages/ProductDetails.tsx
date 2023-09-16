@@ -2,13 +2,14 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import ProductSlider, { ImagesSlide } from '../components/ProductSlider/ProductSlider';
-import { Breadcrumbs, Button, Divider, Grid, IconButton, Paper, Typography } from '@mui/material';
-import { AddShoppingCart, CalendarToday, Favorite, Share } from '@mui/icons-material';
+import { Breadcrumbs, Button, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+import { AddShoppingCart, CalendarToday } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Image, Product } from '@commercetools/platform-sdk';
 import styles from './ProductDetails.module.scss';
 import { dateConverter } from '../utils/dateConverter';
 import { Link } from 'react-router-dom';
-import { getProductByKey, incrementLineItem } from '../api/requests';
+import { decrementLineItem, getProductByKey, incrementLineItem } from '../api/requests';
 import { setError, setProduct } from '../store/reducers/products.slice';
 import RenderPrice from '../components/RenderPrice/RenderPrice';
 import { createStoreCart } from '../store/reducers/commerceCart.slice';
@@ -61,6 +62,19 @@ const ProductDetails: FC = () => {
     });
   };
 
+  const deleteItem = async (product: Product) => {
+    const lineItem = cart.lineItems.find((item) => item.productId === product.id);
+    if (!lineItem?.id) return;
+    try {
+      const response = await decrementLineItem(cart.id, cart.version, lineItem?.id, lineItem?.quantity);
+      dispatch(createStoreCart(response.body));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
+    }
+  };
+
   if (productRender) {
     return (
       <div>
@@ -107,22 +121,36 @@ const ProductDetails: FC = () => {
                 />
               </Typography>
               <div className={styles.buttons}>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  endIcon={<AddShoppingCart />}
-                  onClick={() => addToCart(productRender!)}
-                >
-                  Add to cart
-                </Button>
-                <IconButton aria-label="Add to Favorites">
+                <Stack direction="row" spacing={2}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    endIcon={<AddShoppingCart />}
+                    onClick={() => addToCart(productRender!)}
+                  >
+                    Add to cart
+                  </Button>
+                  {cart.lineItems.findIndex((item) => item.productId === productRender.id) !== -1 && (
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="warning"
+                      endIcon={<DeleteIcon />}
+                      onClick={() => deleteItem(productRender!)}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </Stack>
+
+                {/* <IconButton aria-label="Add to Favorites">
                   <Favorite />
                 </IconButton>
                 <IconButton aria-label="Share">
                   <Share />
-                </IconButton>
+                </IconButton> */}
               </div>
-              <Divider />
+              <Divider sx={{ mt: 2 }} />
               <Typography variant="body2" color="textSecondary" className={styles.productInfo}>
                 Additional information about the product can be displayed here.
               </Typography>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Card, CardActions, CardHeader, CardMedia, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
@@ -19,7 +19,10 @@ const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
   const dispatch = useAppDispatch();
   const cart = useAppSelector((store) => store.storeCart.cart);
 
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const addToCart = async (product: ProductProjection) => {
+    setIsDisabled(true);
     if (!product.key) return;
     try {
       const response = await incrementLineItem(cart.id, cart.version, product.id, 1);
@@ -28,6 +31,8 @@ const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
       if (error instanceof Error) {
         dispatch(setError(error.message));
       }
+    } finally {
+      setIsDisabled(false);
     }
   };
 
@@ -53,13 +58,19 @@ const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
             />
           </CardActions>
           <Stack spacing={2}>
-            <Button variant="outlined" endIcon={<AddShoppingCartIcon />} onClick={() => addToCart(product)}>
-              Add to cart
-            </Button>
-            <Button>
+            {' '}
+            <Button variant="outlined">
               <Link data-id={product.id} to={product.key || '/'}>
                 Info
               </Link>
+            </Button>
+            <Button
+              disabled={isDisabled}
+              variant="outlined"
+              endIcon={<AddShoppingCartIcon />}
+              onClick={() => addToCart(product)}
+            >
+              Add to cart
             </Button>
           </Stack>
         </Stack>
