@@ -58,12 +58,10 @@ const ProductItem: React.FC<ProductCardProps> = ({ product }) => {
             />
           </CardActions>
           <Stack spacing={2}>
-            {' '}
-            <Button variant="outlined">
-              <Link data-id={product.id} to={product.key || '/'}>
-                Info
-              </Link>
-            </Button>
+            <Link data-id={product.id} to={product.key || '/'}>
+              <Button variant="outlined">Info</Button>
+            </Link>
+
             <Button
               disabled={isDisabled}
               variant="outlined"
