@@ -130,17 +130,18 @@ const ProductDetails: FC = () => {
                   >
                     Add to cart
                   </Button>
-                  {cart.lineItems.findIndex((item) => item.productId === productRender.id) !== -1 && (
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      color="warning"
-                      endIcon={<DeleteIcon />}
-                      onClick={() => deleteItem(productRender!)}
-                    >
-                      Remove
-                    </Button>
-                  )}
+                  {Array.isArray(cart.lineItems) &&
+                    cart.lineItems.findIndex((item) => item.productId === productRender.id) !== -1 && (
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="warning"
+                        endIcon={<DeleteIcon />}
+                        onClick={() => deleteItem(productRender!)}
+                      >
+                        Remove
+                      </Button>
+                    )}
                 </Stack>
 
                 {/* <IconButton aria-label="Add to Favorites">

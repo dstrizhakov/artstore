@@ -85,10 +85,10 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
           </IconButton>
         </div>
         <Typography data-testid="price" variant="body1" className={styles.price}>
-          {item.price.value.centAmount / 100}
-          {/* {item.product.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0
-            ? (item.product.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0) / 100
-            : (item.product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100} */}
+          {/* {item.price.value.centAmount / 100} */}
+          {item.price.discounted?.value.centAmount
+            ? item.price.discounted?.value.centAmount / 100
+            : item.price.value.centAmount / 100}
         </Typography>
         <IconButton disabled={isDisabled} aria-label="delete" size="large" onClick={deleteItem}>
           <DeleteSharpIcon />

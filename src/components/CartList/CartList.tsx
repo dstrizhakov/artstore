@@ -12,6 +12,7 @@ import {
   getDiscountsCodes,
   recalculateCart,
   removeDiscountCode,
+  getCartDiscounts,
 } from '../../api/requests';
 import { createStoreCart } from '../../store/reducers/commerceCart.slice';
 import { setError } from '../../store/reducers/products.slice';
@@ -96,6 +97,17 @@ const CartList: FC = () => {
     }
   };
 
+  const calculateDiscounts = async () => {
+    try {
+      const response = await getCartDiscounts();
+      console.log(response.body);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
+    }
+  };
+
   return (
     <div className={styles.wrapper}>
       <Modal isOpen={modal} setIsOpen={setModal}>
@@ -139,6 +151,9 @@ const CartList: FC = () => {
             </Button>
             <Button size="large" color="success" variant="contained" onClick={recalculate}>
               Recalculate
+            </Button>
+            <Button size="large" color="success" variant="contained" onClick={calculateDiscounts}>
+              Get Discounts
             </Button>
             <Button size="large" color="warning" variant="contained" onClick={removeAllItems}>
               Clear cart

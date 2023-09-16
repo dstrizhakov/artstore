@@ -527,7 +527,6 @@ export const createCart = async (): Promise<ClientResponse<Cart>> => {
         },
       })
       .execute();
-    console.log(response.body);
     return response;
   } catch (error) {
     throw error;
@@ -652,6 +651,15 @@ export const recalculateCart = async (
         },
       })
       .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCartDiscounts = async () => {
+  try {
+    const response = await getApiRoot().withProjectKey({ projectKey }).cartDiscounts().get().execute();
     return response;
   } catch (error) {
     throw error;
