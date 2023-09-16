@@ -6,17 +6,18 @@ import EmailIcon from '@mui/icons-material/Email';
 export const developers: DeveloperItemType[] = [
   {
     name: 'Dmitry Strizhakov (TeamLead)',
-    description: `Hello, I'm a JavaScript developer. Currently, I'm studying at the online school RSSchool, and I would like to extend my heartfelt gratitude to our mentors, Vitaliy Boudkin and Shakhzod Kudratov, for their guidance and support throughout this learning journey.
-    During my journey in web development, I've had the privilege of working with various technologies and frameworks, which you can find listed below.
-    My experience has allowed me to tackle various challenges and projects. Collaboration is something I deeply value, and I believe that effective teamwork and communication are key to project success.
-    I have a passion for problem-solving, and I enjoy finding innovative solutions to complex challenges. In the ever-evolving world of web development, I'm committed to continuous learning to stay updated with the latest trends and technologies.`,
+    description: `Hello, I'm a JavaScript developer. Currently, I'm studying at the online school RSSchool, and I would like to extend my heartfelt gratitude 
+    to our mentors, Vitaliy Boudkin and Shakhzod Kudratov, for their guidance and support throughout this learning journey. 
+    On this project I played the role of Team Lead and I really enjoyed learning and sharing my knowledge, it was a very cool experience!
+    Collaboration is something I deeply value, and I believe that effective teamwork and communication are key to project success.
+    My contribution to this project is the basic structure of the project, redux-store, part of API, Home, Cart pages, filtering, pagination on the
+    Shop page, tests for components, errors handling.`,
     img: 'https://avatars.githubusercontent.com/u/95134334?v=4',
     skills: [
       'React',
       'NextJS',
       'Redux',
       'Redux Toolkit',
-      'Effector',
       'Axios',
       'JavaScript',
       'TypeScript',

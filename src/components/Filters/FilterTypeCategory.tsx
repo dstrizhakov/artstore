@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setFilterCategory, setFilterType } from '../../store/reducers/filters.slice';
+import { setFilterCategory, setFilterType, setOffset } from '../../store/reducers/filters.slice';
 import { getProductCategories, getProductTypes } from '../../api/requests';
 import { setError } from '../../store/reducers/products.slice';
+import { useNavigate } from 'react-router-dom';
 
 type CategoryTypeItem = {
   id: string;
@@ -15,6 +16,8 @@ const FilterTypeCategory = () => {
   const filterTypeId = useAppSelector((state) => state.filters.typeId);
   const filterCategoryId = useAppSelector((state) => state.filters.categoryId);
 
+  const navigate = useNavigate();
+
   const [type, setType] = useState<string>('');
   const [category, setCategory] = useState<string>('');
   const [types, setTypes] = useState<CategoryTypeItem[]>([]);
@@ -24,6 +27,8 @@ const FilterTypeCategory = () => {
     const newType = event.target.value;
     setType(newType);
     dispatch(setFilterType(newType));
+    navigate('/shop');
+    dispatch(setOffset(0));
   };
 
   const handleSetCategory = (event: SelectChangeEvent<string>) => {
@@ -31,9 +36,11 @@ const FilterTypeCategory = () => {
 
     setCategory(newCategory);
     dispatch(setFilterCategory(newCategory));
+    navigate('/shop');
+    dispatch(setOffset(0));
   };
 
-  const fetchCategoriesAndTypes = async () => {
+  const fetchCategoriesAndTypes = useCallback(async () => {
     try {
       const categoryResponse = await getProductCategories();
       const typeResponse = await getProductTypes();
@@ -56,11 +63,11 @@ const FilterTypeCategory = () => {
     } catch (error) {
       dispatch(setError('Не удалось загрузить типы или категории'));
     }
-  };
+  }, [dispatch, filterCategoryId, filterTypeId]);
 
   useEffect(() => {
     fetchCategoriesAndTypes();
-  }, []);
+  }, [fetchCategoriesAndTypes]);
 
   return (
     <Paper variant="outlined" sx={{ padding: 2, height: '90px' }}>
