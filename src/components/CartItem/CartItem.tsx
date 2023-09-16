@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styles from './CartItem.module.scss';
 import { IconButton, Typography } from '@mui/material';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
@@ -17,10 +17,12 @@ interface CartItemProps {
 const CartItem: FC<CartItemProps> = ({ item }) => {
   const cartId = useAppSelector((store) => store.storeCart.cart.id);
   const cartVersion = useAppSelector((store) => store.storeCart.cart.version);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const dispatch = useAppDispatch();
 
   const increment = async () => {
+    setIsDisabled(true);
     try {
       const response = await incrementLineItem(cartId, cartVersion, item.productId, 1);
       dispatch(createStoreCart(response.body));
@@ -28,10 +30,13 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
       if (error instanceof Error) {
         dispatch(setError(error.message));
       }
+    } finally {
+      setIsDisabled(false);
     }
   };
 
   const decrement = async () => {
+    setIsDisabled(true);
     try {
       const response = await decrementLineItem(cartId, cartVersion, item.id, 1);
       dispatch(createStoreCart(response.body));
@@ -39,10 +44,13 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
       if (error instanceof Error) {
         dispatch(setError(error.message));
       }
+    } finally {
+      setIsDisabled(false);
     }
   };
 
   const deleteItem = async () => {
+    setIsDisabled(true);
     try {
       const response = await decrementLineItem(cartId, cartVersion, item.id, item.quantity);
       dispatch(createStoreCart(response.body));
@@ -50,6 +58,8 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
       if (error instanceof Error) {
         dispatch(setError(error.message));
       }
+    } finally {
+      setIsDisabled(false);
     }
   };
 
@@ -66,11 +76,11 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
           </Typography>
         </div>
         <div className={styles.quantity}>
-          <IconButton aria-label="decrement" size="large" onClick={decrement}>
+          <IconButton disabled={isDisabled} aria-label="decrement" size="large" onClick={decrement}>
             <RemoveIcon />
           </IconButton>
           <span data-testid="count">{item.quantity}</span>
-          <IconButton aria-label="increment" size="large" onClick={increment}>
+          <IconButton disabled={isDisabled} aria-label="increment" size="large" onClick={increment}>
             <AddIcon />
           </IconButton>
         </div>
@@ -80,7 +90,7 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
             ? (item.product.masterData?.staged?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount ?? 0) / 100
             : (item.product.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0) / 100} */}
         </Typography>
-        <IconButton aria-label="delete" size="large" onClick={deleteItem}>
+        <IconButton disabled={isDisabled} aria-label="delete" size="large" onClick={deleteItem}>
           <DeleteSharpIcon />
         </IconButton>
       </div>
