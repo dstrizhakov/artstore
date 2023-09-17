@@ -10,6 +10,7 @@ export const developers: DeveloperItemType[] = [
     During my journey in web development, I've had the privilege of working with various technologies and frameworks, which you can find listed below.
     My experience has allowed me to tackle various challenges and projects. Collaboration is something I deeply value, and I believe that effective teamwork and communication are key to project success.
     I have a passion for problem-solving, and I enjoy finding innovative solutions to complex challenges. In the ever-evolving world of web development, I'm committed to continuous learning to stay updated with the latest trends and technologies.`,
+    contribution: 'contribution',
     img: 'https://avatars.githubusercontent.com/u/95134334?v=4',
     skills: [
       'React',
@@ -57,6 +58,8 @@ export const developers: DeveloperItemType[] = [
     order. The difficulty turned out to be that the site engine was self-written, but I found out about it
     later, when I got acquainted with the popular cms: joomla, wordpress and MODX. As a result of the task, I
     had a great desire to develop in this direction.`,
+    contribution:
+      'Product page, personal discount for a product, slider on the product page, modal slider, 404 page, about us page, routing, breadcrumbs, footer.',
     img: 'https://avatars.githubusercontent.com/u/50585824?v=4',
     skills: [
       'HT​ML',

@@ -3,7 +3,7 @@ import styles from './AboutItem.module.scss';
 import { Button, Chip, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
 import { DeveloperItemType } from '../../types/types';
 
-const AboutItem: FC<DeveloperItemType> = ({ name, description, img, skills, links }) => {
+const AboutItem: FC<DeveloperItemType> = ({ name, description, contribution, img, skills, links }) => {
   return (
     <Paper sx={{ mb: 2 }}>
       <Grid container>
@@ -16,6 +16,12 @@ const AboutItem: FC<DeveloperItemType> = ({ name, description, img, skills, link
           </Typography>
           <Typography variant="body1" paddingBottom={2}>
             {description}
+          </Typography>
+          <Typography variant="h5" gutterBottom>
+            Contribution to the project:
+          </Typography>
+          <Typography variant="body1" paddingBottom={2}>
+            {contribution}
           </Typography>
           <Typography variant="h5" gutterBottom>
             Technologies stack and my tools:

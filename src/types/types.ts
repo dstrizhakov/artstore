@@ -38,6 +38,7 @@ export type ILink = {
 export interface DeveloperItemType {
   name: string;
   description: string;
+  contribution: string;
   img: string;
   skills: string[];
   links: ILink[];
