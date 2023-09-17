@@ -9,9 +9,8 @@ export const developers: DeveloperItemType[] = [
     description: `Hello, I'm a JavaScript developer. Currently, I'm studying at the online school RSSchool, and I would like to extend my heartfelt gratitude 
     to our mentors, Vitaliy Boudkin and Shakhzod Kudratov, for their guidance and support throughout this learning journey. 
     On this project I played the role of Team Lead and I really enjoyed learning and sharing my knowledge, it was a very cool experience!
-    Collaboration is something I deeply value, and I believe that effective teamwork and communication are key to project success.
-    My contribution to this project is the basic structure of the project, redux-store, part of API, Home, Cart pages, filtering, pagination on the
-    Shop page, tests for components, errors handling.`,
+    Collaboration is something I deeply value, and I believe that effective teamwork and communication are key to project success.`,
+    contribution: ' basic structure of the project, redux-store, part of API, Home, Cart pages, filtering, pagination on the Shop page, tests for components, errors handlingbasic structure of the project',
     img: 'https://avatars.githubusercontent.com/u/95134334?v=4',
     skills: [
       'React',
@@ -58,12 +57,17 @@ export const developers: DeveloperItemType[] = [
     order. The difficulty turned out to be that the site engine was self-written, but I found out about it
     later, when I got acquainted with the popular cms: joomla, wordpress and MODX. As a result of the task, I
     had a great desire to develop in this direction.`,
+    contribution:
+      'Product page, personal discount for a product, slider on the product page, modal slider, 404 page, about us page, routing, breadcrumbs, footer.',
     img: 'https://avatars.githubusercontent.com/u/50585824?v=4',
     skills: [
       'HT​ML',
       'CSS (SASS, LESS)',
       'JavaScript',
       'TypeScript',
+      'Bootstrap',
+      'SmartGrid',
+      'Webpack',
       'GIT',
       'Wordpress',
       'MODX',

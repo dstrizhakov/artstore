@@ -10,6 +10,7 @@ const AboutList: FC = () => {
           key={developer.name}
           name={developer.name}
           description={developer.description}
+          contribution={developer.contribution}
           img={developer.img}
           skills={developer.skills}
           links={developer.links}
