@@ -246,7 +246,7 @@ export default function PrimarySearchAppBar() {
                 FINEART
               </Typography>
             </Link>
-            <Search>
+            <Search sx={{ display: { xs: 'none', md: 'flex' } }}>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
