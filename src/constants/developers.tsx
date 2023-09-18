@@ -11,7 +11,7 @@ export const developers: DeveloperItemType[] = [
     On this project I played the role of Team Lead and I really enjoyed learning and sharing my knowledge, it was a very cool experience!
     Collaboration is something I deeply value, and I believe that effective teamwork and communication are key to project success.`,
     contribution:
-      ' basic structure of the project, redux-store, part of API, Home, Cart pages, filtering, pagination on the Shop page, tests for components, errors handlingbasic structure of the project',
+      'Basic structure of the project, redux-store, part of API, Home, Cart pages, filtering, pagination on the Shop page, tests for components, errors handling',
     img: 'https://avatars.githubusercontent.com/u/95134334?v=4',
     skills: [
       'React',
