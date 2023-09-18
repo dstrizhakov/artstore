@@ -10,7 +10,8 @@ export const developers: DeveloperItemType[] = [
     to our mentors, Vitaliy Boudkin and Shakhzod Kudratov, for their guidance and support throughout this learning journey. 
     On this project I played the role of Team Lead and I really enjoyed learning and sharing my knowledge, it was a very cool experience!
     Collaboration is something I deeply value, and I believe that effective teamwork and communication are key to project success.`,
-    contribution: ' basic structure of the project, redux-store, part of API, Home, Cart pages, filtering, pagination on the Shop page, tests for components, errors handlingbasic structure of the project',
+    contribution:
+      ' basic structure of the project, redux-store, part of API, Home, Cart pages, filtering, pagination on the Shop page, tests for components, errors handlingbasic structure of the project',
     img: 'https://avatars.githubusercontent.com/u/95134334?v=4',
     skills: [
       'React',
@@ -89,6 +90,46 @@ export const developers: DeveloperItemType[] = [
       {
         name: 'email',
         url: 'mailto:stanislav.shendryk@gmail.com',
+        icon: EmailIcon,
+      },
+    ],
+  },
+  {
+    name: 'Berdiev Mardon',
+    description: `My name is Mardon. Four years ago I moved to Moscow to change my life. Starting as a courier, I soon realized that I wanted something more and began to explore the world of programming. Despite the difficulties due to limited knowledge of the Russian language, my interest in programming was passionate. Now I am a fourth-year student at the Moscow State University of Technology and Management. My goal became to become a frontend developer. My journey began with learning layout using online resources and learning on YouTube. In a short time I acquired basic skills in the art of layout. However, my studies are not limited to this. I am keen to learn JavaScript and frontend frameworks such as React or Angular. My study projects help me consolidate what I have learned and also create an impressive portfolio. My main traits are persistence and readiness for self-development. I am confident that I can achieve my goals in the field of front-end development and make a significant contribution to this field.`,
+    contribution:
+      'Login page, registration, validation setup, adding and changing addresses, product search, profile page, part of the API',
+    img: 'https://avatars.githubusercontent.com/u/78404962?v=4',
+    skills: [
+      'React',
+      'Redux',
+      'Redux Toolkit',
+      'Axios',
+      'HT​ML',
+      'CSS (SASS, LESS)',
+      'JavaScript',
+      'TypeScript',
+      'Bootstrap',
+      'Webpack',
+      'GIT',
+      'Figma',
+      'Photoshop',
+      'MIU',
+    ],
+    links: [
+      {
+        name: 'github',
+        url: 'https://github.com/Mardon07',
+        icon: GitHubIcon,
+      },
+      {
+        name: 'telegram',
+        url: 'https://t.me/onmard',
+        icon: TelegramIcon,
+      },
+      {
+        name: 'email',
+        url: 'mailto:mardonberdiev10@gmail.com',
         icon: EmailIcon,
       },
     ],
