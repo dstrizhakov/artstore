@@ -1,4 +1,8 @@
-import { ICart } from '../store/reducers/cart.slice';
+import { Cart } from '@commercetools/platform-sdk';
+
+export type CartStoreType = {
+  cart: Cart;
+};
 
 export const mockProducts = {
   items: [
@@ -1101,162 +1105,220 @@ export const mockUser = {
     authenticationMode: 'Password',
   },
 };
-export const mockCart: ICart = {
-  items: [
-    {
-      id: '774b937a-7d07-47d5-86ca-f4898f85a272',
-      product: {
-        id: '774b937a-7d07-47d5-86ca-f4898f85a272',
-        version: 13,
-        createdAt: '2023-08-05T08:41:06.819Z',
-        lastModifiedAt: '2023-08-13T08:59:26.021Z',
-
-        createdBy: {},
-        productType: {
-          typeId: 'product-type',
-          id: 'ec28cb5a-2e92-4c19-a4ac-b1c2704e9e67',
+export const mockCart: CartStoreType = {
+  cart: {
+    id: '91a485cf-90d0-4fe4-aa07-4583c3106697',
+    version: 10,
+    createdAt: '2023-09-18T16:51:23.242Z',
+    lastModifiedAt: '2023-09-18T16:51:28.422Z',
+    lastModifiedBy: { clientId: 'jJHtcyUwpnRApDdV3MzB5GNJ' },
+    createdBy: { clientId: 'jJHtcyUwpnRApDdV3MzB5GNJ' },
+    lineItems: [
+      {
+        id: '2473d458-449f-4c7c-86f2-daac5da08379',
+        productId: '4a392b29-005b-48ed-8d24-d4ef3ef041d3',
+        productKey: '3',
+        name: { 'en-US': 'Provence original oil painting on canvas lavender and sunflower fields ' },
+        productType: { typeId: 'product-type', id: 'ec28cb5a-2e92-4c19-a4ac-b1c2704e9e67' },
+        productSlug: { 'en-US': 'provence-original-oil-painting' },
+        variant: {
+          id: 1,
+          prices: [
+            {
+              id: '8ce1378e-a8c8-48f4-bd89-dd8719bfbfa7',
+              value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 6700, fractionDigits: 2 },
+            },
+            {
+              id: '26de71f7-7ea0-432b-8ad8-08064d04c816',
+              value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 7700, fractionDigits: 2 },
+              key: '123235',
+              country: 'US',
+            },
+          ],
+          images: [
+            {
+              url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/tyuiyf-pBJ_h46g.jpg',
+              label: 'Interior view',
+              dimensions: { w: 2000, h: 1437 },
+            },
+            {
+              url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/DSC_3699-oEhaYRnF.jpg',
+              label: 'Main view',
+              dimensions: { w: 2400, h: 1189 },
+            },
+            {
+              url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/DSC_3699-2-Ku7fmC-V.jpg',
+              label: 'Detail view',
+              dimensions: { w: 2400, h: 2400 },
+            },
+          ],
+          attributes: [
+            { name: 'size', value: '50x60 cm' },
+            { name: 'availability', value: true },
+            { name: 'price', value: 240 },
+          ],
+          assets: [],
         },
-        masterData: {
-          current: {
-            name: {
-              'en-US': 'Product Name',
-            },
-            description: {
-              'en-US': 'Product Description',
-            },
-            categories: [],
-            categoryOrderHints: {},
-            slug: {
-              'en-US': 'Product slug',
-            },
-            metaTitle: {
-              'en-US': '',
-            },
-            metaDescription: {
-              'en-US': '',
-            },
-            masterVariant: {
-              id: 1,
-              prices: [],
-              images: [],
-              attributes: [
-                {
-                  name: 'size',
-                  value: '13x18cm',
-                },
-                {
-                  name: 'availability',
-                  value: true,
-                },
-                {
-                  name: 'price',
-                  value: 47,
-                },
-              ],
-              assets: [],
-            },
-            variants: [],
-            searchKeywords: {
-              'en-US': [
-                {
-                  text: 'lotus',
-                },
-                {
-                  text: 'oil',
-                },
-                {
-                  text: 'painting',
-                },
-              ],
-            },
-          },
-          staged: {
-            name: {
-              'en-US': 'Lotus flower original oil painting pond flowers',
-            },
-            description: {
-              'en-US':
-                "Pink fluffy lotus flower in the pond oil painting. This artwork is made in impressionism style, impasto technique, textured with palette knife. Vibrant floral garden landscape painting.\n\nOn the back of the painting is the author's signature.",
-            },
-            categories: [
-              {
-                typeId: 'category',
-                id: '77faad28-ae26-4542-b827-3e281222521b',
-              },
-            ],
-            categoryOrderHints: {},
-            slug: {
-              'en-US': 'lotus-flower-original-oil-painting',
-            },
-            metaTitle: {
-              'en-US': '',
-            },
-            metaDescription: {
-              'en-US': '',
-            },
-            masterVariant: {
-              id: 1,
-              prices: [
-                {
-                  id: '6d5e1a78-a7d3-440b-b6d0-274e88d5600b',
-                  value: {
-                    type: 'centPrecision',
-                    currencyCode: 'USD',
-                    centAmount: 34500,
-                    fractionDigits: 2,
-                  },
-                },
-              ],
-              images: [
-                {
-                  url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/DSC_3415-tF0AG8US.jpg',
-                  dimensions: {
-                    w: 1024,
-                    h: 762,
-                  },
-                },
-              ],
-              attributes: [
-                {
-                  name: 'size',
-                  value: '13x18cm',
-                },
-                {
-                  name: 'availability',
-                  value: true,
-                },
-                {
-                  name: 'price',
-                  value: 47,
-                },
-              ],
-              assets: [],
-            },
-            variants: [],
-            searchKeywords: {
-              'en-US': [
-                {
-                  text: 'lotus',
-                },
-                {
-                  text: 'oil',
-                },
-                {
-                  text: 'painting',
-                },
-              ],
-            },
-          },
-          published: true,
-          hasStagedChanges: true,
+        price: {
+          id: '8ce1378e-a8c8-48f4-bd89-dd8719bfbfa7',
+          value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 6700, fractionDigits: 2 },
         },
-        key: '2',
-        priceMode: 'Standalone',
+        quantity: 123,
+        discountedPricePerQuantity: [],
+        perMethodTaxRate: [],
+        addedAt: '2023-09-18T16:51:27.113Z',
+        lastModifiedAt: '2023-09-18T16:51:27.113Z',
+        state: [{ quantity: 1, state: { typeId: 'state', id: '4a167d16-4e04-408b-a570-d2fc3710e2a7' } }],
+        priceMode: 'Platform',
+        lineItemMode: 'Standard',
+        totalPrice: { type: 'centPrecision', currencyCode: 'USD', centAmount: 6700, fractionDigits: 2 },
+        taxedPricePortions: [],
       },
-      count: 2,
-    },
-  ],
-  total: 2,
-  price: 345,
+      {
+        id: 'f98d9694-c4b9-4f46-9080-eea726281965',
+        productId: '177ac5fb-9ebb-44f3-94c3-f92db5f806eb',
+        productKey: '10',
+        name: {
+          'en-US':
+            'Birch Trees original oil painting birch grove artwork birch forest impressionism landscape birch tree wall art',
+        },
+        productType: { typeId: 'product-type', id: 'ec28cb5a-2e92-4c19-a4ac-b1c2704e9e67' },
+        productSlug: {
+          'en-US':
+            'birch-trees-original-oil-painting-birch-grove-artwork-birch-forest-impressionism-landscape-birch-tree-wall-art',
+        },
+        variant: {
+          id: 1,
+          sku: 'p010',
+          prices: [
+            {
+              id: 'd129872f-f907-4dab-b576-a95c0ffc3e49',
+              value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 100000, fractionDigits: 2 },
+              key: '1000',
+              discounted: {
+                value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 90000, fractionDigits: 2 },
+                discount: { typeId: 'product-discount', id: '00ad2a08-b90a-4311-bac2-285bbd7677cf' },
+              },
+            },
+          ],
+          images: [
+            {
+              url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/%D0%BF%D1%80%D0%BE%D0%BF%D0%B0%D0%BE-zDX6fTxB.jpg',
+              label: 'Detail view',
+              dimensions: { w: 2000, h: 1661 },
+            },
+            {
+              url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/DSC_9946-LfAdvvzC.jpg',
+              label: 'Main view',
+              dimensions: { w: 2835, h: 1416 },
+            },
+            {
+              url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/tfyu-cnGr7uI9.jpg',
+              label: 'Interior view',
+              dimensions: { w: 2456, h: 1843 },
+            },
+          ],
+          attributes: [
+            { name: 'size', value: '78x47 cm' },
+            { name: 'availability', value: true },
+            { name: 'price', value: 237 },
+          ],
+          assets: [],
+        },
+        price: {
+          id: 'd129872f-f907-4dab-b576-a95c0ffc3e49',
+          value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 100000, fractionDigits: 2 },
+          key: '1000',
+          discounted: {
+            value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 90000, fractionDigits: 2 },
+            discount: { typeId: 'product-discount', id: '00ad2a08-b90a-4311-bac2-285bbd7677cf' },
+          },
+        },
+        quantity: 1,
+        discountedPricePerQuantity: [],
+        perMethodTaxRate: [],
+        addedAt: '2023-09-18T16:51:27.643Z',
+        lastModifiedAt: '2023-09-18T16:51:27.643Z',
+        state: [{ quantity: 1, state: { typeId: 'state', id: '4a167d16-4e04-408b-a570-d2fc3710e2a7' } }],
+        priceMode: 'Platform',
+        lineItemMode: 'Standard',
+        totalPrice: { type: 'centPrecision', currencyCode: 'USD', centAmount: 90000, fractionDigits: 2 },
+        taxedPricePortions: [],
+      },
+      {
+        id: '845c427b-2313-46e4-9193-f4df3d032683',
+        productId: '27225d0a-6252-444f-b9ba-e97c52f6fe7d',
+        productKey: '4',
+        name: {
+          'en-US':
+            'Mount Rainier original oil painting Washington national park artwork impasto landscape mountain sunset wall art',
+        },
+        productType: { typeId: 'product-type', id: 'ec28cb5a-2e92-4c19-a4ac-b1c2704e9e67' },
+        productSlug: { 'en-US': 'mount-rainier-original-oil' },
+        variant: {
+          id: 1,
+          prices: [
+            {
+              id: 'da05fd29-de98-4a9c-a9f5-4eb3fe89c05c',
+              value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 9900, fractionDigits: 2 },
+            },
+          ],
+          images: [
+            {
+              url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/yghjgj-rBztQ6Fm.jpg',
+              label: 'Interior view',
+              dimensions: { w: 2000, h: 1956 },
+            },
+            {
+              url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/DSC_3483-3-NP8E9pvO.jpg',
+              label: 'Detail view',
+              dimensions: { w: 2064, h: 2064 },
+            },
+            {
+              url: 'https://d00cb446ab43a070ee45-65a4a7d498d3de1f230ce17f2863b2e9.ssl.cf1.rackcdn.com/DSC_3483-2-xT04exby.jpg',
+              label: 'Main view',
+              dimensions: { w: 5477, h: 4097 },
+            },
+          ],
+          attributes: [
+            { name: 'size', value: '25x30 cm' },
+            { name: 'availability', value: true },
+            { name: 'price', value: 50 },
+          ],
+          assets: [],
+        },
+        price: {
+          id: 'da05fd29-de98-4a9c-a9f5-4eb3fe89c05c',
+          value: { type: 'centPrecision', currencyCode: 'USD', centAmount: 9900, fractionDigits: 2 },
+        },
+        quantity: 1,
+        discountedPricePerQuantity: [],
+        perMethodTaxRate: [],
+        addedAt: '2023-09-18T16:51:28.412Z',
+        lastModifiedAt: '2023-09-18T16:51:28.412Z',
+        state: [{ quantity: 1, state: { typeId: 'state', id: '4a167d16-4e04-408b-a570-d2fc3710e2a7' } }],
+        priceMode: 'Platform',
+        lineItemMode: 'Standard',
+        totalPrice: { type: 'centPrecision', currencyCode: 'USD', centAmount: 9900, fractionDigits: 2 },
+        taxedPricePortions: [],
+      },
+    ],
+    cartState: 'Active',
+    totalPrice: { type: 'centPrecision', currencyCode: 'USD', centAmount: 106600, fractionDigits: 2 },
+    shippingMode: 'Single',
+    shipping: [],
+    customLineItems: [],
+    discountCodes: [],
+    directDiscounts: [],
+    inventoryMode: 'None',
+    taxMode: 'Platform',
+    taxRoundingMode: 'HalfEven',
+    taxCalculationMode: 'LineItemLevel',
+    deleteDaysAfterLastModification: 90,
+    refusedGifts: [],
+    origin: 'Customer',
+    itemShippingAddresses: [],
+    totalLineItemQuantity: 3,
+  },
 };
 export const mockAddresses = { shipping: { country: '' }, billing: { country: '' }, isBillingSame: false };

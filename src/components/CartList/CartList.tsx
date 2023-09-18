@@ -14,7 +14,7 @@ const CartList: FC = () => {
   const [modal, setModal] = useState(false);
   const dispatch = useAppDispatch();
   const cartTotal = useAppSelector((state) => state.storeCart.cart.totalPrice.centAmount / 100);
-  const cartList = useAppSelector((state) => state.storeCart.cart.lineItems);
+  const cartListItems = useAppSelector((state) => state.storeCart.cart.lineItems);
   const totalCount = useAppSelector((state) => state.storeCart.cart.totalLineItemQuantity);
   const cart = useAppSelector((state) => state.storeCart.cart);
 
@@ -118,9 +118,7 @@ const CartList: FC = () => {
         <h3>Thank you for your order!</h3>
       </Modal>
       <div className={styles.body}>
-        {cartList.map((item) => (
-          <CartItem key={item.id} item={item} />
-        ))}
+        {Array.isArray(cartListItems) && cartListItems.map((item) => <CartItem key={item.id} item={item} />)}
       </div>
 
       {totalCount ? (
