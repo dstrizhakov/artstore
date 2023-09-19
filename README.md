@@ -7,9 +7,11 @@ This is the final task on JavaScript/Front-end 2023Q1
 - React
 - TypeScript
 - Vite
+- Webpack
 - ESlint
 - Prettier
 - Husky
+- Jest
 
 ### How to install:
 
