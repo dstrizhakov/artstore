@@ -33,6 +33,8 @@ npm start
 - prepare -husky install
 - pre-commit - scrypt for husky hook pre-commit
 
+### Deploy: https://melodious-manatee-c529f4.netlify.app/
+
 ## License
 
 **Free Software, Hell Yeah!**
