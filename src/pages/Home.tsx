@@ -1,5 +1,5 @@
 import { FC, useEffect, useCallback } from 'react';
-import { searchProducts } from '../api/requests';
+import { createCart, searchProducts } from '../api/requests';
 import MainSlider from '../components/MainSlider/MainSlider';
 import MainInfo from '../components/MainInfo/MainInfo';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -10,6 +10,7 @@ import { Image, ProductProjection } from '@commercetools/platform-sdk';
 import { setProducts, setLoading, setError } from '../store/reducers/products.slice';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { setPagination } from '../store/reducers/filters.slice';
+import { createStoreCart } from '../store/reducers/commerceCart.slice';
 
 interface ISlide {
   id: string;
@@ -23,6 +24,9 @@ const Home: FC = () => {
   const products = useAppSelector((store) => store.products.items);
   const loading = useAppSelector((store) => store.products.loading);
   const error = useAppSelector((store) => store.products.error);
+
+  const cart = useAppSelector((store) => store.storeCart.cart);
+  const isCart = Object.keys(cart).length !== 0;
 
   const getSlides = (products: ProductProjection[]): ISlide[] => {
     return products.map((item) => {
@@ -42,10 +46,16 @@ const Home: FC = () => {
       const responce = await searchProducts('', true, 10, 0);
       dispatch(setProducts(responce.results));
       dispatch(setPagination(responce));
-    } catch (e) {
-      dispatch(setError('Произошла ошибка при получении данных'));
+      if (!isCart) {
+        const response = await createCart();
+        dispatch(createStoreCart(response.body));
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
     }
-  }, [dispatch]);
+  }, [dispatch, isCart]);
 
   useEffect(() => {
     fetchData();

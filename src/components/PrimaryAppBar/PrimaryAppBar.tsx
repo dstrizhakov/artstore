@@ -79,7 +79,7 @@ export default function PrimarySearchAppBar() {
 
   const user = useAppSelector((state) => state.user.customer);
   const isAuth = useAppSelector((state) => state.user.isAuth);
-  const cartTotal = useAppSelector((state) => state.cart.total);
+  const cartTotal = useAppSelector((state) => state.storeCart.cart.totalLineItemQuantity);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -242,17 +242,11 @@ export default function PrimarySearchAppBar() {
               </Menu>
             </Box>
             <Link to="/">
-              <Typography
-                data-testid="logo"
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ display: { xs: 'none', sm: 'block' } }}
-              >
+              <Typography data-testid="logo" variant="h6" noWrap component="div">
                 FINEART
               </Typography>
             </Link>
-            <Search>
+            <Search sx={{ display: { xs: 'none', md: 'flex' } }}>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>

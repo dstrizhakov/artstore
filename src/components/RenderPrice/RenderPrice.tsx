@@ -14,12 +14,12 @@ const RenderPrice: FC<RenderPriceProps> = ({ price, discount }) => {
         className={styles.container_price}
         direction="row"
         justifyContent="flex-start"
-        alignItems="flex-end"
+        alignItems="center"
         spacing={1}
       >
         <div className={styles.price}>${price / 100}</div>
         <div className={styles.discount}>${discount / 100}</div>
-        <div>Discount {(100 - (discount / price) * 100).toFixed(0)}%</div>
+        <div> -{(100 - (discount / price) * 100).toFixed(0)}%</div>
       </Stack>
     );
   } else {

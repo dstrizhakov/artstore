@@ -1,29 +1,38 @@
-import { useAppDispatch } from '../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import ProductSlider, { ImagesSlide } from '../components/ProductSlider/ProductSlider';
-import { Breadcrumbs, Button, Divider, Grid, IconButton, Paper, Typography } from '@mui/material';
-import { AddShoppingCart, CalendarToday, Favorite, Share } from '@mui/icons-material';
-import { addProductToCart } from '../store/reducers/cart.slice';
+import { Breadcrumbs, Button, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+import { AddShoppingCart, CalendarToday } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Image, Product } from '@commercetools/platform-sdk';
 import styles from './ProductDetails.module.scss';
 import { dateConverter } from '../utils/dateConverter';
 import { Link } from 'react-router-dom';
-import { getProductByKey } from '../api/requests';
-import { setProduct } from '../store/reducers/products.slice';
+import { decrementLineItem, getProductByKey, incrementLineItem } from '../api/requests';
+import { setError, setProduct } from '../store/reducers/products.slice';
 import RenderPrice from '../components/RenderPrice/RenderPrice';
+import { createStoreCart } from '../store/reducers/commerceCart.slice';
 
 const ProductDetails: FC = () => {
   const { id: key } = useParams();
+
   const dispatch = useAppDispatch();
+  const cart = useAppSelector((store) => store.storeCart.cart);
+
   const [productRender, setProductRender] = useState<Product>();
 
   const getCurrentProduct = useCallback(async () => {
     if (!key) return;
-    const responce = await getProductByKey(key);
-    setProductRender(responce);
-
-    dispatch(setProduct(responce));
+    try {
+      const responce = await getProductByKey(key);
+      setProductRender(responce);
+      dispatch(setProduct(responce));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
+    }
   }, [dispatch, key]);
 
   useEffect(() => {
@@ -31,8 +40,16 @@ const ProductDetails: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const addToCart = (product: Product) => {
-    dispatch(addProductToCart(product));
+  const addToCart = async (product: Product) => {
+    if (!product.key) return;
+    try {
+      const response = await incrementLineItem(cart.id, cart.version, product.id, 1);
+      dispatch(createStoreCart(response.body));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
+    }
   };
 
   const getSlides = (imagesArr: Image[]): ImagesSlide[] => {
@@ -43,6 +60,19 @@ const ProductDetails: FC = () => {
         title: item!.label || '',
       };
     });
+  };
+
+  const deleteItem = async (product: Product) => {
+    const lineItem = cart.lineItems.find((item) => item.productId === product.id);
+    if (!lineItem?.id) return;
+    try {
+      const response = await decrementLineItem(cart.id, cart.version, lineItem?.id, lineItem?.quantity);
+      dispatch(createStoreCart(response.body));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(setError(error.message));
+      }
+    }
   };
 
   if (productRender) {
@@ -71,7 +101,6 @@ const ProductDetails: FC = () => {
               <Typography variant="body2" color="textSecondary" className={styles.data}>
                 {<CalendarToday />} {dateConverter(productRender!.createdAt)}
               </Typography>
-
               {productRender!.masterData.staged.description &&
                 productRender!.masterData.staged.description['en-US'].split('\n').filter((elem) => elem !== '') &&
                 productRender!.masterData.staged.description &&
@@ -83,7 +112,6 @@ const ProductDetails: FC = () => {
                       {item}
                     </Typography>
                   ))}
-
               <Typography variant="h5" gutterBottom>
                 <RenderPrice
                   price={productRender!.masterData?.staged?.masterVariant?.prices?.[0]?.value?.centAmount ?? 0}
@@ -93,22 +121,37 @@ const ProductDetails: FC = () => {
                 />
               </Typography>
               <div className={styles.buttons}>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  endIcon={<AddShoppingCart />}
-                  onClick={() => addToCart(productRender!)}
-                >
-                  Add to cart
-                </Button>
-                <IconButton aria-label="Add to Favorites">
+                <Stack direction="row" spacing={2}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    endIcon={<AddShoppingCart />}
+                    onClick={() => addToCart(productRender!)}
+                  >
+                    Add to cart
+                  </Button>
+                  {Array.isArray(cart.lineItems) &&
+                    cart.lineItems.findIndex((item) => item.productId === productRender.id) !== -1 && (
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="warning"
+                        endIcon={<DeleteIcon />}
+                        onClick={() => deleteItem(productRender!)}
+                      >
+                        Remove
+                      </Button>
+                    )}
+                </Stack>
+
+                {/* <IconButton aria-label="Add to Favorites">
                   <Favorite />
                 </IconButton>
                 <IconButton aria-label="Share">
                   <Share />
-                </IconButton>
+                </IconButton> */}
               </div>
-              <Divider />
+              <Divider sx={{ mt: 2 }} />
               <Typography variant="body2" color="textSecondary" className={styles.productInfo}>
                 Additional information about the product can be displayed here.
               </Typography>

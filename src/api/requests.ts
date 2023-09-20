@@ -10,6 +10,8 @@ import {
   CategoryPagedQueryResponse,
   ProductTypePagedQueryResponse,
   CustomerUpdateAction,
+  Cart,
+  ClientResponse,
 } from '@commercetools/platform-sdk';
 
 export async function signIn(email: string, password: string): Promise<CustomerSignInResult> {
@@ -509,6 +511,156 @@ export const DeleteCustomerAddress = async (customerID: string, version: number,
       })
       .execute();
     return response.body;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createCart = async (): Promise<ClientResponse<Cart>> => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .carts()
+      .post({
+        body: {
+          currency: 'USD',
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const incrementLineItem = async (
+  cartId: string,
+  cartVersion: number,
+  productId: string,
+  quantity: number
+): Promise<ClientResponse<Cart>> => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID: cartId })
+      .post({ body: { version: cartVersion, actions: [{ action: 'addLineItem', productId, quantity }] } })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const decrementLineItem = async (
+  cartId: string,
+  cartVersion: number,
+  lineItemId: string,
+  quantity: number
+): Promise<ClientResponse<Cart>> => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID: cartId })
+      .post({ body: { version: cartVersion, actions: [{ action: 'removeLineItem', lineItemId, quantity }] } })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const clearShopCart = async (cart: Cart): Promise<ClientResponse<Cart>> => {
+  try {
+    let response;
+    for (let i = 0; i <= cart.lineItems.length; i++) {
+      response = decrementLineItem(cart.id, cart.version, cart.lineItems[i].id, cart.lineItems[i].quantity);
+    }
+    if (!response) throw new Error('Не удалось очистить корзину');
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getDiscountsCodes = async () => {
+  try {
+    const response = await getApiRoot().withProjectKey({ projectKey }).discountCodes().get().execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addDiscountCode = async (
+  cartId: string,
+  cartVersion: number,
+  code: string
+): Promise<ClientResponse<Cart>> => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID: cartId })
+      .post({ body: { version: cartVersion, actions: [{ action: 'addDiscountCode', code }] } })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const removeDiscountCode = async (
+  cartId: string,
+  cartVersion: number,
+  codeId: string
+): Promise<ClientResponse<Cart>> => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion,
+          actions: [{ action: 'removeDiscountCode', discountCode: { typeId: 'discount-code', id: codeId } }],
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const recalculateCart = async (
+  cartId: string,
+  cartVersion: number,
+  updateProductData?: boolean
+): Promise<ClientResponse<Cart>> => {
+  try {
+    const response = await getApiRoot()
+      .withProjectKey({ projectKey })
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion,
+          actions: [{ action: 'recalculate', updateProductData }],
+        },
+      })
+      .execute();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCartDiscounts = async () => {
+  try {
+    const response = await getApiRoot().withProjectKey({ projectKey }).cartDiscounts().get().execute();
+    return response;
   } catch (error) {
     throw error;
   }

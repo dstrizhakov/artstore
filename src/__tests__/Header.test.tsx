@@ -11,7 +11,7 @@ describe('Header component', () => {
   it('should render with data from the store', () => {
     const initialState = {
       user: mockUser,
-      cart: mockCart,
+      storeCart: mockCart,
     };
 
     const store = mockStore(initialState);

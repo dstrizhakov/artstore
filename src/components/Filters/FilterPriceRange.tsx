@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Box, Paper, Slider, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setFilterPriceRange } from '../../store/reducers/filters.slice';
@@ -13,7 +13,9 @@ export default function FilterPriceRange() {
   const range = useAppSelector((state) => state.filters.priceRange).map((item) => item / 100);
   const [minmax, setMinMax] = useState<number[]>(range);
 
-  const getProductsPrices = async () => {
+  const dispatch = useAppDispatch();
+
+  const getProductsPrices = useCallback(async () => {
     try {
       const products = (await getProducts()).results;
       const prices = products.map((product) => {
@@ -27,13 +29,11 @@ export default function FilterPriceRange() {
     } catch (error) {
       dispatch(setError('Не удалось загрузить продукты'));
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     getProductsPrices();
-  }, []);
-
-  const dispatch = useAppDispatch();
+  }, [getProductsPrices]);
 
   const [minmin, maxmax] = minmax;
   const [priceRangeValue, setPriceRangeValue] = useState([minmin, maxmax]);

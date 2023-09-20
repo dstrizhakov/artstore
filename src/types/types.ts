@@ -1,3 +1,5 @@
+import { SvgIconComponent } from '@mui/icons-material';
+
 export type AddressType = {
   firstName?: string;
   lastName?: string;
@@ -27,3 +29,17 @@ export type AddressType = {
   lastNameBilling?: string;
   billingMobile?: string;
 };
+
+export type ILink = {
+  name: string;
+  url: string;
+  icon: SvgIconComponent;
+};
+export interface DeveloperItemType {
+  name: string;
+  description: string;
+  contribution: string;
+  img: string;
+  skills: string[];
+  links: ILink[];
+}
