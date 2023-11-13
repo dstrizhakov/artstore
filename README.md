@@ -1,6 +1,6 @@
 # Artstore - the store of fineart
 
-This is the final task on JavaScript/Front-end 2023Q1
+This is the fineart store template. It used https://commercetools.com/ backend.
 
 ### Using technologies:
 
